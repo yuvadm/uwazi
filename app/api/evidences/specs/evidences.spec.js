@@ -5,7 +5,7 @@ import db from 'api/utils/testing_db';
 
 describe('evidences', () => {
   describe('save', () => {
-    fit('should create a new entity for each language in settings with a language property and a shared id', (done) => {
+    it('should create a new entity for each language in settings with a language property and a shared id', (done) => {
       let evidence = {
         entity: db.id(),
         property: db.id(),
