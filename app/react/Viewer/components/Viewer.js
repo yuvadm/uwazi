@@ -21,6 +21,7 @@ import Footer from 'app/App/Footer';
 import ShowIf from 'app/App/ShowIf';
 import {TemplateLabel, Icon} from 'app/Layout';
 import Marker from 'app/Viewer/utils/Marker';
+import {AddEvidenceModal} from 'app/evidences';
 
 export class Viewer extends Component {
 
@@ -70,6 +71,7 @@ export class Viewer extends Component {
         </main>
 
         <ConfirmCloseForm />
+        <AddEvidenceModal templateId={doc.get('template')} />
         <ViewMetadataPanel storeKey={'documentViewer'} searchTerm={this.props.searchTerm}/>
         <CreateConnectionPanel containerId={this.props.targetDoc ? 'target' : doc.get('sharedId')}
                                onCreate={this.props.addReference}
