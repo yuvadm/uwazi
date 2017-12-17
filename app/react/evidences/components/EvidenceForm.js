@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 //import {actions as formActions, Field, LocalForm} from 'react-redux-form';
 import {Field, LocalForm} from 'react-redux-form';
 import {Select as SimpleSelect} from 'app/Forms';
+import {unsetEvidence} from '../actions';
 
 export class EvidenceForm extends Component {
 
@@ -82,7 +83,7 @@ export class EvidenceForm extends Component {
           </Field>
         </LocalForm>
 
-        <button type="button" className="btn btn-default">
+        <button type="button" className="btn btn-default" onClick={this.props.unsetEvidence}>
           <i className="fa fa-close"></i> Cancel
         </button>
         <button type="button" className="btn btn-primary">
@@ -96,7 +97,8 @@ export class EvidenceForm extends Component {
 EvidenceForm.propTypes = {
   template: PropTypes.object,
   thesauris: PropTypes.object,
-  evidence: PropTypes.string
+  evidence: PropTypes.string,
+  unsetEvidence: PropTypes.func
 };
 
 const mapStateToProps = ({thesauris}) => {
@@ -104,7 +106,7 @@ const mapStateToProps = ({thesauris}) => {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({unsetEvidence}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EvidenceForm);

@@ -14,7 +14,7 @@ describe('evidences actions', () => {
   });
 
   describe('add Evidence', () => {
-    fit('should set the evidence', () => {
+    it('should set the evidence', () => {
       const expectedActions = [{type: 'evidences/evidence/SET', value: {text: 'evidence text'}}];
 
       actions.setEvidence({text: 'evidence text'})(store.dispatch);
@@ -23,7 +23,7 @@ describe('evidences actions', () => {
   });
 
   describe('cancel Evidence', () => {
-    fit('should unset the evidence', () => {
+    it('should unset the evidence', () => {
       const expectedActions = [{type: 'evidences/evidence/UNSET'}];
 
       actions.unsetEvidence()(store.dispatch);
