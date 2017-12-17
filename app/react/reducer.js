@@ -7,6 +7,7 @@ import {reducer as notificationsReducer} from 'app/Notifications';
 
 import thesauri from 'app/Thesauris/reducers/reducer';
 import documentViewer from 'app/Viewer/reducers/reducer';
+import evidences from 'app/evidences/reducer';
 import entityView from 'app/Entities/reducers/reducer';
 import contextMenu from 'app/ContextMenu/reducers/contextMenuReducer';
 import connections from 'app/Connections';
@@ -29,6 +30,7 @@ export default combineReducers({
   library: library('library'),
   uploads: library('uploads'),
   progress,
+  evidences,
   locale,
   template,
   page,

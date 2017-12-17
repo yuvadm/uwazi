@@ -7,6 +7,7 @@ import {addToToc} from '../actions/documentActions';
 import {actions as connectionsActions} from 'app/Connections';
 import {openPanel} from 'app/Viewer/actions/uiActions';
 import ShowIf from 'app/App/ShowIf';
+import {AddEvidenceButton} from 'app/evidences';
 
 export class ViewerTextSelectedMenu extends Component {
   showPanel(type) {
@@ -36,6 +37,10 @@ export class ViewerTextSelectedMenu extends Component {
           <span className="ContextMenu-tooltip">Add to table of contents</span>
           <i className="fa fa-font"></i>
         </div>
+        <AddEvidenceButton className="btn btn-primary" evidence={this.props.reference.toJS().sourceRange}>
+          <span className="ContextMenu-tooltip">Add as evidence</span>
+          <i className="fa fa-search"></i>
+        </AddEvidenceButton>
       </div>
     );
   }

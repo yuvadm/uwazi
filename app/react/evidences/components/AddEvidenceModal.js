@@ -6,14 +6,9 @@ import Modal from 'app/Layout/Modal';
 import EvidenceForm from './EvidenceForm';
 
 export class AddEvidenceModal extends Component {
-
-  submit() {
-
-  }
-
   render() {
     return (
-      <Modal isOpen={!!this.props.template}>
+      <Modal isOpen={!!this.props.evidence}>
         <Modal.Body>
           <EvidenceForm template={this.props.template} evidence={this.props.evidence}/>
         </Modal.Body>
@@ -27,10 +22,10 @@ AddEvidenceModal.propTypes = {
   evidence: PropTypes.string
 };
 
-const mapStateToProps = ({templates}, {templateId}) => {
+const mapStateToProps = ({templates, evidences}, {templateId}) => {
   return {
     template: templates.find((t) => t.get('_id') === templateId),
-    evidence: 'this is a test evidence for testing'
+    evidence: evidences.evidence.get('text')
   };
 };
 
