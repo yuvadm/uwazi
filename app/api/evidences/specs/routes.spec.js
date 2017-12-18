@@ -1,11 +1,7 @@
 import evidencesRoutes from '../routes.js';
 import instrumentRoutes from '../../utils/instrumentRoutes';
 import evidences from '../evidences';
-import templates from '../../templates/templates';
-import thesauris from '../../thesauris/thesauris';
 import {catchErrors} from 'api/utils/jasmineHelpers';
-
-import db from 'api/utils/testing_db';
 
 describe('evidences routes', () => {
   let routes;
@@ -37,7 +33,8 @@ describe('evidences routes', () => {
         expect(result).toBe('document');
         expect(evidences.save).toHaveBeenCalledWith(req.body);
         done();
-      });
+      })
+      .catch(catchErrors);
     });
   });
 });
