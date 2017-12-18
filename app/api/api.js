@@ -14,6 +14,7 @@ export default (app, server) => {
   require('./socketio/middleware.js')(server, app);
   require('./references/routes.js')(app);
   require('./users/routes.js')(app);
+  require('./evidences/routes.js')(app);
   require('./templates/routes.js')(app);
   require('./search/routes.js')(app);
   require('./thesauris/routes.js')(app);

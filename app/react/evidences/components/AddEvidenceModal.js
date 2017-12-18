@@ -10,7 +10,7 @@ export class AddEvidenceModal extends Component {
     return (
       <Modal isOpen={!!this.props.evidence}>
         <Modal.Body>
-          <EvidenceForm template={this.props.template} evidence={this.props.evidence}/>
+          <EvidenceForm doc={this.props.doc} evidence={this.props.evidence}/>
         </Modal.Body>
       </Modal>
     );
@@ -18,13 +18,13 @@ export class AddEvidenceModal extends Component {
 }
 
 AddEvidenceModal.propTypes = {
-  template: PropTypes.object,
+  doc: PropTypes.object,
   evidence: PropTypes.string
 };
 
-const mapStateToProps = ({templates, evidences}, {templateId}) => {
+const mapStateToProps = ({templates, evidences}, {doc}) => {
   return {
-    template: templates.find((t) => t.get('_id') === templateId),
+    doc,
     evidence: evidences.evidence.get('text')
   };
 };

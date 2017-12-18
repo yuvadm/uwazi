@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions as formActions, LocalForm} from 'react-redux-form';
 //import {Field, LocalForm} from 'react-redux-form';
-import {unsetEvidence} from '../actions';
+import {unsetEvidence, saveEvidence} from '../actions';
 import {Select as SimpleSelect} from 'app/ReactReduxForms';
 
 export class EvidenceForm extends Component {
@@ -24,11 +24,20 @@ export class EvidenceForm extends Component {
     };
 
     this.submit = this.submit.bind(this);
+    this.attachDispatch = this.attachDispatch.bind(this);
     this.propertyChange = this.propertyChange.bind(this);
   }
 
   submit(values) {
-    console.log(values);
+    const evidence = {
+      property: values.property,
+      value: values.value,
+      entity: this.props.doc.get('_id'),
+      evidence: {text: this.props.evidence},
+      isEvidence: true
+    };
+
+    this.props.saveEvidence(evidence);
   }
 
   buildThesauriOptions(propertyId) {
@@ -42,7 +51,8 @@ export class EvidenceForm extends Component {
       return {label: t.label, value: t._id || t.id};
     });
 
-    return [{label: 'Select...', value: ''}].concat(thesauriOptions);
+    //return [{label: 'Select...', value: ''}].concat(thesauriOptions);
+    return thesauriOptions;
   }
 
   propertyChange(e) {
@@ -71,7 +81,7 @@ export class EvidenceForm extends Component {
         <p>{this.props.evidence}</p>
         <p>as evidence of:</p>
         <LocalForm
-          getDispatch={(dispatch) => this.attachDispatch(dispatch)}
+          getDispatch={this.attachDispatch}
           model={'evidence'}
           onSubmit={this.submit}
           id='evidenceForm'
@@ -107,17 +117,22 @@ export class EvidenceForm extends Component {
 
 EvidenceForm.propTypes = {
   template: PropTypes.object,
+  doc: PropTypes.object,
   thesauris: PropTypes.object,
   evidence: PropTypes.string,
-  unsetEvidence: PropTypes.func
+  unsetEvidence: PropTypes.func,
+  saveEvidence: PropTypes.func
 };
 
-const mapStateToProps = ({thesauris}) => {
-  return {thesauris};
+const mapStateToProps = ({thesauris, templates}, {doc}) => {
+  return {
+    template: templates.find((t) => t.get('_id') === doc.get('template')),
+    thesauris
+  };
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({unsetEvidence}, dispatch);
+  return bindActionCreators({unsetEvidence, saveEvidence}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EvidenceForm);

@@ -1,4 +1,5 @@
 import {actions} from 'app/BasicReducer';
+import evidencesAPI from './evidencesAPI';
 
 export function setEvidence(evidence) {
   return function (dispatch) {
@@ -9,5 +10,14 @@ export function setEvidence(evidence) {
 export function unsetEvidence() {
   return function (dispatch) {
     return dispatch(actions.unset('evidences/evidence'));
+  };
+}
+
+export function saveEvidence(evidence) {
+  return function (dispatch) {
+    return evidencesAPI.save(evidence)
+    .then(() => {
+      dispatch(actions.unset('evidences/evidence'));
+    });
   };
 }

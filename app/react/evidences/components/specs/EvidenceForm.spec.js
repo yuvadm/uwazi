@@ -2,7 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {EvidenceForm} from '../EvidenceForm';
 import Immutable from 'immutable';
-import {Select as SimpleSelect} from 'app/Forms';
+import {Select as SimpleSelect} from 'app/ReactReduxForms';
+import {actions as formActions} from 'react-redux-form';
 
 describe('EvidenceForm', () => {
   let component;
@@ -11,6 +12,10 @@ describe('EvidenceForm', () => {
 
   beforeEach(() => {
     props = {
+      saveEvidence: jasmine.createSpy('saveEvidence'),
+      doc: Immutable.fromJS({
+        _id: 'doc_id'
+      }),
       evidence: 'evidence_text',
       template: Immutable.fromJS({
         _id: 'template',
@@ -46,6 +51,8 @@ describe('EvidenceForm', () => {
 
   it('should render a select with thesauri options based on the first selection', () => {
     render();
+    instance.formDispatch = jasmine.createSpy('formDispatch');
+
     expect(component.find(SimpleSelect).at(0).props().options)
     .toEqual([{label: 'multiselect1', value: 'id_multiselect1'}, {label: 'multiselect2', value: 'id_multiselect2'}]);
 
@@ -56,7 +63,24 @@ describe('EvidenceForm', () => {
     instance.selectProperty('id_multiselect2');
     component.update();
 
+    expect(instance.formDispatch).toHaveBeenCalledWith(formActions.change('evidence.value', ''));
     expect(component.find(SimpleSelect).at(1).props().options)
     .toEqual([{label: 'thesauri2_label1', value: 'thesauri2_id1'}, {label: 'thesauri2_label2', value: 'thesauri2_id2'}]);
+  });
+
+  describe('submit', () => {
+    it('save evidence', () => {
+      render();
+
+      instance.submit({property: 'propertyId', value: 'valueId'});
+
+      expect(props.saveEvidence).toHaveBeenCalledWith({
+        property: 'propertyId',
+        value: 'valueId',
+        entity: 'doc_id',
+        evidence: {text: props.evidence},
+        isEvidence: true
+      });
+    });
   });
 });
