@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-//import {actions as formActions, Field, LocalForm} from 'react-redux-form';
-import {Field, LocalForm} from 'react-redux-form';
-import {Select as SimpleSelect} from 'app/Forms';
+import {actions as formActions, LocalForm} from 'react-redux-form';
+//import {Field, LocalForm} from 'react-redux-form';
 import {unsetEvidence} from '../actions';
+import {Select as SimpleSelect} from 'app/ReactReduxForms';
 
 export class EvidenceForm extends Component {
 
@@ -27,8 +27,8 @@ export class EvidenceForm extends Component {
     this.propertyChange = this.propertyChange.bind(this);
   }
 
-  submit() {
-
+  submit(values) {
+    console.log(values);
   }
 
   buildThesauriOptions(propertyId) {
@@ -39,10 +39,10 @@ export class EvidenceForm extends Component {
 
     const thesauri = thesauris.find((t) => t._id === properties.find((p) => p._id === propertyId).content);
     const thesauriOptions = thesauri.values.map((t) => {
-      return {label: t.label, value: t._id};
+      return {label: t.label, value: t._id || t.id};
     });
 
-    return thesauriOptions;
+    return [{label: 'Select...', value: ''}].concat(thesauriOptions);
   }
 
   propertyChange(e) {
@@ -50,9 +50,18 @@ export class EvidenceForm extends Component {
   }
 
   selectProperty(propertyId) {
+    this.resetValue();
     this.setState({
       thesauriOptions: this.buildThesauriOptions(propertyId)
     });
+  }
+
+  attachDispatch(dispatch) {
+    this.formDispatch = dispatch;
+  }
+
+  resetValue() {
+    this.formDispatch(formActions.change('evidence.value', ''));
   }
 
   render() {
@@ -62,31 +71,33 @@ export class EvidenceForm extends Component {
         <p>{this.props.evidence}</p>
         <p>as evidence of:</p>
         <LocalForm
+          getDispatch={(dispatch) => this.attachDispatch(dispatch)}
           model={'evidence'}
           onSubmit={this.submit}
+          id='evidenceForm'
+        >
+          <SimpleSelect
+            model=".property"
+            className="form-control"
+            options={this.state.propertyOptions}
+            onChange={this.propertyChange}
+            defaultValue=''
           >
-          <Field model=".property">
-            <SimpleSelect
-              className="form-control"
-              options={this.state.propertyOptions}
-              onChange={this.propertyChange}
-            >
-            </SimpleSelect>
-          </Field>
+          </SimpleSelect>
 
-          <Field model=".value">
-            <SimpleSelect
-              className="form-control"
-              options={this.state.thesauriOptions}
-            >
-            </SimpleSelect>
-          </Field>
+          <SimpleSelect
+            model=".value"
+            className="form-control"
+            options={this.state.thesauriOptions}
+            defaultValue=''
+          >
+          </SimpleSelect>
         </LocalForm>
 
         <button type="button" className="btn btn-default" onClick={this.props.unsetEvidence}>
           <i className="fa fa-close"></i> Cancel
         </button>
-        <button type="button" className="btn btn-primary">
+        <button type="submit" form="evidenceForm" className="btn btn-primary">
           <i className="fa fa-trash"></i> Add property
         </button>
       </div>
