@@ -3,7 +3,7 @@ import needsAuthorization from '../auth/authMiddleware';
 
 export default (app) => {
   app.post('/api/evidences', needsAuthorization(['admin', 'editor']), (req, res) => {
-    return evidences.save(req.body)
+    return evidences.save(req.body, req.user, req.language)
     .then(response => res.json(response))
     .catch(res.error);
   });

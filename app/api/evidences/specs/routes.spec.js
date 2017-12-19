@@ -31,7 +31,7 @@ describe('evidences routes', () => {
       routes.post('/api/evidences', req)
       .then((result) => {
         expect(result).toBe('document');
-        expect(evidences.save).toHaveBeenCalledWith(req.body);
+        expect(evidences.save).toHaveBeenCalledWith(req.body, req.user, req.language);
         done();
       })
       .catch(catchErrors);

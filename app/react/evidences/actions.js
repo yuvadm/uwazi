@@ -16,8 +16,9 @@ export function unsetEvidence() {
 export function saveEvidence(evidence) {
   return function (dispatch) {
     return evidencesAPI.save(evidence)
-    .then(() => {
+    .then((savedDoc) => {
       dispatch(actions.unset('evidences/evidence'));
+      dispatch(actions.set('viewer/doc', savedDoc));
     });
   };
 }

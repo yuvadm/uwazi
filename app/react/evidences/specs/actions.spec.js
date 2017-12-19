@@ -11,7 +11,7 @@ describe('evidences actions', () => {
   let store;
 
   beforeEach(() => {
-    spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve());
+    spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve('savedDoc'));
     store = mockStore({});
   });
 
@@ -36,7 +36,8 @@ describe('evidences actions', () => {
   describe('saveEvidence', () => {
     it('should save the evidence', (done) => {
       const expectedActions = [
-        {type: 'evidences/evidence/UNSET'}
+        {type: 'evidences/evidence/UNSET'},
+        {type: 'viewer/doc/SET', value: 'savedDoc'}
       ];
       const evidence = {test: 'test'};
 

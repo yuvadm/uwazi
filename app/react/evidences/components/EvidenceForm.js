@@ -48,7 +48,7 @@ export class EvidenceForm extends Component {
 
     const thesauri = thesauris.find((t) => t._id === properties.find((p) => p._id === propertyId).content);
     const thesauriOptions = thesauri.values.map((t) => {
-      return {label: t.label, value: t._id || t.id};
+      return {label: t.label, value: t.id || t._id};
     });
 
     //return [{label: 'Select...', value: ''}].concat(thesauriOptions);
