@@ -1,9 +1,10 @@
 import evidencesRoutes from '../routes.js';
 import instrumentRoutes from '../../utils/instrumentRoutes';
 import evidences from '../evidences';
+import MLAPI from '../MLAPI';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-describe('evidences routes', () => {
+fdescribe('evidences routes', () => {
   let routes;
 
   beforeEach(() => {
@@ -19,6 +20,7 @@ describe('evidences routes', () => {
         language: 'lang',
         io: {sockets: {emit: () => {}}}
       };
+      spyOn(MLAPI, 'train');
     });
 
     it('should need authorization', () => {
@@ -32,6 +34,18 @@ describe('evidences routes', () => {
       .then((result) => {
         expect(result).toBe('document');
         expect(evidences.save).toHaveBeenCalledWith(req.body, req.user, req.language);
+        done();
+      })
+      .catch(catchErrors);
+    });
+
+    it('should call the train MLapi endpoint with the evidence', (done) => {
+      spyOn(evidences, 'save').and.returnValue(new Promise((resolve) => resolve('document')));
+
+      routes.post('/api/evidences', req)
+      .then((result) => {
+        expect(result).toBe('document');
+        expect(MLAPI.train).toHaveBeenCalledWith(req.body);
         done();
       })
       .catch(catchErrors);

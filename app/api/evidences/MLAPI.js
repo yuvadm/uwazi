@@ -1,17 +1,11 @@
-//import {APIURL} from '../config.js';
-
-//let API_URL = APIURL;
+import {MLAPIURL} from '../config/config.js';
+import request from 'shared/JSONRequest';
 
 export default {
   getSuggestions: (url, data) => {
-    //return request.get(API_URL + url, data)
-    //.then(doneLoading)
-    //.catch(handleError);
+  },
+
+  train: (data) => {
+    return request.post(MLAPIURL + 'classification/train', data);
   }
-
-  //post: (url, data) => {
-  //},
-
-  //delete: (url, data) => {
-  //}
-}
+};
