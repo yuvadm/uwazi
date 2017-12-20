@@ -28,6 +28,25 @@ export default {
     return model.get(query, select, pagination);
   },
 
+  getSuggestions(docId) {
+    return entities.getById(docId)
+    .then((entity) => {
+      return Promise.all([
+        entity,
+        templates.getById(entity.template)
+      ]);
+    })
+    .then(([entity, template]) => {
+      const multiselects = template.properties.filter(p => p.type === 'multiselect');
+      return Promise.resolve({rows: [
+        {entity: docId, property: multiselects[0]._id, value: 'test', evidence: {text: 'test evidence true'}},
+        {entity: docId, property: multiselects[0]._id, value: 'test', evidence: {text: 'test evidence false'}},
+        {entity: docId, property: multiselects[1]._id, value: 'test2', evidence: {text: 'test evidence2 true'}},
+        {entity: docId, property: multiselects[1]._id, value: 'test2', evidence: {text: 'test evidence2 false'}}
+      ]});
+    });
+  },
+
   getById(_id) {
     return model.get({_id}).then(([evidence]) => evidence);
   },

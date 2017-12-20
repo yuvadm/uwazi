@@ -1,6 +1,27 @@
 import {actions} from 'app/BasicReducer';
 import evidencesAPI from './evidencesAPI';
 
+export function setSuggestions(suggestions) {
+  return function (dispatch) {
+    return dispatch(actions.set('evidences/suggestions', suggestions));
+  };
+}
+
+export function unsetSuggestions() {
+  return function (dispatch) {
+    return dispatch(actions.unset('evidences/suggestions'));
+  };
+}
+
+export function getSuggestions(docId) {
+  return function (dispatch) {
+    return evidencesAPI.getSuggestions(docId)
+    .then((suggestions) => {
+      dispatch(setSuggestions(suggestions));
+    });
+  };
+}
+
 export function setEvidence(evidence) {
   return function (dispatch) {
     return dispatch(actions.set('evidences/evidence', evidence));

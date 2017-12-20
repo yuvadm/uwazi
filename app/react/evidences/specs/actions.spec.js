@@ -11,8 +11,39 @@ describe('evidences actions', () => {
   let store;
 
   beforeEach(() => {
-    spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve('savedDoc'));
     store = mockStore({});
+  });
+
+  describe('setSuggestions', () => {
+    it('should set the suggestions', () => {
+      const expectedActions = [{type: 'evidences/suggestions/SET', value: 'suggestions'}];
+
+      actions.setSuggestions('suggestions')(store.dispatch);
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  describe('unsetSuggestions', () => {
+    it('should unset the suggestions', () => {
+      const expectedActions = [{type: 'evidences/suggestions/UNSET'}];
+
+      actions.unsetSuggestions()(store.dispatch);
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  describe('getSuggestions', () => {
+    it('should request suggestions and set them on the store', (done) => {
+      spyOn(evidencesAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestionsResponse'));
+      const expectedActions = [{type: 'evidences/suggestions/SET', value: 'suggestionsResponse'}];
+
+      actions.getSuggestions('docId')(store.dispatch)
+      .then(() => {
+        expect(evidencesAPI.getSuggestions).toHaveBeenCalledWith('docId');
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      });
+    });
   });
 
   describe('add Evidence', () => {
@@ -35,6 +66,7 @@ describe('evidences actions', () => {
 
   describe('saveEvidence', () => {
     it('should save the evidence', (done) => {
+      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve('savedDoc'));
       const expectedActions = [
         {type: 'evidences/evidence/UNSET'},
         {type: 'viewer/doc/SET', value: 'savedDoc'}

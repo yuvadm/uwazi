@@ -17,6 +17,7 @@ import SidePanel from 'app/Layout/SidePanel';
 import SearchText from './SearchText';
 import ShowToc from './ShowToc';
 import SnippetsTab from './SnippetsTab';
+import {EvidenceSuggestions} from 'app/evidences';
 
 const selectReferences = createSelector(
   s => s.references,
@@ -142,6 +143,17 @@ export class DocumentSidePanel extends Component {
               })()}
               {(() => {
                 if (docType !== 'entity') {
+                  return <li>
+                    <TabLink to="suggestions">
+                      <i className="fa fa-search"></i>
+                      <span className="tab-link-tooltip">{t('System', 'Suggestions')}</span>
+                    </TabLink>
+                  </li>;
+                }
+                return <span/>;
+              })()}
+              {(() => {
+                if (docType !== 'entity') {
                   return <li className="tab-separator"></li>;
                 }
                 return <span/>;
@@ -258,6 +270,9 @@ export class DocumentSidePanel extends Component {
                 references={references}
                 readOnly={readOnly}
               />
+            </TabContent>
+            <TabContent for="suggestions">
+              <EvidenceSuggestions />
             </TabContent>
             <TabContent for="connections">
               <Connections references={connections}

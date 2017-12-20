@@ -10,6 +10,7 @@ describe('evidencesAPI', () => {
     backend.restore();
     backend
     .get(APIURL + 'evidences?_id=docId', {body: JSON.stringify({rows: arrayResponse})})
+    .get(APIURL + 'evidences/suggestions?_id=docId', {body: JSON.stringify({rows: arrayResponse})})
     .delete(APIURL + 'evidences?_id=id', {body: JSON.stringify({backednResponse: 'testdelete'})})
     .post(APIURL + 'evidences', {body: JSON.stringify({backednResponse: 'test'})});
   });
@@ -23,6 +24,17 @@ describe('evidencesAPI', () => {
       .then((response) => {
         expect(JSON.parse(backend.lastOptions(APIURL + 'evidences').body)).toEqual(data);
         expect(response).toEqual({backednResponse: 'test'});
+        done();
+      })
+      .catch(done.fail);
+    });
+  });
+
+  describe('getSuggestions()', () => {
+    it('should request evidences', (done) => {
+      evidencesAPI.getSuggestions('docId')
+      .then((response) => {
+        expect(response).toEqual(arrayResponse);
         done();
       })
       .catch(done.fail);

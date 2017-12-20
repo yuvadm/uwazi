@@ -1,6 +1,7 @@
 import evidences from '../evidences.js';
 import entities from '../../entities';
 import {catchErrors} from 'api/utils/jasmineHelpers';
+import MLAPI from '../MLAPI';
 
 import db from 'api/utils/testing_db';
 import fixtures, {propertyID, entityID} from './fixtures.js';
@@ -61,4 +62,15 @@ describe('evidences', () => {
       .catch(catchErrors(done));
     });
   });
+
+  //describe('getSuggestions', () => {
+    //it('should call the suggestions api for each multiselect value and return all suggestions merged', (done) => {
+      //spyOn(MLAPI, 'getSuggestions').and.returnValue('suggestions');
+      //evidences.getSuggestions(entityID)
+      //.then((suggestions) => {
+        //expect(true).toBe(false);
+        //done();
+      //});
+    //});
+  //});
 });
