@@ -1,3 +1,3 @@
 export default {
-  MLAPIURL: 'https://localhost:4000/'
+  MLAPIURL: 'http://localhost:4000/'
 };

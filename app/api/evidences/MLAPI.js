@@ -7,5 +7,9 @@ export default {
 
   train: (data) => {
     return request.post(MLAPIURL + 'classification/train', data);
+  },
+
+  setUp: (data) => {
+    return request.post(MLAPIURL + 'classification/setUp', data);
   }
 };
