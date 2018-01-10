@@ -42,15 +42,13 @@ thesauris.dictionaries()
           if (!result[value]) {
             result[value] = [];
           }
-          if (result[value].length < 2) {
-            result[value].push({id: doc._id, text: doc.fullText, title: doc.title});
+          if (result[value].length < 5) {
+            result[value].push({id: doc._id, text: doc.fullText.replace(/\[\[[0-9]*\]\]/g, ''), title: doc.title});
           }
         }
       });
     });
   });
-
-  //console.log(result);
 
   return MLAPI.setUp({data: result});
 })

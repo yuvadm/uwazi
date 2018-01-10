@@ -4,7 +4,7 @@ import evidences from '../evidences';
 import MLAPI from '../MLAPI';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-fdescribe('evidences routes', () => {
+describe('evidences routes', () => {
   let routes;
 
   beforeEach(() => {
@@ -46,6 +46,30 @@ fdescribe('evidences routes', () => {
       .then((result) => {
         expect(result).toBe('document');
         expect(MLAPI.train).toHaveBeenCalledWith(req.body);
+        done();
+      })
+      .catch(catchErrors);
+    });
+  });
+
+  describe('GET', () => {
+    let req;
+    beforeEach(() => {
+      req = {
+        query: {id: 'id'},
+        user: {username: 'admin'},
+        language: 'lang',
+        io: {sockets: {emit: () => {}}}
+      };
+    });
+
+    it('should get evidences passing query', (done) => {
+      spyOn(evidences, 'get').and.returnValue(Promise.resolve('evidences'));
+
+      routes.get('/api/evidences', req)
+      .then((result) => {
+        expect(result).toBe('evidences');
+        expect(evidences.get).toHaveBeenCalledWith(req.query);
         done();
       })
       .catch(catchErrors);

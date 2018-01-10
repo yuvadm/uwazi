@@ -5,7 +5,7 @@ import api from '../MLAPI';
 
 describe('MLAPI', () => {
   describe('train()', () => {
-    fit('should post data passed', (done) => {
+    it('should post data passed', (done) => {
       spyOn(request, 'post').and.returnValue(Promise.resolve('response'));
       const data = {data: 'test'};
       api.train(data)

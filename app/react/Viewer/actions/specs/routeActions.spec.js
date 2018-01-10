@@ -8,13 +8,15 @@ describe('Viewer routeActions', () => {
   let document = {_id: '1', title: 'title', pdfInfo: 'test'};
   let relationTypes = {rows: [{name: 'Supports', _id: '1'}]};
   let references = [{_id: '1', connectedDocument: '1'}, {_id: '2', connectedDocument: '2'}];
+  let evidences = {rows: []};
 
   beforeEach(() => {
     backend.restore();
     backend
     .get(APIURL + 'documents?_id=documentId', {body: JSON.stringify({rows: [document]})})
     .get(APIURL + 'relationtypes', {body: JSON.stringify(relationTypes)})
-    .get(APIURL + 'references/by_document/documentId', {body: JSON.stringify(references)});
+    .get(APIURL + 'references/by_document/documentId', {body: JSON.stringify(references)})
+    .get(APIURL + 'evidences?entity=documentId', {body: JSON.stringify(evidences)});
 
     spyOn(referencesUtils, 'filterRelevant').and.returnValue(['filteredReferences']);
   });
@@ -27,10 +29,12 @@ describe('Viewer routeActions', () => {
       .then((state) => {
         let documentResponse = state.documentViewer.doc;
         let relationTypesResponse = state.documentViewer.relationTypes;
+        let evidencesResponse = state.evidences;
 
         expect(documentResponse._id).toBe('1');
         expect(relationTypesResponse).toEqual(relationTypes.rows);
         expect(state.relationTypes).toEqual(relationTypes.rows);
+        expect(evidencesResponse).toEqual(evidences.rows);
         done();
       })
       .catch(done.fail);
@@ -63,7 +67,8 @@ describe('Viewer routeActions', () => {
           thesauris: 'thesauris',
           relationTypes: 'relationTypes'
         },
-        relationTypes: 'relationTypes'
+        relationTypes: 'relationTypes',
+        evidences: 'evidences'
       })(dispatch);
     });
 
@@ -72,6 +77,7 @@ describe('Viewer routeActions', () => {
       expect(dispatch).toHaveBeenCalledWith({type: 'SET_REFERENCES', references: 'references'});
       expect(dispatch).toHaveBeenCalledWith({type: 'viewer/doc/SET', value: 'doc'});
       expect(dispatch).toHaveBeenCalledWith({type: 'viewer/relationTypes/SET', value: 'relationTypes'});
+      expect(dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/SET', value: 'evidences'});
     });
   });
 });

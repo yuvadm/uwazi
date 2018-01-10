@@ -28,11 +28,18 @@ class EvidenceSuggestions extends Component {
   }
 
   render() {
+    let thesauriValues = {};
+    this.props.thesauris.forEach((thesauri) => {
+      thesauri.get('values').forEach((value) => {
+        thesauriValues[value.get('id')] = value.get('label');
+      });
+    });
     return <div>
       <button onClick={this.getSuggestions}>Get suggestions</button>
       {this.props.suggestions.map((suggestion, index) => {
         return <div key={index}>
           <p>{suggestion.get('evidence').get('text')}</p>
+          <p>{thesauriValues[suggestion.get('value')]}</p>
           <p>{suggestion.get('value')}</p>
           <button onClick={this.saveValidSuggestion.bind(this, suggestion)}>OK</button>
           <button onClick={this.saveInvalidSuggestion.bind(this, suggestion)}>NO</button>
@@ -49,10 +56,11 @@ EvidenceSuggestions.propTypes = {
   saveEvidence: PropTypes.func
 };
 
-export function mapStateToProps({evidences, documentViewer}) {
+export function mapStateToProps({evidences, documentViewer, thesauris}) {
   return {
     suggestions: evidences.suggestions,
-    doc: documentViewer.doc
+    doc: documentViewer.doc,
+    thesauris
   };
 }
 

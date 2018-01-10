@@ -4,7 +4,7 @@ import {catchErrors} from 'api/utils/jasmineHelpers';
 import MLAPI from '../MLAPI';
 
 import db from 'api/utils/testing_db';
-import fixtures, {propertyID, entityID} from './fixtures.js';
+import fixtures, {propertyID, propertyID2, entityID, entityForSuggestions} from './fixtures.js';
 
 describe('evidences', () => {
   beforeEach((done) => {
@@ -63,14 +63,28 @@ describe('evidences', () => {
     });
   });
 
-  //describe('getSuggestions', () => {
-    //it('should call the suggestions api for each multiselect value and return all suggestions merged', (done) => {
-      //spyOn(MLAPI, 'getSuggestions').and.returnValue('suggestions');
-      //evidences.getSuggestions(entityID)
-      //.then((suggestions) => {
-        //expect(true).toBe(false);
-        //done();
-      //});
-    //});
-  //});
+  describe('getSuggestions', () => {
+    it('should get suggestions passing the doc and every posible combination of property/vale for the multiselect', (done) => {
+      spyOn(MLAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestions'));
+      evidences.getSuggestions(entityForSuggestions)
+      .then((suggestions) => {
+        expect(MLAPI.getSuggestions).toHaveBeenCalledWith({
+          doc: {
+            title: 'Suggestions doc',
+            text: 'this is a test'
+          },
+          properties: [
+            {entity: entityForSuggestions, property: propertyID, value: '1'},
+            {entity: entityForSuggestions, property: propertyID, value: '2'},
+
+            {entity: entityForSuggestions, property: propertyID2, value: '3'},
+            {entity: entityForSuggestions, property: propertyID2, value: '4'}
+          ]
+        });
+        expect(suggestions).toBe('suggestions');
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+  });
 });

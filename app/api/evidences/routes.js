@@ -18,8 +18,8 @@ export default (app) => {
     .catch(res.error);
   });
 
-  app.delete('/api/entities', needsAuthorization(['admin', 'editor']), (req, res) => {
-    evidences.delete(req.query)
+  app.get('/api/evidences', (req, res) => {
+    evidences.get(req.query)
     .then(response => res.json(response))
     .catch(res.error);
   });

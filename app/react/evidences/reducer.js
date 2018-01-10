@@ -3,5 +3,6 @@ import createReducer from 'app/BasicReducer';
 
 export default combineReducers({
   evidence: createReducer('evidences/evidence', {}),
-  suggestions: createReducer('evidences/suggestions', [])
+  suggestions: createReducer('evidences/suggestions', []),
+  evidences: createReducer('evidences/evidences', [])
 });

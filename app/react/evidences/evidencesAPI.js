@@ -1,12 +1,12 @@
 import api from 'app/utils/api';
 
 export default {
-  get(id) {
-    return api.get('evidences', {_id: id}).then(response => response.json.rows);
+  get(docId) {
+    return api.get('evidences', {entity: docId}).then(response => response.json.rows);
   },
 
   getSuggestions(id) {
-    return api.get('evidences/suggestions', {_id: id}).then(response => response.json.rows);
+    return api.get('evidences/suggestions', {_id: id}).then(response => response.json);
   },
 
   save(evidence) {

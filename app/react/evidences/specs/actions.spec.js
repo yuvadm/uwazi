@@ -81,4 +81,21 @@ describe('evidences actions', () => {
       });
     });
   });
+
+  describe('get', () => {
+    it('should get evidences for the doc', (done) => {
+      spyOn(evidencesAPI, 'get').and.returnValue(Promise.resolve('evidences'));
+      const expectedActions = [
+        {type: 'evidences/evidences/SET', value: 'evidences'}
+      ];
+      const docId = 'docId';
+
+      actions.getEvidences(docId)(store.dispatch)
+      .then(() => {
+        expect(evidencesAPI.get).toHaveBeenCalledWith(docId);
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      });
+    });
+  });
 });

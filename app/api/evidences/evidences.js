@@ -1,6 +1,8 @@
 import model from './evidencesModel.js';
 import entities from '../entities';
 import templates from '../templates';
+import thesauris from '../thesauris/thesauris';
+import MLAPI from './MLAPI';
 
 export default {
   save(evidence, user, language) {
@@ -29,8 +31,8 @@ export default {
   },
 
   getSuggestions(docId) {
-    return entities.getById(docId)
-    .then((entity) => {
+    return entities.get({_id: docId}, '+fullText')
+    .then(([entity]) => {
       return Promise.all([
         entity,
         templates.getById(entity.template)
@@ -38,12 +40,34 @@ export default {
     })
     .then(([entity, template]) => {
       const multiselects = template.properties.filter(p => p.type === 'multiselect');
-      return Promise.resolve({rows: [
-        {entity: docId, property: multiselects[0]._id, value: 'test', evidence: {text: 'test evidence true'}},
-        {entity: docId, property: multiselects[0]._id, value: 'test', evidence: {text: 'test evidence false'}},
-        {entity: docId, property: multiselects[1]._id, value: 'test2', evidence: {text: 'test evidence2 true'}},
-        {entity: docId, property: multiselects[1]._id, value: 'test2', evidence: {text: 'test evidence2 false'}}
-      ]});
+
+      return Promise.all([
+        entity,
+        template,
+        Promise.all(multiselects.map((multiselect) => thesauris.get(multiselect.content, 'en').then((t) => t[0])))
+      ]);
+    })
+    .then(([entity, template, dictionaries]) => {
+      const multiselects = template.properties.filter(p => p.type === 'multiselect');
+      let properties = [];
+      multiselects.forEach((property) => {
+        dictionaries.find((d) => d._id.toString() === property.content.toString()).values.forEach((value) => {
+          properties.push({entity: docId, property: property._id, value: value.id});
+        });
+      });
+      return MLAPI.getSuggestions({
+        doc: {
+          title: entity.title,
+          text: entity.fullText.replace(/\[\[[0-9]*\]\]/g, '')
+        },
+        properties
+      });
+    })
+    .then((evidences) => {
+      return evidences.map((evidence) => {
+        evidence.evidence = {text: evidence.evidence};
+        return evidence;
+      });
     });
   },
 

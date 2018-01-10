@@ -70,6 +70,9 @@ describe('ViewDocument', () => {
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'viewer/relationTypes/UNSET'});
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'rrf/reset', model: 'documentViewer.tocForm'});
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'viewer/targetDoc/UNSET'});
+      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/suggestions/UNSET'});
+      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/UNSET'});
+      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidence/UNSET'});
     });
   });
 });

@@ -2,7 +2,8 @@ import {MLAPIURL} from '../config/config.js';
 import request from 'shared/JSONRequest';
 
 export default {
-  getSuggestions: (url, data) => {
+  getSuggestions: (data) => {
+    return request.post(MLAPIURL + 'classification/predict', data).then((response) => response.json);
   },
 
   train: (data) => {
@@ -10,6 +11,9 @@ export default {
   },
 
   setUp: (data) => {
-    return request.post(MLAPIURL + 'classification/setUp', data);
+    return request.post(MLAPIURL + 'classification/setUp', data)
+    .then((response) => {
+      return response;
+    });
   }
 };

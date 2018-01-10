@@ -4,13 +4,12 @@ import backend from 'fetch-mock';
 
 describe('evidencesAPI', () => {
   let arrayResponse = [{entities: 'array'}];
-  //let singleResponse = [{entities: 'single'}];
 
   beforeEach(() => {
     backend.restore();
     backend
-    .get(APIURL + 'evidences?_id=docId', {body: JSON.stringify({rows: arrayResponse})})
-    .get(APIURL + 'evidences/suggestions?_id=docId', {body: JSON.stringify({rows: arrayResponse})})
+    .get(APIURL + 'evidences?entity=docId', {body: JSON.stringify({rows: arrayResponse})})
+    .get(APIURL + 'evidences/suggestions?_id=docId', {body: JSON.stringify(arrayResponse)})
     .delete(APIURL + 'evidences?_id=id', {body: JSON.stringify({backednResponse: 'testdelete'})})
     .post(APIURL + 'evidences', {body: JSON.stringify({backednResponse: 'test'})});
   });
