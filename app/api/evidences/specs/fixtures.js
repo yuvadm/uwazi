@@ -13,7 +13,7 @@ const dictionary2Id = db.id();
 export default {
   entities: [
     {_id: entityID, sharedId: 'shared', type: 'entity', template: templateId, language: 'en', title: 'Batman finishes', published: true, metadata: {property1: 'value1'}},
-    {_id: entityForSuggestions, sharedId: 'shared1', type: 'document', template: templateId, title: 'Suggestions doc', fullText: 'this[[1]] is[[2]] a[[13]] test[[234]]', metadata: {}}
+    {_id: entityForSuggestions, sharedId: 'shared1', language: 'en', type: 'document', template: templateId, title: 'Suggestions doc', fullText: 'this[[1]] is[[2]] a[[13]] test[[234]]', metadata: {}}
   ],
   settings: [
     {_id: db.id(), languages: [{key: 'es'}, {key: 'pt'}, {key: 'en'}]}

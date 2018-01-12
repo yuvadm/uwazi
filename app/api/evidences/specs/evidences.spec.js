@@ -4,9 +4,9 @@ import {catchErrors} from 'api/utils/jasmineHelpers';
 import MLAPI from '../MLAPI';
 
 import db from 'api/utils/testing_db';
-import fixtures, {propertyID, propertyID2, entityID, entityForSuggestions} from './fixtures.js';
+import fixtures, {propertyID, propertyID2, entityID} from './fixtures.js';
 
-describe('evidences', () => {
+fdescribe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -17,9 +17,9 @@ describe('evidences', () => {
   });
 
   describe('save', () => {
-    it('should create a new entity for each language in settings with a language property and a shared id', (done) => {
+    fit('should create a new entity for each language in settings with a language property and a shared id', (done) => {
       let evidence = {
-        entity: entityID,
+        document: 'shared',
         property: propertyID,
         value: db.id(),
         evidence: {text: 'test evidence'}
@@ -29,14 +29,15 @@ describe('evidences', () => {
       .then(() => evidences.get())
       .then(([createdEvidence]) => {
         expect(createdEvidence.evidence.text).toBe('test evidence');
+        expect(createdEvidence.language).toBe('en');
         done();
       })
       .catch(catchErrors(done));
     });
 
-    it('should save the value on the entity property', (done) => {
+    fit('should save the value on the entity property, if not already saved', (done) => {
       let evidence = {
-        entity: entityID,
+        document: 'shared',
         property: propertyID,
         value: 'value',
         evidence: {text: 'test evidence'}
@@ -57,6 +58,10 @@ describe('evidences', () => {
       })
       .then((entity) => {
         expect(entity.metadata.multiselect).toEqual(['value', 'value2']);
+        return evidences.save(evidence, {}, 'en');
+      })
+      .then((entity) => {
+        expect(entity.metadata.multiselect).toEqual(['value', 'value2']);
         done();
       })
       .catch(catchErrors(done));
@@ -64,9 +69,9 @@ describe('evidences', () => {
   });
 
   describe('getSuggestions', () => {
-    it('should get suggestions passing the doc and every posible combination of property/vale for the multiselect', (done) => {
-      spyOn(MLAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestions'));
-      evidences.getSuggestions(entityForSuggestions)
+    fit('should get suggestions passing the doc and every posible combination of property/vale for the multiselect', (done) => {
+      spyOn(MLAPI, 'getSuggestions').and.returnValue(Promise.resolve([]));
+      evidences.getSuggestions('shared1', 'en')
       .then((suggestions) => {
         expect(MLAPI.getSuggestions).toHaveBeenCalledWith({
           doc: {
@@ -74,14 +79,13 @@ describe('evidences', () => {
             text: 'this is a test'
           },
           properties: [
-            {entity: entityForSuggestions, property: propertyID, value: '1'},
-            {entity: entityForSuggestions, property: propertyID, value: '2'},
-
-            {entity: entityForSuggestions, property: propertyID2, value: '3'},
-            {entity: entityForSuggestions, property: propertyID2, value: '4'}
+            {document: 'shared1', language: 'en', property: propertyID, value: '1'},
+            {document: 'shared1', language: 'en', property: propertyID, value: '2'},
+            {document: 'shared1', language: 'en', property: propertyID2, value: '3'},
+            {document: 'shared1', language: 'en', property: propertyID2, value: '4'}
           ]
         });
-        expect(suggestions).toBe('suggestions');
+        expect(suggestions).toEqual([]);
         done();
       })
       .catch(catchErrors(done));

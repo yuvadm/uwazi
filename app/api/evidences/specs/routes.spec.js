@@ -4,7 +4,7 @@ import evidences from '../evidences';
 import MLAPI from '../MLAPI';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-describe('evidences routes', () => {
+fdescribe('evidences routes', () => {
   let routes;
 
   beforeEach(() => {
@@ -69,7 +69,7 @@ describe('evidences routes', () => {
       routes.get('/api/evidences', req)
       .then((result) => {
         expect(result).toBe('evidences');
-        expect(evidences.get).toHaveBeenCalledWith(req.query);
+        expect(evidences.get).toHaveBeenCalledWith({id: 'id', language: 'lang'});
         done();
       })
       .catch(catchErrors);

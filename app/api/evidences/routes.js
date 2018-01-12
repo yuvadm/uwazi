@@ -13,13 +13,15 @@ export default (app) => {
   });
 
   app.get('/api/evidences/suggestions', needsAuthorization(['admin', 'editor']), (req, res) => {
-    return evidences.getSuggestions(req.query._id)
+    return evidences.getSuggestions(req.query._id, req.language)
     .then(response => res.json(response))
     .catch(res.error);
   });
 
   app.get('/api/evidences', (req, res) => {
-    evidences.get(req.query)
+    let query = req.query;
+    query.language = req.language;
+    evidences.get(query)
     .then(response => res.json(response))
     .catch(res.error);
   });

@@ -6,9 +6,10 @@ import MLAPI from './MLAPI';
 
 export default {
   save(evidence, user, language) {
+    evidence.language = language;
     return model.save(evidence)
     .then(() => {
-      return entities.getById(evidence.entity);
+      return entities.getById(evidence.document, language);
     })
     .then((entity) => {
       return Promise.all([
@@ -21,7 +22,9 @@ export default {
       if (!entity.metadata[propertyName]) {
         entity.metadata[propertyName] = [];
       }
-      entity.metadata[propertyName].push(evidence.value);
+      if (!entity.metadata[propertyName].includes(evidence.value)) {
+        entity.metadata[propertyName].push(evidence.value);
+      }
       return entities.save(entity, {user, language});
     });
   },
@@ -30,8 +33,8 @@ export default {
     return model.get(query, select, pagination);
   },
 
-  getSuggestions(docId) {
-    return entities.get({_id: docId}, '+fullText')
+  getSuggestions(docId, language) {
+    return entities.get({sharedId: docId, language}, '+fullText')
     .then(([entity]) => {
       return Promise.all([
         entity,
@@ -52,7 +55,7 @@ export default {
       let properties = [];
       multiselects.forEach((property) => {
         dictionaries.find((d) => d._id.toString() === property.content.toString()).values.forEach((value) => {
-          properties.push({entity: docId, property: property._id, value: value.id});
+          properties.push({document: docId, language: language, property: property._id, value: value.id});
         });
       });
       return MLAPI.getSuggestions({

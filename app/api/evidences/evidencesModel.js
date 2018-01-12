@@ -4,7 +4,8 @@ import instanceModel from 'api/odm';
 const evidenceSchema = new mongoose.Schema({
   property: {type: mongoose.Schema.Types.ObjectId},
   value: String,
-  entity: {type: mongoose.Schema.Types.ObjectId, ref: 'entities'},
+  document: String,
+  language: String,
   isEvidence: Boolean,
   evidence: {
     text: String
