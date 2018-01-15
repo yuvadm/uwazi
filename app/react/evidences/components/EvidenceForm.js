@@ -32,7 +32,7 @@ export class EvidenceForm extends Component {
     const evidence = {
       property: values.property,
       value: values.value,
-      entity: this.props.doc.get('_id'),
+      document: this.props.doc.get('sharedId'),
       evidence: {text: this.props.evidence},
       isEvidence: true
     };

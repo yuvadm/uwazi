@@ -17,7 +17,7 @@ import SidePanel from 'app/Layout/SidePanel';
 import SearchText from './SearchText';
 import ShowToc from './ShowToc';
 import SnippetsTab from './SnippetsTab';
-import {EvidenceSuggestions} from 'app/evidences';
+import {Evidences} from 'app/evidences';
 
 const selectReferences = createSelector(
   s => s.references,
@@ -272,7 +272,7 @@ export class DocumentSidePanel extends Component {
               />
             </TabContent>
             <TabContent for="suggestions">
-              <EvidenceSuggestions />
+              <Evidences />
             </TabContent>
             <TabContent for="connections">
               <Connections references={connections}

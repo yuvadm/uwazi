@@ -2,7 +2,7 @@ import api from 'app/utils/api';
 
 export default {
   get(docId) {
-    return api.get('evidences', {entity: docId}).then(response => response.json.rows);
+    return api.get('evidences', {document: docId}).then(response => response.json);
   },
 
   getSuggestions(id) {

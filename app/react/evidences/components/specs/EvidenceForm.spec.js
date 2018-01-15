@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import {Select as SimpleSelect} from 'app/ReactReduxForms';
 import {actions as formActions} from 'react-redux-form';
 
-describe('EvidenceForm', () => {
+fdescribe('EvidenceForm', () => {
   let component;
   let instance;
   let props;
@@ -14,7 +14,7 @@ describe('EvidenceForm', () => {
     props = {
       saveEvidence: jasmine.createSpy('saveEvidence'),
       doc: Immutable.fromJS({
-        _id: 'doc_id'
+        sharedId: 'shared'
       }),
       evidence: 'evidence_text',
       template: Immutable.fromJS({
@@ -77,7 +77,7 @@ describe('EvidenceForm', () => {
       expect(props.saveEvidence).toHaveBeenCalledWith({
         property: 'propertyId',
         value: 'valueId',
-        entity: 'doc_id',
+        document: 'shared',
         evidence: {text: props.evidence},
         isEvidence: true
       });

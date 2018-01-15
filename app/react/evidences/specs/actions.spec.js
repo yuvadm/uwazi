@@ -66,10 +66,11 @@ describe('evidences actions', () => {
 
   describe('saveEvidence', () => {
     it('should save the evidence', (done) => {
-      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve('savedDoc'));
+      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
       const expectedActions = [
         {type: 'evidences/evidence/UNSET'},
-        {type: 'viewer/doc/SET', value: 'savedDoc'}
+        {type: 'viewer/doc/SET', value: 'savedDoc'},
+        {type: 'evidences/evidences/PUSH', value: 'savedEvidence'}
       ];
       const evidence = {test: 'test'};
 

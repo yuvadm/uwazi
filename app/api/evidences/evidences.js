@@ -8,16 +8,20 @@ export default {
   save(evidence, user, language) {
     evidence.language = language;
     return model.save(evidence)
-    .then(() => {
-      return entities.getById(evidence.document, language);
-    })
-    .then((entity) => {
+    .then((updatedEvidence) => {
       return Promise.all([
+        updatedEvidence,
+        entities.getById(evidence.document, language)
+      ]);
+    })
+    .then(([updatedEvidence, entity]) => {
+      return Promise.all([
+        updatedEvidence,
         entity,
         templates.getById(entity.template)
       ]);
     })
-    .then(([entity, template]) => {
+    .then(([updatedEvidence, entity, template]) => {
       const propertyName = template.properties.find((p) => p._id.toString() === evidence.property.toString()).name;
       if (!entity.metadata[propertyName]) {
         entity.metadata[propertyName] = [];
@@ -25,7 +29,13 @@ export default {
       if (!entity.metadata[propertyName].includes(evidence.value)) {
         entity.metadata[propertyName].push(evidence.value);
       }
-      return entities.save(entity, {user, language});
+      return entities.save(entity, {user, language})
+      .then((updatedEntity) => {
+        return {
+          entity: updatedEntity,
+          evidence: updatedEvidence
+        };
+      });
     });
   },
 

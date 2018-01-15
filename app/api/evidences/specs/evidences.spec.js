@@ -18,18 +18,36 @@ fdescribe('evidences', () => {
 
   describe('save', () => {
     fit('should create a new entity for each language in settings with a language property and a shared id', (done) => {
-      let evidence = {
+      let newEvidence = {
         document: 'shared',
         property: propertyID,
         value: db.id(),
         evidence: {text: 'test evidence'}
       };
 
-      evidences.save(evidence, {}, 'en')
+      evidences.save(newEvidence, {}, 'en')
       .then(() => evidences.get())
       .then(([createdEvidence]) => {
         expect(createdEvidence.evidence.text).toBe('test evidence');
         expect(createdEvidence.language).toBe('en');
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+
+    fit('should return the updated entity and evidence', (done) => {
+      let newEvidence = {
+        document: 'shared',
+        property: propertyID,
+        value: 'value',
+        evidence: {text: 'test evidence'}
+      };
+
+      evidences.save(newEvidence, {}, 'en')
+      .then(({entity, evidence}) => {
+        expect(evidence.value).toBe('value');
+        expect(evidence._id).toBeDefined();
+        expect(entity.metadata.multiselect).toEqual(['value']);
         done();
       })
       .catch(catchErrors(done));
@@ -44,9 +62,9 @@ fdescribe('evidences', () => {
       };
 
       evidences.save(evidence, {}, 'en')
-      .then((updatedEntity) => {
+      .then(({entity}) => {
         return Promise.all([
-          updatedEntity,
+          entity,
           entities.getById(entityID)
         ]);
       })
@@ -56,11 +74,11 @@ fdescribe('evidences', () => {
         evidence.value = 'value2';
         return evidences.save(evidence, {}, 'en');
       })
-      .then((entity) => {
+      .then(({entity}) => {
         expect(entity.metadata.multiselect).toEqual(['value', 'value2']);
         return evidences.save(evidence, {}, 'en');
       })
-      .then((entity) => {
+      .then(({entity}) => {
         expect(entity.metadata.multiselect).toEqual(['value', 'value2']);
         done();
       })
