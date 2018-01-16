@@ -6,27 +6,31 @@ import {Evidences} from '../Evidences';
 
 fdescribe('Evidences', () => {
   let component;
-  //let instance;
+  let instance;
   let props;
   let evidences = Immutable.fromJS([
     {
       value: 'valueId1',
       property: 'property1',
+      isEvidence: true,
       evidence: {text: 'evidence text 1'}
     },
     {
       value: 'valueId3',
       property: 'property2',
+      isEvidence: true,
       evidence: {text: 'evidence text 3'}
     },
     {
       value: 'valueId2',
       property: 'property1',
+      isEvidence: false,
       evidence: {text: 'evidence text 2'}
     },
     {
       value: 'valueId4',
       property: 'property2',
+      isEvidence: true,
       evidence: {text: 'evidence text 4'}
     }
   ]);
@@ -45,7 +49,7 @@ fdescribe('Evidences', () => {
 
   let render = () => {
     component = shallow(<Evidences {...props} />);
-    //instance = component.instance();
+    instance = component.instance();
   };
 
   it('should render evidences grouped by property', () => {
@@ -116,6 +120,83 @@ fdescribe('Evidences', () => {
         expect(evidenceElements.at(1).text().match('suggestion2')).not.toBe(null);
         expect(evidenceElements.at(1).text().match('label3')).not.toBe(null);
       });
+    });
+  });
+
+  describe('toggle suggestions', () => {
+    it('should only render suggestions', () => {
+      props.suggestions = Immutable.fromJS([
+        {
+          value: 'valueId1',
+          property: 'property1',
+          evidence: {text: 'suggestion1'}
+        },
+        {
+          value: 'valueId3',
+          property: 'property2',
+          evidence: {text: 'suggestion2'}
+        }
+      ]);
+      render();
+      instance.toggleSuggestions();
+      component.update();
+
+      let suggestionElements = component.find('div.suggestion');
+      expect(suggestionElements.length).toBe(0);
+      let evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(4);
+
+
+      instance.toggleSuggestions();
+      component.update();
+
+      suggestionElements = component.find('div.suggestion');
+      expect(suggestionElements.length).toBe(2);
+      evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(4);
+    });
+  });
+
+  describe('toggle positive evidences', () => {
+    it('should only render negative evidences', () => {
+      render();
+      instance.togglePositiveEvidences();
+      component.update();
+
+      let evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(1);
+
+
+      instance.togglePositiveEvidences();
+      component.update();
+
+      evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(4);
+    });
+  });
+
+  describe('toggle negative evidences', () => {
+    it('should only render positive evidences', () => {
+      render();
+      instance.toggleNegativeEvidences();
+      component.update();
+
+      let evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(3);
+
+
+      instance.toggleNegativeEvidences();
+      component.update();
+
+      evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(4);
+
+      instance.toggleNegativeEvidences();
+      instance.togglePositiveEvidences();
+      component.update();
+
+      evidenceElements = component.find('div.evidence');
+      expect(evidenceElements.length).toBe(0);
     });
   });
 });

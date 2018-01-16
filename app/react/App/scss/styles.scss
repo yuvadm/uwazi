@@ -56,3 +56,16 @@
 @import "vendor/recharts";
 @import "vendor/nprogress";
 
+.sidepanel-body .card {
+  border: 1px solid green;
+  margin: 10px;
+  padding: 2px;
+}
+
+.sidepanel-body .card.suggestion {
+  border-color: blue;
+}
+
+.sidepanel-body .card.evidence.negative {
+  border-color: red;
+}
