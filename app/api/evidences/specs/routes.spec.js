@@ -4,7 +4,7 @@ import evidences from '../evidences';
 import MLAPI from '../MLAPI';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-fdescribe('evidences routes', () => {
+describe('evidences routes', () => {
   let routes;
 
   beforeEach(() => {

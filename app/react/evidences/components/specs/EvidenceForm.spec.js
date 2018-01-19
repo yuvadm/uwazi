@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import {Select as SimpleSelect} from 'app/ReactReduxForms';
 import {actions as formActions} from 'react-redux-form';
 
-fdescribe('EvidenceForm', () => {
+describe('EvidenceForm', () => {
   let component;
   let instance;
   let props;

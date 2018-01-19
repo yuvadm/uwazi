@@ -1,7 +1,7 @@
 import createReducer, * as actions from 'app/BasicReducer/reducer';
 import {fromJS as Immutable} from 'immutable';
 
-fdescribe('BasicReducer', () => {
+describe('BasicReducer', () => {
   describe('createReducer', () => {
     it('should return a reducer function with default value passed', () => {
       let reducer = createReducer('namespace', {});
@@ -94,17 +94,14 @@ fdescribe('BasicReducer', () => {
       expect(newState2.toJS()).toEqual([{_id: '2'}]);
     });
 
-    fdescribe('when has no _id', () => {
+    describe('when has no _id', () => {
       it('should delete an element from the array based on the identity', () => {
         let reducer1 = createReducer('namespace1', []);
-        let reducer2 = createReducer('namespace2', []);
 
         let state1 = Immutable([{prop: '1'}, {prop: '2'}, {prop: '3'}]);
         let newState1 = reducer1(state1, actions.remove('namespace1', state1.get(1)));
-        //let newState2 = reducer2([{prop: '2'}], actions.remove('namespace1', {prop: '2'}));
 
         expect(newState1.toJS()).toEqual([{prop: '1'}, {prop: '3'}]);
-        //expect(newState2.toJS()).toEqual([{prop: '2'}]);
       });
     });
   });

@@ -6,7 +6,7 @@ import MLAPI from '../MLAPI';
 import db from 'api/utils/testing_db';
 import fixtures, {propertyID, propertyID2, entityID} from './fixtures.js';
 
-fdescribe('evidences', () => {
+describe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
