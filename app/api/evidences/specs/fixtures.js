@@ -9,6 +9,7 @@ const propertyID2 = db.id();
 
 const dictionary1Id = db.id();
 const dictionary2Id = db.id();
+const evidenceId = db.id();
 
 export default {
   entities: [
@@ -17,6 +18,9 @@ export default {
   ],
   settings: [
     {_id: db.id(), languages: [{key: 'es'}, {key: 'pt'}, {key: 'en'}]}
+  ],
+  evidences: [
+    {_id: evidenceId}
   ],
   dictionaries: [
     {_id: dictionary1Id, name: 'dictionary1', values: [{id: '1', label: 'dict1value1'}, {id: '2', label: 'dict1value2'}]},
@@ -35,6 +39,7 @@ export default {
 export {
   entityID,
   entityForSuggestions,
+  evidenceId,
   propertyID,
   propertyID2
 };

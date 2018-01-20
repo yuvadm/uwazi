@@ -4,9 +4,10 @@ import {catchErrors} from 'api/utils/jasmineHelpers';
 import MLAPI from '../MLAPI';
 
 import db from 'api/utils/testing_db';
-import fixtures, {propertyID, propertyID2, entityID} from './fixtures.js';
+import fixtures, {evidenceId, propertyID, propertyID2, entityID} from './fixtures.js';
+import search from '../searchEvidences';
 
-describe('evidences', () => {
+fdescribe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -17,7 +18,7 @@ describe('evidences', () => {
   });
 
   describe('save', () => {
-    fit('should create a new entity for each language in settings with a language property and a shared id', (done) => {
+    it('should create a new entity for each language in settings with a language property and a shared id', (done) => {
       let newEvidence = {
         document: 'shared',
         property: propertyID,
@@ -26,7 +27,7 @@ describe('evidences', () => {
       };
 
       evidences.save(newEvidence, {}, 'en')
-      .then(() => evidences.get())
+      .then(() => evidences.get({document: 'shared'}))
       .then(([createdEvidence]) => {
         expect(createdEvidence.evidence.text).toBe('test evidence');
         expect(createdEvidence.language).toBe('en');
@@ -35,7 +36,7 @@ describe('evidences', () => {
       .catch(catchErrors(done));
     });
 
-    fit('should return the updated entity and evidence', (done) => {
+    it('should return the updated entity and evidence', (done) => {
       let newEvidence = {
         document: 'shared',
         property: propertyID,
@@ -53,7 +54,25 @@ describe('evidences', () => {
       .catch(catchErrors(done));
     });
 
-    fit('should save the value on the entity property, if not already saved', (done) => {
+    fit('should index the newly created evidence', (done) => {
+      spyOn(search, 'index');
+      let evidence = {
+        document: 'shared',
+        property: propertyID,
+        value: 'value',
+        evidence: {text: 'test evidence'}
+      };
+
+      evidences.save(evidence, {}, 'en')
+      .then(() => {
+        expect(search.index.calls.all()[0].args[0].value).toBe('value');
+        expect(search.index.calls.all()[0].args[0]._id).toBeDefined();
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+
+    it('should save the value on the entity property, if not already saved', (done) => {
       let evidence = {
         document: 'shared',
         property: propertyID,
@@ -87,7 +106,7 @@ describe('evidences', () => {
   });
 
   describe('getSuggestions', () => {
-    fit('should get suggestions passing the doc and every posible combination of property/vale for the multiselect', (done) => {
+    it('should get suggestions passing the doc and every posible combination of property/vale for the multiselect', (done) => {
       spyOn(MLAPI, 'getSuggestions').and.returnValue(Promise.resolve([]));
       evidences.getSuggestions('shared1', 'en')
       .then((suggestions) => {
@@ -107,6 +126,19 @@ describe('evidences', () => {
         done();
       })
       .catch(catchErrors(done));
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete the evidence from the db and from the search engine', (done) => {
+      spyOn(search, 'delete');
+      evidences.delete(evidenceId)
+      .then(() => evidences.get())
+      .then((results) => {
+        expect(results.length).toBe(0);
+        expect(search.delete).toHaveBeenCalledWith(evidenceId);
+        done();
+      });
     });
   });
 });

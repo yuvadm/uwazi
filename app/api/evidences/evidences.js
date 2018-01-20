@@ -3,6 +3,7 @@ import entities from '../entities';
 import templates from '../templates';
 import thesauris from '../thesauris/thesauris';
 import MLAPI from './MLAPI';
+import search from './searchEvidences';
 
 export default {
   save(evidence, user, language) {
@@ -11,7 +12,8 @@ export default {
     .then((updatedEvidence) => {
       return Promise.all([
         updatedEvidence,
-        entities.getById(evidence.document, language)
+        entities.getById(evidence.document, language),
+        search.index(updatedEvidence)
       ]);
     })
     .then(([updatedEvidence, entity]) => {
@@ -89,6 +91,7 @@ export default {
   },
 
   delete(_id) {
-    return model.delete({_id});
+    return model.delete({_id})
+    .then(() => search.delete(_id));
   }
 };
