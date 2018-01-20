@@ -3,6 +3,7 @@ import languages from '../app/shared/languages';
 
 let config = {
   settings: {
+    //'index.mapping.total_fields.limit': 2000,
     analysis: {
       char_filter: {
         remove_annotation: {
