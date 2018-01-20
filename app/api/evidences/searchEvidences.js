@@ -1,11 +1,22 @@
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 import elastic from '../search/elastic';
+import queryBuilder from './evidencesQueryBuilder';
 //import queryBuilder from './documentQueryBuilder';
 
 export default {
-  //search() {
+  search(filters) {
+    const query = queryBuilder().filter(filters).query();
 
-  //},
+    return elastic.search({index: elasticIndex, type: 'evidence', body: query})
+    .then((result) => {
+      const rows = result.hits.hits.map((hit) => {
+        hit._source._id = hit._id;
+        return hit._source;
+      });
+
+      return {rows};
+    });
+  },
 
   index(evidence) {
     const id = evidence._id.toString();

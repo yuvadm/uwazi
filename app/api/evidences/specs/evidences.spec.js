@@ -7,7 +7,7 @@ import db from 'api/utils/testing_db';
 import fixtures, {evidenceId, propertyID, propertyID2, entityID} from './fixtures.js';
 import search from '../searchEvidences';
 
-fdescribe('evidences', () => {
+describe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -54,7 +54,7 @@ fdescribe('evidences', () => {
       .catch(catchErrors(done));
     });
 
-    fit('should index the newly created evidence', (done) => {
+    it('should index the newly created evidence', (done) => {
       spyOn(search, 'index');
       let evidence = {
         document: 'shared',

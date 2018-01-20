@@ -5,21 +5,56 @@ import elastic from '../../search/elastic';
 //import queryBuilder from 'api/search/documentQueryBuilder';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-//import fixtures, {templateId, userId} from './fixtures';
+import fixtures, {evidenceId, value1, value2} from './fixtures';
 //import elasticFixtures, {ids} from './fixtures_elastic';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
-import languages from 'shared/languages';
 
 fdescribe('searchEvidences', () => {
-  //beforeEach((done) => {
-    //db.clearAllAndLoad(fixtures, (err) => {
-      //if (err) {
-        //done.fail(err);
-      //}
-      //done();
-    //});
-  //});
+  beforeEach((done) => {
+    db.clearAllAndLoad(fixtures, (err) => {
+      if (err) {
+        done.fail(err);
+      }
+
+      elasticTesting.reindexEvidences()
+      .then(done)
+      .catch(done.fail);
+    });
+  });
+
+  describe('search', () => {
+    fit('should return all results if no params passed', (done) => {
+      search.search()
+      .then((allEvidences) => {
+        expect(allEvidences.rows.length).toBe(4);
+        const value1Evidence = allEvidences.rows.find((e) => e._id === evidenceId.toString());
+        expect(value1Evidence.value).toBe(value1);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+
+    fit('should search by value', (done) => {
+      Promise.all([
+        search.search({value: {values: [value1]}}),
+        search.search({value: {values: [value2]}}),
+        search.search({value: {values: [value1, value2]}})
+      ])
+      .then(([value1Evidences, value2Evidences, value12Evidences]) => {
+        expect(value1Evidences.rows.length).toBe(2);
+        expect(value1Evidences.rows[0].value).toBe(value1);
+        expect(value1Evidences.rows[1].value).toBe(value1);
+
+        expect(value2Evidences.rows.length).toBe(1);
+        expect(value2Evidences.rows[0].value).toBe(value2);
+
+        expect(value12Evidences.rows.length).toBe(3);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+  });
 
   describe('index', () => {
     it('should index the evidence', (done) => {
@@ -89,21 +124,20 @@ fdescribe('searchEvidences', () => {
   });
 
   //describe('indexEntities', () => {
-    //it('should index entities based on query params passed', (done) => {
-      //spyOn(search, 'bulkIndex');
-      //search.indexEntities({sharedId: 'shared'}, {title: 1})
-      //.then(() => {
-        //const documentsToIndex = search.bulkIndex.calls.argsFor(0)[0];
-        //expect(documentsToIndex[0].title).toBeDefined();
-        //expect(documentsToIndex[0].metadata).not.toBeDefined();
-        //expect(documentsToIndex[1].title).toBeDefined();
-        //expect(documentsToIndex[1].metadata).not.toBeDefined();
-        //expect(documentsToIndex[2].title).toBeDefined();
-        //expect(documentsToIndex[2].metadata).not.toBeDefined();
-        //done();
-      //})
-      //.catch(catchErrors(done));
-    //});
+  //it('should index entities based on query params passed', (done) => {
+  //spyOn(search, 'bulkIndex');
+  //search.indexEntities({sharedId: 'shared'}, {title: 1})
+  //.then(() => {
+  //const documentsToIndex = search.bulkIndex.calls.argsFor(0)[0];
+  //expect(documentsToIndex[0].title).toBeDefined();
+  //expect(documentsToIndex[0].metadata).not.toBeDefined();
+  //expect(documentsToIndex[1].title).toBeDefined();
+  //expect(documentsToIndex[1].metadata).not.toBeDefined();
+  //expect(documentsToIndex[2].title).toBeDefined();
+  //expect(documentsToIndex[2].metadata).not.toBeDefined();
+  //done();
+  //})
+  //.catch(catchErrors(done));
   //});
-
+  //});
 });
