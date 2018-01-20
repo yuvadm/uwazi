@@ -8,7 +8,7 @@ describe('Viewer routeActions', () => {
   let document = {_id: '1', title: 'title', pdfInfo: 'test'};
   let relationTypes = {rows: [{name: 'Supports', _id: '1'}]};
   let references = [{_id: '1', connectedDocument: '1'}, {_id: '2', connectedDocument: '2'}];
-  let evidences = {rows: []};
+  let evidences = [];
 
   beforeEach(() => {
     backend.restore();
@@ -16,7 +16,7 @@ describe('Viewer routeActions', () => {
     .get(APIURL + 'documents?_id=documentId', {body: JSON.stringify({rows: [document]})})
     .get(APIURL + 'relationtypes', {body: JSON.stringify(relationTypes)})
     .get(APIURL + 'references/by_document/documentId', {body: JSON.stringify(references)})
-    .get(APIURL + 'evidences?entity=documentId', {body: JSON.stringify(evidences)});
+    .get(APIURL + 'evidences?document=documentId', {body: JSON.stringify(evidences)});
 
     spyOn(referencesUtils, 'filterRelevant').and.returnValue(['filteredReferences']);
   });
@@ -34,7 +34,7 @@ describe('Viewer routeActions', () => {
         expect(documentResponse._id).toBe('1');
         expect(relationTypesResponse).toEqual(relationTypes.rows);
         expect(state.relationTypes).toEqual(relationTypes.rows);
-        expect(evidencesResponse).toEqual(evidences.rows);
+        expect(evidencesResponse).toEqual(evidences);
         done();
       })
       .catch(done.fail);

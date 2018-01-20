@@ -5,6 +5,10 @@ export default {
     return api.get('evidences', {document: docId}).then(response => response.json);
   },
 
+  search(filters) {
+    return api.get('evidences/search', filters).then(response => response.json);
+  },
+
   getSuggestions(id) {
     return api.get('evidences/suggestions', {_id: id}).then(response => response.json);
   },

@@ -1,4 +1,5 @@
 import evidences from './evidences';
+import searchEvidences from './searchEvidences';
 import MLAPI from './MLAPI';
 import needsAuthorization from '../auth/authMiddleware';
 
@@ -17,6 +18,14 @@ export default (app) => {
     .then(response => res.json(response))
     .catch(res.error);
   });
+
+  //
+  app.get('/api/evidences/search', (req, res) => {
+    return searchEvidences.search()
+    .then(response => res.json(response))
+    .catch(res.error);
+  });
+  //
 
   app.get('/api/evidences', (req, res) => {
     let query = req.query;

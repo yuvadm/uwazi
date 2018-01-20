@@ -8,13 +8,26 @@ describe('evidencesAPI', () => {
   beforeEach(() => {
     backend.restore();
     backend
-    .get(APIURL + 'evidences?entity=docId', {body: JSON.stringify({rows: arrayResponse})})
+    .get(APIURL + 'evidences?document=docId', {body: JSON.stringify(arrayResponse)})
+    .get(APIURL + 'evidences/search?filters=filter', {body: JSON.stringify(arrayResponse)})
     .get(APIURL + 'evidences/suggestions?_id=docId', {body: JSON.stringify(arrayResponse)})
     .delete(APIURL + 'evidences?_id=id', {body: JSON.stringify({backednResponse: 'testdelete'})})
     .post(APIURL + 'evidences', {body: JSON.stringify({backednResponse: 'test'})});
   });
 
   afterEach(() => backend.restore());
+
+  describe('filter()', () => {
+    it('should search evidences', (done) => {
+      let data = {filters: 'filter'};
+      evidencesAPI.search(data)
+      .then((response) => {
+        expect(response).toEqual(arrayResponse);
+        done();
+      })
+      .catch(done.fail);
+    });
+  });
 
   describe('save()', () => {
     it('should post the evidence data to /evidences', (done) => {

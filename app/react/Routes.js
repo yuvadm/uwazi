@@ -45,6 +45,7 @@ import NewRelationType from 'app/RelationTypes/NewRelationType';
 import EditTranslations from 'app/I18N/EditTranslations';
 
 import Library from 'app/Library/Library';
+import EvidencesRoute from 'app/evidences/EvidencesRoute';
 
 import {store} from './store';
 import {trackPage} from 'app/App/GoogleAnalytics';
@@ -109,6 +110,7 @@ const routes =
       <Route path='filters' component={FiltersForm} />
     </Route>
     <Route path='library' component={Library} onEnter={onEnter}/>
+    <Route path='evidences' component={EvidencesRoute} onEnter={onEnter}/>
     <Route path='uploads' component={Uploads} />
     <Route path='login' component={Login} />
     <Route path='setpassword/:key' component={ResetPassword} />
