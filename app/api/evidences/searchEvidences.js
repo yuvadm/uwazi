@@ -1,12 +1,6 @@
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 import elastic from '../search/elastic';
 //import queryBuilder from './documentQueryBuilder';
-//import entities from '../entities';
-//import model from '../entities/entitiesModel';
-//import templatesModel from '../templates';
-//import {comonProperties} from 'shared/comonProperties';
-//import languages from 'shared/languagesList';
-//import {detect as detectLanguage} from 'shared/languages';
 
 export default {
   //search() {
@@ -14,13 +8,16 @@ export default {
   //},
 
   index(evidence) {
-    const id = evidence._id;
-    return elastic.index({index: elasticIndex, type: 'evidence', id, body: evidence});
+    const id = evidence._id.toString();
+    let body = Object.assign({}, evidence);
+    delete body._id;
+    return elastic.index({index: elasticIndex, type: 'evidence', id, body});
   },
 
   bulkIndex(evidences) {
     const body = evidences.reduce((value, evidence) => {
       value.push({index: {_index: elasticIndex, _type: 'evidence', _id: evidence._id}});
+      delete evidence._id;
       value.push(evidence);
       return value;
     }, []);
@@ -40,5 +37,9 @@ export default {
 
   delete(id) {
     return elastic.delete({index: elasticIndex, type: 'evidence', id: id.toString()});
+  },
+
+  deleteAll() {
+    return elastic.deleteByQuery({index: elasticIndex, type: 'evidence', body: {query: {match_all: {}}}});
   }
 };

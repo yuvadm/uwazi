@@ -26,21 +26,22 @@ fdescribe('searchEvidences', () => {
       done();
       spyOn(elastic, 'index').and.returnValue(Promise.resolve());
 
+      const id = db.id();
+
       const evidence = {
-        _id: 'evidenceId',
+        _id: id,
         document: 'documentId'
       };
 
       search.index(evidence)
       .then(() => {
-        expect(evidence._id).toBe('evidenceId');
+        expect(evidence._id.toString()).toBe(id.toString());
         expect(elastic.index)
         .toHaveBeenCalledWith({
           index: elasticIndex,
           type: 'evidence',
-          id: 'evidenceId',
+          id: id.toString(),
           body: {
-            _id: 'evidenceId',
             document: 'documentId'
           }
         });
@@ -77,9 +78,9 @@ fdescribe('searchEvidences', () => {
       .then(() => {
         expect(elastic.bulk).toHaveBeenCalledWith({body: [
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id1'}},
-          {_id: 'id1', document: 'doc1'},
+          {document: 'doc1'},
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id2'}},
-          {_id: 'id2', document: 'doc2'}
+          {document: 'doc2'}
         ]});
         done();
       })
