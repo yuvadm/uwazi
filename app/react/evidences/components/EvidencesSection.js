@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Evidence from './Evidence';
+import EvidencesList from '../containers/EvidencesList';
 
 class EvidencesSection extends Component {
   render() {
@@ -10,6 +11,7 @@ class EvidencesSection extends Component {
       {this.props.evidences.map((evidence, index) => {
         return <Evidence key={index} evidence={evidence} />;
       })}
+      <EvidencesList />
       </div>;
   }
 }

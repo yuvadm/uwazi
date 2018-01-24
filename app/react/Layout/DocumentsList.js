@@ -3,13 +3,13 @@ import React, {Component} from 'react';
 
 import Doc from 'app/Library/components/Doc';
 import SearchBar from 'app/Library/components/SearchBar';
-import SortButtons from 'app/Library/components/SortButtons';
 
 import {RowList} from 'app/Layout/Lists';
 import Loader from 'app/components/Elements/Loader';
 import Footer from 'app/App/Footer';
 import {NeedAuthorization} from 'app/Auth';
 import {t} from 'app/I18N';
+import DocumentsListSort from './DocumentsListSort';
 
 const loadMoreAmmount = 30;
 
@@ -47,6 +47,7 @@ export default class DocumentsList extends Component {
     }
 
     const Search = this.props.SearchBar;
+    const Sort = this.props.DocumentsListSort;
     const ActionButtons = this.props.ActionButtons ? <div className="search-list-actions"><this.props.ActionButtons /></div> : null;
 
     return (
@@ -56,17 +57,7 @@ export default class DocumentsList extends Component {
             {ActionButtons}
             <Search storeKey={this.props.storeKey}/>
           </div>
-          <div className="sort-by">
-              <div className="documents-counter">
-                <span className="documents-counter-label">{counter}</span>
-                <span className="documents-counter-sort">{t('System', 'sorted by')}:</span>
-              </div>
-              <SortButtons sortCallback={this.props.searchDocuments}
-                           selectedTemplates={this.props.filters.get('documentTypes')}
-                           stateProperty={this.props.sortButtonsStateProperty}
-                           storeKey={this.props.storeKey}
-              />
-          </div>
+          <Sort total={counter} label={t('System', 'sorted by')} storeKey={this.props.storeKey}/>
           {(() => {
             if (view !== 'graph') {
               return <RowList>
@@ -126,15 +117,15 @@ export default class DocumentsList extends Component {
 }
 
 DocumentsList.defaultProps = {
-  SearchBar
+  SearchBar,
+  DocumentsListSort
 };
 
 DocumentsList.propTypes = {
   documents: PropTypes.object.isRequired,
   connections: PropTypes.object,
-  filters: PropTypes.object,
-  selectedDocument: PropTypes.object,
   SearchBar: PropTypes.func,
+  DocumentsListSort: PropTypes.func,
   ActionButtons: PropTypes.func,
   GraphView: PropTypes.func,
   search: PropTypes.object,

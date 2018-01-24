@@ -135,7 +135,6 @@ export class SortButtons extends Component {
 }
 
 SortButtons.propTypes = {
-  searchDocuments: PropTypes.func,
   stateProperty: PropTypes.string,
   search: PropTypes.object,
   templates: PropTypes.object,

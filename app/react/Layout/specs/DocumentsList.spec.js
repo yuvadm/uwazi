@@ -4,9 +4,10 @@ import Immutable from 'immutable';
 
 import DocumentsList from 'app/Layout/DocumentsList';
 import Doc from 'app/Library/components/Doc';
-import SortButtons from 'app/Library/components/SortButtons';
+//import SortButtons from 'app/Library/components/SortButtons';
+import DocumentsListSort from 'app/Layout/DocumentsListSort';
 
-describe('DocumentsList', () => {
+fdescribe('DocumentsList', () => {
   let component;
   let instance;
   let props;
@@ -16,6 +17,7 @@ describe('DocumentsList', () => {
     props = {
       documents: documents,
       search: {sort: 'sort'},
+      storeKey: 'storeKey',
       filters: Immutable.fromJS({documentTypes: []}),
       clickOnDocument: {apply: jasmine.createSpy('clickOnDocumentApply')},
       onSnippetClick: jasmine.createSpy('onSnippetClick'),
@@ -86,9 +88,41 @@ describe('DocumentsList', () => {
     expect(component.find('.search-list-actions').childAt(0).getElements()[0].type().props.children).toBe('action buttons');
   });
 
-  it('should hold sortButtons with search callback and selectedTemplates', () => {
-    render();
-    expect(component.find(SortButtons).props().sortCallback).toBe(props.searchDocuments);
-    expect(component.find(SortButtons).props().selectedTemplates).toBe(props.filters.get('documentTypes'));
+  describe('sorting', () => {
+    it('Should render a default sorting section', () => {
+      render();
+      expect(component.find(DocumentsListSort).props().label).toBe('sorted by');
+      expect(component.find(DocumentsListSort).props().total).toBeDefined();
+      expect(component.find(DocumentsListSort).props().storeKey).toBe('storeKey');
+    });
+
+    it('Should render sorting section passed', () => {
+      const CustomSorting = () => <div/>;
+      props.DocumentsListSort = CustomSorting;
+      render();
+
+      expect(component.find(CustomSorting).props().label).toBe('sorted by');
+      expect(component.find(CustomSorting).props().total).toBeDefined();
+      expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
+    });
+  });
+
+  describe('List', () => {
+    it('Should render a default sorting section', () => {
+      render();
+      expect(component.find(DocumentsListSort).props().label).toBe('sorted by');
+      expect(component.find(DocumentsListSort).props().total).toBeDefined();
+      expect(component.find(DocumentsListSort).props().storeKey).toBe('storeKey');
+    });
+
+    it('Should render sorting section passed', () => {
+      const CustomSorting = () => <div/>;
+      props.DocumentsListSort = CustomSorting;
+      render();
+
+      expect(component.find(CustomSorting).props().label).toBe('sorted by');
+      expect(component.find(CustomSorting).props().total).toBeDefined();
+      expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
+    });
   });
 });

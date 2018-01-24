@@ -4,6 +4,7 @@ import Immutable, {fromJS} from 'immutable';
 
 import {clickOnDocument, mapStateToProps} from '../DocumentsList';
 import DocumentsList from 'app/Layout/DocumentsList';
+import DocumentSortSelector from '../DocumentSortSelector';
 
 describe('Library DocumentsList container', () => {
   let component;
@@ -97,6 +98,7 @@ describe('Library DocumentsList container', () => {
         selectedDocuments: store.library.ui.get('selectedDocuments'),
         multipleSelected: false,
         authorized: true,
+        DocumentsListSort: DocumentSortSelector,
         clickOnDocument
       });
     });

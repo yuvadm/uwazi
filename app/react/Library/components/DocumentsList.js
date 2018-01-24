@@ -5,6 +5,7 @@ import {searchDocuments} from 'app/Library/actions/libraryActions';
 import {actions as actionCreators} from 'app/BasicReducer';
 
 import DocumentsList from 'app/Layout/DocumentsList';
+import DocumentSortSelector from './DocumentSortSelector';
 import {loadMoreDocuments, selectDocument, unselectDocument, unselectAllDocuments, selectDocuments} from 'app/Library/actions/libraryActions';
 
 export function clickOnDocument(e, doc, active) {
@@ -53,6 +54,7 @@ export function clickOnDocument(e, doc, active) {
 export function mapStateToProps(state, props) {
   return {
     documents: state[props.storeKey].documents,
+    DocumentsListSort: DocumentSortSelector,
     filters: state[props.storeKey].filters,
     filtersPanel: state[props.storeKey].ui.get('filtersPanel'),
     search: state[props.storeKey].search,
