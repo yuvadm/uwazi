@@ -14,7 +14,7 @@ export default {
         return hit._source;
       });
 
-      return {rows};
+      return {rows, totalRows: result.hits.total};
     });
   },
 

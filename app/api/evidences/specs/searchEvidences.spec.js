@@ -10,7 +10,7 @@ import fixtures, {evidenceId, value1, value2} from './fixtures';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
-fdescribe('searchEvidences', () => {
+describe('searchEvidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -24,9 +24,10 @@ fdescribe('searchEvidences', () => {
   });
 
   describe('search', () => {
-    fit('should return all results if no params passed', (done) => {
+    it('should return all results if no params passed', (done) => {
       search.search()
       .then((allEvidences) => {
+        expect(allEvidences.totalRows).toBe(4);
         expect(allEvidences.rows.length).toBe(4);
         const value1Evidence = allEvidences.rows.find((e) => e._id === evidenceId.toString());
         expect(value1Evidence.value).toBe(value1);
@@ -35,7 +36,7 @@ fdescribe('searchEvidences', () => {
       .catch(catchErrors(done));
     });
 
-    fit('should search by value', (done) => {
+    it('should search by value', (done) => {
       Promise.all([
         search.search({value: {values: [value1]}}),
         search.search({value: {values: [value2]}}),
