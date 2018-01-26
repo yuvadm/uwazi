@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
-import Doc from 'app/Library/components/Doc';
 import SearchBar from 'app/Library/components/SearchBar';
 
-import {RowList} from 'app/Layout/Lists';
 import Loader from 'app/components/Elements/Loader';
 import Footer from 'app/App/Footer';
 import {NeedAuthorization} from 'app/Auth';
@@ -18,7 +16,6 @@ export default class DocumentsList extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {loading: false};
-    this.clickOnDocument = this.clickOnDocument.bind(this);
     this.loadMoreDocuments = this.loadMoreDocuments.bind(this);
   }
 
@@ -29,12 +26,6 @@ export default class DocumentsList extends Component {
 
   componentWillReceiveProps() {
     this.setState({loading: false});
-  }
-
-  clickOnDocument() {
-    if (this.props.clickOnDocument) {
-      this.props.clickOnDocument.apply(this, arguments);
-    }
   }
 
   render() {
@@ -48,6 +39,7 @@ export default class DocumentsList extends Component {
 
     const Search = this.props.SearchBar;
     const Sort = this.props.DocumentsListSort;
+    const List = this.props.List;
     const ActionButtons = this.props.ActionButtons ? <div className="search-list-actions"><this.props.ActionButtons /></div> : null;
 
     return (
@@ -60,17 +52,7 @@ export default class DocumentsList extends Component {
           <Sort total={counter} label={t('System', 'sorted by')} storeKey={this.props.storeKey}/>
           {(() => {
             if (view !== 'graph') {
-              return <RowList>
-                      {documents.get('rows').map((doc, index) =>
-                        <Doc doc={doc}
-                             storeKey={this.props.storeKey}
-                             key={index}
-                             onClick={this.clickOnDocument}
-                             onSnippetClick={this.props.onSnippetClick}
-                             deleteConnection={this.props.deleteConnection}
-                             searchParams={this.props.search} />
-                      )}
-                     </RowList>;
+              return <List storeKey={this.props.storeKey}/>;
             }
 
             if (view === 'graph') {
@@ -125,12 +107,11 @@ DocumentsList.propTypes = {
   documents: PropTypes.object.isRequired,
   connections: PropTypes.object,
   SearchBar: PropTypes.func,
+  List: PropTypes.func.isRequired,
   DocumentsListSort: PropTypes.func,
   ActionButtons: PropTypes.func,
   GraphView: PropTypes.func,
-  search: PropTypes.object,
   loadMoreDocuments: PropTypes.func,
-  searchDocuments: PropTypes.func,
   deleteConnection: PropTypes.func,
   sortButtonsStateProperty: PropTypes.string,
   storeKey: PropTypes.string,

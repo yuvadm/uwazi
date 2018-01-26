@@ -27,17 +27,28 @@ webpackConfig.module.rules = [
 webpackConfig.plugins = [];
 
 karmaConfig = {
-  browsers: ['PhantomJS'],
+  browsers: ['ChromeNoSandboxHeadless'],
+  customLaunchers: {
+    ChromeNoSandboxHeadless: {
+      base: 'Chrome',
+      flags: [
+        '--no-sandbox',
+        // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+        '--headless',
+        '--disable-gpu',
+        // Without a remote debugging port, Google Chrome exits immediately.
+        ' --remote-debugging-port=9222'
+      ]
+    }
+  },
   singleRun: false,
   frameworks: ['jasmine'],
   files: [
-    './node_modules/babel-polyfill/browser.js',
     'tests.webpack.js'
   ],
   plugins: [
     'karma-firefox-launcher',
     'karma-chrome-launcher',
-    'karma-phantomjs-launcher',
     'karma-jasmine',
     'karma-jasmine-diff-reporter',
     'karma-sourcemap-loader',

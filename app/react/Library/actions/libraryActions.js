@@ -10,6 +10,7 @@ import referencesAPI from 'app/Viewer/referencesAPI';
 import {api as entitiesAPI} from 'app/Entities';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 import {toUrlParams} from 'shared/JSONRequest';
+import {getLibraryDocuments, getSelectedDocuments} from '../selectors';
 
 export function enterLibrary() {
   return {type: types.ENTER_LIBRARY};
@@ -298,5 +299,48 @@ export function getDocumentReferences(documentId, storeKey) {
     .then((references) => {
       dispatch(actions.set(storeKey + '.sidepanel.references', referencesUtils.filterRelevant(references, getState().locale)));
     });
+  };
+}
+
+export function clickOnDocument(e, doc, storeKey) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selectedDocuments = getSelectedDocuments(state, storeKey);
+    const isActive = selectedDocuments.find((s) => s.get('_id') === doc.get('_id'));
+    const specialKey = e.metaKey || e.ctrlKey || e.shiftKey;
+
+    if (isActive) {
+      return dispatch(unselectDocument(doc.get('_id')));
+    }
+
+    if (!specialKey) {
+      dispatch(unselectAllDocuments());
+    }
+
+    if (e.shiftKey) {
+      const lastSelectedDocument = selectedDocuments.last();
+      const docs = getLibraryDocuments(state, storeKey).get('rows');
+      const startIndex = docs.reduce((result, _doc, index) => {
+        if (_doc.get('_id') === lastSelectedDocument.get('_id')) {
+          return index;
+        }
+        return result;
+      }, -1);
+
+      const endIndex = docs.reduce((result, _doc, index) => {
+        if (_doc.get('_id') === doc.get('_id')) {
+          return index;
+        }
+        return result;
+      }, -1);
+
+      let docsToSelect = docs.slice(startIndex, endIndex + 1);
+      if (endIndex < startIndex) {
+        docsToSelect = docs.slice(endIndex, startIndex + 1);
+      }
+      return dispatch(selectDocuments(docsToSelect.toJS()));
+    }
+
+    dispatch(selectDocument(doc));
   };
 }

@@ -315,6 +315,7 @@ describe('libraryActions', () => {
         .catch(done.fail);
       });
     });
+
     describe('getDocumentReferences', () => {
       it('should set the library sidepanel references', (done) => {
         mockID();
@@ -334,6 +335,91 @@ describe('libraryActions', () => {
         })
         .then(done)
         .catch(done.fail);
+      });
+    });
+
+    describe('clickOnDocument', () => {
+      let libraryDocuments;
+      let selectedDocuments;
+      let store;
+
+      const resetStore = () => {
+        store = mockStore({locale: 'es', library: {documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}});
+      };
+
+      beforeEach(() => {
+        libraryDocuments = Immutable.fromJS({rows: [
+          {title: 'Document one', _id: '1'},
+          {title: 'Document two', _id: '2'},
+          {title: 'Document three', _id: '3'}
+        ], totalRows: 3});
+
+        selectedDocuments = Immutable.fromJS([{_id: '1'}]);
+        resetStore();
+      });
+
+      it('should select the document', () => {
+        const e = {};
+        const doc = Immutable.fromJS({_id: '2'});
+
+        const expectedActions = [
+          actions.unselectAllDocuments(),
+          actions.selectDocument(doc)
+        ];
+
+        store.dispatch(actions.clickOnDocument(e, doc));
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      describe('when document is active', () => {
+        it('should unselect the document', () => {
+          const e = {};
+          const doc = Immutable.fromJS({_id: '1'});
+
+          const expectedActions = [
+            actions.unselectDocument('1')
+          ];
+
+          store.dispatch(actions.clickOnDocument(e, doc));
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      });
+
+      describe('when holding cmd or ctrl', () => {
+        it('should add the document to the selected documents', () => {
+          const doc = Immutable.fromJS({_id: '3'});
+
+          let e = {metaKey: true};
+          let expectedActions = [
+            actions.selectDocument(doc)
+          ];
+
+          store.dispatch(actions.clickOnDocument(e, doc));
+          expect(store.getActions()).toEqual(expectedActions);
+
+          resetStore();
+          e = {ctrlKey: true};
+          expectedActions = [
+            actions.selectDocument(doc)
+          ];
+
+          store.dispatch(actions.clickOnDocument(e, doc));
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      });
+
+      describe('when holding shift', () => {
+        it('should select all the documents from the last selected document to the one clicked', () => {
+          const e = {shiftKey: true};
+          const doc = Immutable.fromJS({_id: '3'});
+
+          const expectedActions = [
+            actions.selectDocuments(libraryDocuments.toJS().rows)
+          ];
+
+          store.dispatch(actions.clickOnDocument(e, doc));
+          expect(store.getActions()).toEqual(expectedActions);
+        });
       });
     });
   });

@@ -7,7 +7,7 @@ import Doc from 'app/Library/components/Doc';
 //import SortButtons from 'app/Library/components/SortButtons';
 import DocumentsListSort from 'app/Layout/DocumentsListSort';
 
-fdescribe('DocumentsList', () => {
+describe('DocumentsList', () => {
   let component;
   let instance;
   let props;
@@ -19,7 +19,6 @@ fdescribe('DocumentsList', () => {
       search: {sort: 'sort'},
       storeKey: 'storeKey',
       filters: Immutable.fromJS({documentTypes: []}),
-      clickOnDocument: {apply: jasmine.createSpy('clickOnDocumentApply')},
       onSnippetClick: jasmine.createSpy('onSnippetClick'),
       searchDocuments: () => {},
       deleteConnection: () => {}
@@ -32,30 +31,14 @@ fdescribe('DocumentsList', () => {
   };
 
   describe('List view', () => {
-    beforeEach(() => {
+    it('should render List passed', () => {
+      const List = () => false;
+      props.List = List;
       render();
-    });
 
-    it('should render a Doc element for each document, passing the search options', () => {
-      let docs = component.find(Doc);
-      expect(docs.length).toBe(2);
-      expect(docs.first().props().doc.get('title')).toBe('Document one');
-      expect(docs.first().props().searchParams).toEqual({sort: 'sort'});
-      expect(docs.first().props().deleteConnection).toBe(props.deleteConnection);
-    });
+      let renderedList = component.find(List).at(0);
 
-    it('should pass onClickSnippet to Doc', () => {
-      const docProps = component.find(Doc).at(0).props();
-      expect(docProps.onSnippetClick).toBe(props.onSnippetClick);
-    });
-
-    describe('Clicking on a document', () => {
-      it('should call on props.clickOnDocument if present', () => {
-        component.find(Doc).at(0).simulate('click', 'e', 'other args');
-        expect(props.clickOnDocument.apply.calls.mostRecent().args[0]).toBe(instance);
-        expect(props.clickOnDocument.apply.calls.mostRecent().args[1][0]).toBe('e');
-        expect(props.clickOnDocument.apply.calls.mostRecent().args[1][1]).toBe('other args');
-      });
+      expect(renderedList.props().storeKey).toEqual('storeKey');
     });
   });
 
