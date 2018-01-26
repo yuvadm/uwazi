@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {wrapDispatch} from 'app/Multireducer';
 import {actions as actionCreators} from 'app/BasicReducer';
 
-import DocumentsList from 'app/Layout/DocumentsList';
+import {MainListWrapper} from 'app/Layout';
 import Documents from './Documents.js';
 import DocumentSortSelector from './DocumentSortSelector';
 import {loadMoreDocuments} from 'app/Library/actions/libraryActions';
@@ -11,7 +11,7 @@ import {loadMoreDocuments} from 'app/Library/actions/libraryActions';
 export function mapStateToProps(state, props) {
   return {
     List: Documents,
-    DocumentsListSort: DocumentSortSelector,
+    Sort: DocumentSortSelector,
     documents: state[props.storeKey].documents
   };
 }
@@ -23,4 +23,4 @@ function mapDispatchToProps(dispatch, props) {
   }, wrapDispatch(dispatch, props.storeKey));
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentsList);
+export default connect(mapStateToProps, mapDispatchToProps)(MainListWrapper);

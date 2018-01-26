@@ -27,7 +27,7 @@ webpackConfig.module.rules = [
 webpackConfig.plugins = [];
 
 karmaConfig = {
-  browsers: ['ChromeNoSandboxHeadless'],
+  browsers: ['Chrome'],
   customLaunchers: {
     ChromeNoSandboxHeadless: {
       base: 'Chrome',
@@ -35,7 +35,7 @@ karmaConfig = {
         '--no-sandbox',
         // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
         '--headless',
-        '--disable-gpu',
+        //'--disable-gpu',
         // Without a remote debugging port, Google Chrome exits immediately.
         ' --remote-debugging-port=9222'
       ]

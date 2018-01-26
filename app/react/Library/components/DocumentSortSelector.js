@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import DocumentsListSort from 'app/Layout/DocumentsListSort';
+import {ListSortSection} from 'app/Layout';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {searchDocuments} from 'app/Library/actions/libraryActions';
@@ -10,13 +10,13 @@ import Immutable from 'immutable';
 
 const DocumentSortSelector = (props) => {
   return (
-    <DocumentsListSort total={props.total} label={props.label}>
+    <ListSortSection total={props.total} label={props.label}>
       <SortButtons
         sortCallback={props.searchDocuments}
         storeKey={props.storeKey}
         selectedTemplates={props.selectedTemplates}
       />
-    </DocumentsListSort>
+    </ListSortSection>
   );
 };
 

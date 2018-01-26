@@ -4,7 +4,7 @@ import {wrapDispatch} from 'app/Multireducer';
 import {searchDocuments} from 'app/Library/actions/libraryActions';
 import {actions as actionCreators} from 'app/BasicReducer';
 
-import DocumentsList from 'app/Layout/DocumentsList';
+import {MainListWrapper} from 'app/Layout';
 import {loadMoreDocuments, selectDocument, unselectDocument, unselectAllDocuments, selectDocuments} from 'app/Library/actions/libraryActions';
 
 export function mapStateToProps({evidences}) {
@@ -25,4 +25,4 @@ function mapDispatchToProps(dispatch, props) {
   }, wrapDispatch(dispatch, props.storeKey));
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentsList);
+export default connect(mapStateToProps, mapDispatchToProps)(MainListWrapper);

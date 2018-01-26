@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {fromJS as Immutable} from 'immutable';
 import {searchReferences, loadMoreReferences} from '../actions/actions';
 
-import DocumentsList from 'app/Layout/DocumentsList';
+import {MainListWrapper} from 'app/Layout';
 import SearchBar from 'app/ConnectionsList/components/SearchBar';
 import ToggleStyleButtons from 'app/ConnectionsList/components/ToggleStyleButtons';
 import RelationshipsGraph from 'app/Relationships/components/RelationshipsGraph';
@@ -31,4 +31,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentsList);
+export default connect(mapStateToProps, mapDispatchToProps)(MainListWrapper);

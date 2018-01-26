@@ -2,14 +2,12 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import Immutable from 'immutable';
 
-import DocumentsList from 'app/Layout/DocumentsList';
+import MainListWrapper from '../Lists/MainListWrapper';
 import Doc from 'app/Library/components/Doc';
-//import SortButtons from 'app/Library/components/SortButtons';
-import DocumentsListSort from 'app/Layout/DocumentsListSort';
+import {ListSortSection} from 'app/Layout';
 
-describe('DocumentsList', () => {
+describe('MainListWrapper', () => {
   let component;
-  let instance;
   let props;
   let documents = Immutable.fromJS({rows: [{title: 'Document one', _id: '1'}, {title: 'Document two', _id: '2'}], totalRows: 2});
 
@@ -26,8 +24,7 @@ describe('DocumentsList', () => {
   });
 
   let render = () => {
-    component = shallow(<DocumentsList {...props} />);
-    instance = component.instance();
+    component = shallow(<MainListWrapper {...props} />);
   };
 
   describe('List view', () => {
@@ -74,14 +71,14 @@ describe('DocumentsList', () => {
   describe('sorting', () => {
     it('Should render a default sorting section', () => {
       render();
-      expect(component.find(DocumentsListSort).props().label).toBe('sorted by');
-      expect(component.find(DocumentsListSort).props().total).toBeDefined();
-      expect(component.find(DocumentsListSort).props().storeKey).toBe('storeKey');
+      expect(component.find(ListSortSection).props().label).toBe('sorted by');
+      expect(component.find(ListSortSection).props().total).toBeDefined();
+      expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
     });
 
     it('Should render sorting section passed', () => {
       const CustomSorting = () => <div/>;
-      props.DocumentsListSort = CustomSorting;
+      props.Sort = CustomSorting;
       render();
 
       expect(component.find(CustomSorting).props().label).toBe('sorted by');
@@ -93,14 +90,14 @@ describe('DocumentsList', () => {
   describe('List', () => {
     it('Should render a default sorting section', () => {
       render();
-      expect(component.find(DocumentsListSort).props().label).toBe('sorted by');
-      expect(component.find(DocumentsListSort).props().total).toBeDefined();
-      expect(component.find(DocumentsListSort).props().storeKey).toBe('storeKey');
+      expect(component.find(ListSortSection).props().label).toBe('sorted by');
+      expect(component.find(ListSortSection).props().total).toBeDefined();
+      expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
     });
 
     it('Should render sorting section passed', () => {
       const CustomSorting = () => <div/>;
-      props.DocumentsListSort = CustomSorting;
+      props.Sort = CustomSorting;
       render();
 
       expect(component.find(CustomSorting).props().label).toBe('sorted by');

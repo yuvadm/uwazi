@@ -338,7 +338,7 @@ describe('libraryActions', () => {
       });
     });
 
-    fdescribe('clickOnDocument', () => {
+    describe('clickOnDocument', () => {
       let libraryDocuments;
       let selectedDocuments;
       let store;

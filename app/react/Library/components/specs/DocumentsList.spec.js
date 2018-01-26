@@ -27,7 +27,7 @@ describe('Library DocumentsList container', () => {
       let state = mapStateToProps(store, {storeKey: 'library'});
       expect(state).toEqual({
         documents: documents,
-        DocumentsListSort: DocumentSortSelector,
+        Sort: DocumentSortSelector,
         List: Documents
       });
     });

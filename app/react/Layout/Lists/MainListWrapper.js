@@ -7,11 +7,11 @@ import Loader from 'app/components/Elements/Loader';
 import Footer from 'app/App/Footer';
 import {NeedAuthorization} from 'app/Auth';
 import {t} from 'app/I18N';
-import DocumentsListSort from './DocumentsListSort';
+import Sort from './ListSortSection';
 
 const loadMoreAmmount = 30;
 
-export default class DocumentsList extends Component {
+export default class MainListWrapper extends Component {
 
   constructor(props, context) {
     super(props, context);
@@ -38,7 +38,7 @@ export default class DocumentsList extends Component {
     }
 
     const Search = this.props.SearchBar;
-    const Sort = this.props.DocumentsListSort;
+    const SortSection = this.props.Sort;
     const List = this.props.List;
     const ActionButtons = this.props.ActionButtons ? <div className="search-list-actions"><this.props.ActionButtons /></div> : null;
 
@@ -49,7 +49,7 @@ export default class DocumentsList extends Component {
             {ActionButtons}
             <Search storeKey={this.props.storeKey}/>
           </div>
-          <Sort total={counter} label={t('System', 'sorted by')} storeKey={this.props.storeKey}/>
+          <SortSection total={counter} label={t('System', 'sorted by')} storeKey={this.props.storeKey}/>
           {(() => {
             if (view !== 'graph') {
               return <List storeKey={this.props.storeKey}/>;
@@ -98,17 +98,17 @@ export default class DocumentsList extends Component {
   }
 }
 
-DocumentsList.defaultProps = {
+MainListWrapper.defaultProps = {
   SearchBar,
-  DocumentsListSort
+  Sort
 };
 
-DocumentsList.propTypes = {
+MainListWrapper.propTypes = {
   documents: PropTypes.object.isRequired,
   connections: PropTypes.object,
   SearchBar: PropTypes.func,
   List: PropTypes.func.isRequired,
-  DocumentsListSort: PropTypes.func,
+  Sort: PropTypes.func,
   ActionButtons: PropTypes.func,
   GraphView: PropTypes.func,
   loadMoreDocuments: PropTypes.func,
