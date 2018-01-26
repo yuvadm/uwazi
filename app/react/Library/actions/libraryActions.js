@@ -11,6 +11,7 @@ import {api as entitiesAPI} from 'app/Entities';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 import {toUrlParams} from 'shared/JSONRequest';
 import {getLibraryDocuments, getSelectedDocuments} from '../selectors';
+import Auth from 'app/Auth';
 
 export function enterLibrary() {
   return {type: types.ENTER_LIBRARY};
@@ -308,16 +309,17 @@ export function clickOnDocument(e, doc, storeKey) {
     const selectedDocuments = getSelectedDocuments(state, storeKey);
     const isActive = selectedDocuments.find((s) => s.get('_id') === doc.get('_id'));
     const specialKey = e.metaKey || e.ctrlKey || e.shiftKey;
+    const authorized = Auth.selectors.getUser(state).get('_id');
 
     if (isActive) {
       return dispatch(unselectDocument(doc.get('_id')));
     }
 
-    if (!specialKey) {
+    if (!specialKey || !authorized) {
       dispatch(unselectAllDocuments());
     }
 
-    if (e.shiftKey) {
+    if (e.shiftKey && authorized) {
       const lastSelectedDocument = selectedDocuments.last();
       const docs = getLibraryDocuments(state, storeKey).get('rows');
       const startIndex = docs.reduce((result, _doc, index) => {

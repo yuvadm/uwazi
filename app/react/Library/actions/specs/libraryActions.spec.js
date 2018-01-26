@@ -338,13 +338,15 @@ describe('libraryActions', () => {
       });
     });
 
-    describe('clickOnDocument', () => {
+    fdescribe('clickOnDocument', () => {
       let libraryDocuments;
       let selectedDocuments;
       let store;
 
       const resetStore = () => {
-        store = mockStore({locale: 'es', library: {documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}});
+        store = mockStore({locale: 'es', library:
+          {documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}, user: Immutable.fromJS({_id: 1})
+        });
       };
 
       beforeEach(() => {
@@ -419,6 +421,24 @@ describe('libraryActions', () => {
 
           store.dispatch(actions.clickOnDocument(e, doc));
           expect(store.getActions()).toEqual(expectedActions);
+        });
+
+        describe('when not authorized', () => {
+          it('should select all the documents from the last selected document to the one clicked', () => {
+            store = mockStore({locale: 'es', library: {
+              documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}, user: Immutable.fromJS({})
+            });
+            const e = {shiftKey: true};
+            const doc = Immutable.fromJS({_id: '3'});
+
+            const expectedActions = [
+              actions.unselectAllDocuments(),
+              actions.selectDocument(doc)
+            ];
+
+            store.dispatch(actions.clickOnDocument(e, doc));
+            expect(store.getActions()).toEqual(expectedActions);
+          });
         });
       });
     });
