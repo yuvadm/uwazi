@@ -311,12 +311,16 @@ export function clickOnDocument(e, doc, storeKey) {
     const specialKey = e.metaKey || e.ctrlKey || e.shiftKey;
     const authorized = Auth.selectors.getUser(state).get('_id');
 
-    if (isActive) {
-      return dispatch(unselectDocument(doc.get('_id')));
-    }
-
     if (!specialKey || !authorized) {
       dispatch(unselectAllDocuments());
+    }
+
+    if (isActive && !specialKey || !authorized) {
+      return dispatch(selectDocument(doc));
+    }
+
+    if (isActive) {
+      return dispatch(unselectDocument(doc.get('_id')));
     }
 
     if (e.shiftKey && authorized) {

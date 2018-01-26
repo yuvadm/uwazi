@@ -373,20 +373,6 @@ describe('libraryActions', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
 
-      describe('when document is active', () => {
-        it('should unselect the document', () => {
-          const e = {};
-          const doc = Immutable.fromJS({_id: '1'});
-
-          const expectedActions = [
-            actions.unselectDocument('1')
-          ];
-
-          store.dispatch(actions.clickOnDocument(e, doc));
-          expect(store.getActions()).toEqual(expectedActions);
-        });
-      });
-
       describe('when holding cmd or ctrl', () => {
         it('should add the document to the selected documents', () => {
           const doc = Immutable.fromJS({_id: '3'});
@@ -410,6 +396,23 @@ describe('libraryActions', () => {
         });
       });
 
+      describe('when multiple documents are selected and clicking a single document', () => {
+        it('should unselect all and select the one clicked', () => {
+          selectedDocuments = Immutable.fromJS([{_id: '1'}, {_id: '2'}]);
+          resetStore();
+          const e = {};
+          const doc = Immutable.fromJS({_id: '2'});
+
+          const expectedActions = [
+            actions.unselectAllDocuments(),
+            actions.selectDocument(doc)
+          ];
+
+          store.dispatch(actions.clickOnDocument(e, doc));
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      });
+
       describe('when holding shift', () => {
         it('should select all the documents from the last selected document to the one clicked', () => {
           const e = {shiftKey: true};
@@ -424,9 +427,9 @@ describe('libraryActions', () => {
         });
 
         describe('when not authorized', () => {
-          it('should select all the documents from the last selected document to the one clicked', () => {
-            store = mockStore({locale: 'es', library: {
-              documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}, user: Immutable.fromJS({})
+          it('should unselect all and select the one clicked', () => {
+            store = mockStore({locale: 'es', library:
+              {documents: libraryDocuments, ui: Immutable.fromJS({selectedDocuments})}, user: Immutable.fromJS({})
             });
             const e = {shiftKey: true};
             const doc = Immutable.fromJS({_id: '3'});
