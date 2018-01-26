@@ -29,13 +29,13 @@ export default class MainListWrapper extends Component {
   }
 
   render() {
-    const {documents, connections, GraphView, view} = this.props;
-    let counter = <span><b>{documents.get('totalRows')}</b> {t('System', 'documents')}</span>;
-    if (connections) {
-      counter = <span>
-                  <b>{connections.totalRows}</b> {t('System', 'connections')}, <b>{documents.get('totalRows')}</b> {t('System', 'documents')}
-                </span>;
-    }
+    const {documents, GraphView, view} = this.props;
+    //let counter = <span><b>{documents.get('totalRows')}</b> {t('System', 'documents')}</span>;
+    //if (connections) {
+      //counter = <span>
+                  //<b>{connections.totalRows}</b> {t('System', 'connections')}, <b>{documents.get('totalRows')}</b> {t('System', 'documents')}
+                //</span>;
+    //}
 
     const Search = this.props.SearchBar;
     const SortSection = this.props.Sort;
@@ -49,7 +49,7 @@ export default class MainListWrapper extends Component {
             {ActionButtons}
             <Search storeKey={this.props.storeKey}/>
           </div>
-          <SortSection total={counter} label={t('System', 'sorted by')} storeKey={this.props.storeKey}/>
+          <SortSection storeKey={this.props.storeKey}/>
           {(() => {
             if (view !== 'graph') {
               return <List storeKey={this.props.storeKey}/>;

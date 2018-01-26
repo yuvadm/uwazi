@@ -7,6 +7,11 @@ const getLibraryDocuments = createSelector(
   docs => docs
 );
 
+const getLibraryTotalDocs = createSelector(
+  (state, storeKey) => libraryState(state, storeKey).documents.get('totalRows'),
+  docs => docs
+);
+
 const getSelectedDocuments = createSelector(
   (state, storeKey) => libraryState(state, storeKey).ui.get('selectedDocuments'),
   docs => docs
@@ -14,5 +19,6 @@ const getSelectedDocuments = createSelector(
 
 export {
   getLibraryDocuments,
+  getLibraryTotalDocs,
   getSelectedDocuments
 };

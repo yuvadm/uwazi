@@ -71,8 +71,6 @@ describe('MainListWrapper', () => {
   describe('sorting', () => {
     it('Should render a default sorting section', () => {
       render();
-      expect(component.find(ListSortSection).props().label).toBe('sorted by');
-      expect(component.find(ListSortSection).props().total).toBeDefined();
       expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
     });
 
@@ -81,28 +79,26 @@ describe('MainListWrapper', () => {
       props.Sort = CustomSorting;
       render();
 
-      expect(component.find(CustomSorting).props().label).toBe('sorted by');
-      expect(component.find(CustomSorting).props().total).toBeDefined();
       expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
     });
   });
 
-  describe('List', () => {
-    it('Should render a default sorting section', () => {
-      render();
-      expect(component.find(ListSortSection).props().label).toBe('sorted by');
-      expect(component.find(ListSortSection).props().total).toBeDefined();
-      expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
-    });
+  //describe('List', () => {
+    //it('Should render a default sorting section', () => {
+      //render();
+      //expect(component.find(ListSortSection).props().label).toBe('sorted by');
+      //expect(component.find(ListSortSection).props().total).toBeDefined();
+      //expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
+    //});
 
-    it('Should render sorting section passed', () => {
-      const CustomSorting = () => <div/>;
-      props.Sort = CustomSorting;
-      render();
+    //it('Should render sorting section passed', () => {
+      //const CustomSorting = () => <div/>;
+      //props.Sort = CustomSorting;
+      //render();
 
-      expect(component.find(CustomSorting).props().label).toBe('sorted by');
-      expect(component.find(CustomSorting).props().total).toBeDefined();
-      expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
-    });
-  });
+      //expect(component.find(CustomSorting).props().label).toBe('sorted by');
+      //expect(component.find(CustomSorting).props().total).toBeDefined();
+      //expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
+    //});
+  //});
 });

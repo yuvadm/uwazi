@@ -567,7 +567,7 @@ $item-padding: 15px;
     color: $c-primary;
   }
 
-  &-sort {
+  span {
     margin: 0 4px;
     @media(max-width: 768px) {
       display: none;

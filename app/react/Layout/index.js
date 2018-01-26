@@ -4,11 +4,12 @@ import Icon from './Icon';
 import SidePanel from './SidePanel';
 import DocumentLanguage from './DocumentLanguage';
 import MainListWrapper from './Lists/MainListWrapper';
-import ListSortSection from './Lists/ListSortSection';
+import ListSortSection, {ListSortLabel} from './Lists/ListSortSection';
 
 export {
   MainListWrapper,
   ListSortSection,
+  ListSortLabel,
   Item,
   TemplateLabel,
   Icon,
