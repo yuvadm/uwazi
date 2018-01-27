@@ -1,28 +1,25 @@
-import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {wrapDispatch} from 'app/Multireducer';
-import {searchDocuments} from 'app/Library/actions/libraryActions';
-import {actions as actionCreators} from 'app/BasicReducer';
+import {connect} from 'react-redux';
+import Immutable from 'immutable';
 
 import {MainListWrapper} from 'app/Layout';
-import {loadMoreDocuments, selectDocument, unselectDocument, unselectAllDocuments, selectDocuments} from 'app/Library/actions/libraryActions';
+import {loadMoreDocuments} from 'app/Library/actions/libraryActions';
 
-export function mapStateToProps({evidences}) {
+import {getEvidences, getEvidencesTotal} from '../selectors';
+import Evidences from './Evidences';
+
+export function mapStateToProps(state) {
   return {
-    documents: evidences.allEvidences
+    SearchBar: () => false,
+    List: Evidences,
+    documents: Immutable.fromJS({rows: getEvidences(state), totalRows: getEvidencesTotal(state)})
   };
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    loadMoreDocuments,
-    searchDocuments,
-    selectDocument,
-    selectDocuments,
-    unselectDocument,
-    unselectAllDocuments,
-    onSnippetClick: () => actionCreators.set(props.storeKey + '.sidepanel.tab', 'text-search')
-  }, wrapDispatch(dispatch, props.storeKey));
+    loadMoreDocuments
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainListWrapper);

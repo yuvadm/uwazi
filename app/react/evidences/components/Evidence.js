@@ -1,29 +1,16 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {RowList, ItemFooter} from 'app/Layout/Lists';
+import React from 'react';
+import {RowList} from 'app/Layout/Lists';
+import Immutable from 'immutable';
 
-class Evidence extends Component {
-
-  render() {
-    return <RowList.Item>
-      {this.props.evidence.get('evidence').get('text')}
-    </RowList.Item>;
-  }
-}
-
-Evidence.propTypes = {
-  evidence: PropTypes.object
+const Evidence = (props) => {
+  return <RowList.Item>
+    {props.evidence.get('evidence').get('text')}
+  </RowList.Item>;
 };
 
-export function mapStateToProps() {
-  return {
-  };
-}
+Evidence.propTypes = {
+  evidence: PropTypes.instanceOf(Immutable.map)
+};
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({}, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Evidence);
+export default Evidence;
