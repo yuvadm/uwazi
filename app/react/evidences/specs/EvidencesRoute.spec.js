@@ -9,7 +9,6 @@ import evidencesAPI from '../evidencesAPI';
 // import LibraryCharts from 'app/Charts/components/LibraryCharts';
 // import ListChartToggleButtons from 'app/Charts/components/ListChartToggleButtons';
 import RouteHandler from 'app/App/RouteHandler';
-import * as actionTypes from 'app/Library/actions/actionTypes.js';
 import {fromJS as Immutable} from 'immutable';
 
 
@@ -54,7 +53,7 @@ describe('EvidencesRoute', () => {
       EvidencesRoute.requestState(params, query, globalResources)
       .then((state) => {
         expect(evidencesAPI.search).toHaveBeenCalledWith(expectedSearch);
-        expect(state.evidences.allEvidences).toEqual(evidences.rows);
+        expect(state.evidences.allEvidences).toEqual(evidences);
         done();
       })
       .catch(done.fail);

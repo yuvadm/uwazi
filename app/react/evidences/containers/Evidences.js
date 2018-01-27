@@ -24,7 +24,7 @@ Evidences.propTypes = {
 
 export function mapStateToProps(state) {
   return {
-    evidences: getEvidences(state)
+    evidences: getEvidences(state).get('rows')
   };
 }
 

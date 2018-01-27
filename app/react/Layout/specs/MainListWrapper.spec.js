@@ -6,7 +6,7 @@ import MainListWrapper from '../Lists/MainListWrapper';
 import Doc from 'app/Library/components/Doc';
 import {ListSortSection} from 'app/Layout';
 
-describe('MainListWrapper', () => {
+fdescribe('MainListWrapper', () => {
   let component;
   let props;
   let documents = Immutable.fromJS({rows: [{title: 'Document one', _id: '1'}, {title: 'Document two', _id: '2'}], totalRows: 2});
@@ -83,22 +83,18 @@ describe('MainListWrapper', () => {
     });
   });
 
-  //describe('List', () => {
-    //it('Should render a default sorting section', () => {
-      //render();
-      //expect(component.find(ListSortSection).props().label).toBe('sorted by');
-      //expect(component.find(ListSortSection).props().total).toBeDefined();
-      //expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
-    //});
+  describe('LoadMoreSection', () => {
+    it('should show current/total', () => {
+      render();
+      expect(component.find(ListSortSection).props().storeKey).toBe('storeKey');
+    });
 
-    //it('Should render sorting section passed', () => {
-      //const CustomSorting = () => <div/>;
-      //props.Sort = CustomSorting;
-      //render();
+    it('Should render sorting section passed', () => {
+      const CustomSorting = () => <div/>;
+      props.Sort = CustomSorting;
+      render();
 
-      //expect(component.find(CustomSorting).props().label).toBe('sorted by');
-      //expect(component.find(CustomSorting).props().total).toBeDefined();
-      //expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
-    //});
-  //});
+      expect(component.find(CustomSorting).props().storeKey).toBe('storeKey');
+    });
+  });
 });

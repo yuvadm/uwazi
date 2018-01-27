@@ -1,13 +1,15 @@
-import configureMockStore from 'redux-mock-store';
+import {browserHistory} from 'react-router';
 import thunk from 'redux-thunk';
-import evidencesAPI from '../evidencesAPI';
+
+import configureMockStore from 'redux-mock-store';
 
 import * as actions from '../actions.js';
+import evidencesAPI from '../evidencesAPI';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('evidences actions', () => {
+fdescribe('evidences actions', () => {
   let store;
 
   beforeEach(() => {
@@ -97,6 +99,27 @@ describe('evidences actions', () => {
         expect(store.getActions()).toEqual(expectedActions);
         done();
       });
+    });
+  });
+
+  //describe('loadMoreEvidences', () => {
+    //it('should call searchEvidences with the new limit', (done) => {
+      //const limit = 'limit';
+      //spyOn(actions, 'searchEvidences');
+      //store.dispatch(actions.loadMoreEvidences({}, limit))
+      //.then(() => {
+        //expect(actions.searchEvidences).toHaveBeenCalledWith({}, limit);
+        //done();
+      //});
+    //});
+  //});
+
+  describe('searchEvidences', () => {
+    it('should change the url with the new params', () => {
+      const limit = 'limit';
+      spyOn(browserHistory, 'push');
+      store.dispatch(actions.searchEvidences({}, limit));
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(limit:limit)');
     });
   });
 });

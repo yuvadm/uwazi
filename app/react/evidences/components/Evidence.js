@@ -10,7 +10,7 @@ const Evidence = (props) => {
 };
 
 Evidence.propTypes = {
-  evidence: PropTypes.instanceOf(Immutable.map)
+  evidence: PropTypes.instanceOf(Immutable.Map)
 };
 
 export default Evidence;

@@ -1,5 +1,7 @@
+import {browserHistory} from 'react-router';
 import {actions} from 'app/BasicReducer';
 import evidencesAPI from './evidencesAPI';
+import rison from 'rison';
 
 export function setSuggestions(suggestions) {
   return function (dispatch) {
@@ -63,3 +65,16 @@ export function saveEvidence(evidence) {
     });
   };
 }
+
+export function searchEvidences(filters, limit) {
+  return function () {
+    browserHistory.push(`/evidences/?q=${rison.encode({limit})}`);
+  };
+}
+
+export function loadMoreEvidences(filters, limit) {
+  return function (dispatch) {
+    dispatch(searchEvidences(filters, limit));
+  };
+}
+

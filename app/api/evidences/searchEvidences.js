@@ -4,10 +4,13 @@ import queryBuilder from './evidencesQueryBuilder';
 //import queryBuilder from './documentQueryBuilder';
 
 export default {
-  search(filters) {
-    const query = queryBuilder().filter(filters).query();
+  search(filters = {}, limit) {
+    const query = queryBuilder().filter(filters);
+    if (limit) {
+      query.limit(limit);
+    }
 
-    return elastic.search({index: elasticIndex, type: 'evidence', body: query})
+    return elastic.search({index: elasticIndex, type: 'evidence', body: query.query()})
     .then((result) => {
       const rows = result.hits.hits.map((hit) => {
         hit._source._id = hit._id;

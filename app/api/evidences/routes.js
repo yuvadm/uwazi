@@ -21,7 +21,7 @@ export default (app) => {
 
   //
   app.get('/api/evidences/search', (req, res) => {
-    return searchEvidences.search()
+    return searchEvidences.search(req.query)
     .then(response => res.json(response))
     .catch(res.error);
   });

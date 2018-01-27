@@ -6,9 +6,13 @@ import EvidencesList from '../containers/EvidencesList';
 
 class EvidencesSection extends Component {
   render() {
-    return <div>
-      <EvidencesList />
-      </div>;
+    return (
+      <div className="row panels-layout">
+        <main className="library-viewer document-viewer with-panel">
+          <EvidencesList />
+        </main>
+      </div>
+    );
   }
 }
 
