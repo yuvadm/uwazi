@@ -82,6 +82,7 @@ export class FiltersForm extends Component {
           {fields.map((property) => {
             let propertyClass = 'search__filter is-active';
             if (property.type === 'select' || property.type === 'multiselect') {
+              console.log(this.translatedOptions(property));
               return (
                 <FormGroup key={property.name}>
                   <ul className={propertyClass}>

@@ -2,6 +2,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 
+import EvidencesFilters from '../containers/EvidencesFilters';
 import EvidencesList from '../containers/EvidencesList';
 
 class EvidencesSection extends Component {
@@ -11,6 +12,7 @@ class EvidencesSection extends Component {
         <main className="library-viewer document-viewer with-panel">
           <EvidencesList />
         </main>
+        <EvidencesFilters />
       </div>
     );
   }

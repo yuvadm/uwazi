@@ -123,22 +123,4 @@ describe('searchEvidences', () => {
       .catch(catchErrors(done));
     });
   });
-
-  //describe('indexEntities', () => {
-  //it('should index entities based on query params passed', (done) => {
-  //spyOn(search, 'bulkIndex');
-  //search.indexEntities({sharedId: 'shared'}, {title: 1})
-  //.then(() => {
-  //const documentsToIndex = search.bulkIndex.calls.argsFor(0)[0];
-  //expect(documentsToIndex[0].title).toBeDefined();
-  //expect(documentsToIndex[0].metadata).not.toBeDefined();
-  //expect(documentsToIndex[1].title).toBeDefined();
-  //expect(documentsToIndex[1].metadata).not.toBeDefined();
-  //expect(documentsToIndex[2].title).toBeDefined();
-  //expect(documentsToIndex[2].metadata).not.toBeDefined();
-  //done();
-  //})
-  //.catch(catchErrors(done));
-  //});
-  //});
 });

@@ -68,7 +68,7 @@ export function saveEvidence(evidence) {
 
 export function searchEvidences(filters, limit) {
   return function () {
-    browserHistory.push(`/evidences/?q=${rison.encode({limit})}`);
+    browserHistory.push(`/evidences/?q=${rison.encode(filters)}`);
   };
 }
 

@@ -21,7 +21,11 @@ export default (app) => {
 
   //
   app.get('/api/evidences/search', (req, res) => {
-    return searchEvidences.search(req.query)
+    let filters = {};
+    if (req.query.filters) {
+      filters = JSON.parse(req.query.filters);
+    }
+    return searchEvidences.search(filters, req.query.limit)
     .then(response => res.json(response))
     .catch(res.error);
   });

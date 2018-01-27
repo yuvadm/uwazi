@@ -57,7 +57,7 @@ export default function () {
       return this;
     },
 
-    filter(filters = []) {
+    filter(filters) {
       Object.keys(filters).forEach((property) => {
         const match = this.filterProperty(filters, property);
         baseQuery.query.bool.filter.push(match);

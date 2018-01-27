@@ -4,8 +4,12 @@ import queryBuilder from './evidencesQueryBuilder';
 //import queryBuilder from './documentQueryBuilder';
 
 export default {
-  search(filters = {}, limit) {
-    const query = queryBuilder().filter(filters);
+  search(filters, limit) {
+    const query = queryBuilder();
+    if (filters) {
+      query.filter(filters);
+    }
+
     if (limit) {
       query.limit(limit);
     }
