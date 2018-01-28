@@ -21,7 +21,7 @@ export default class MainListWrapper extends Component {
 
   loadMoreDocuments() {
     this.setState({loading: true});
-    this.props.loadMoreDocuments(this.props.storeKey, this.props.documents.get('rows').size + loadMoreAmmount);
+    this.props.loadMoreDocuments(this.props.documents.get('rows').size + loadMoreAmmount, this.props.storeKey);
   }
 
   componentWillReceiveProps() {

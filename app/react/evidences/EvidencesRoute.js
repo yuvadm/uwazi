@@ -5,9 +5,10 @@ import api from './evidencesAPI';
 import RouteHandler from 'app/App/RouteHandler';
 import SearchButton from 'app/Library/components/SearchButton';
 import {actions} from 'app/BasicReducer';
+import {actions as formActions} from 'react-redux-form';
 import EvidencesSection from './components/EvidencesSection';
 
-export default class Uploads extends RouteHandler {
+export default class EvidencesRoute extends RouteHandler {
 
   constructor(props, context) {
     super(props, context);
@@ -23,39 +24,23 @@ export default class Uploads extends RouteHandler {
   }
 
   static requestState(params, _query = {}) {
-    //const defaultSearch = prioritySortingCriteria.get({templates: globalResources.templates});
     let query = rison.decode(_query.q || '()');
-    //query.order = query.order || defaultSearch.order;
-    //query.sort = query.sort || defaultSearch.sort;
-    //query.unpublished = true;
 
     return api.search(query)
     .then((allEvidences) => {
-      //const filterState = libraryHelpers.URLQueryToState(query, globalResources.templates.toJS(), globalResources.thesauris.toJS());
       return {
         evidences: {
-          allEvidences: allEvidences
+          allEvidences: allEvidences,
+          search: query
         }
       };
     });
   }
 
   setReduxState(state) {
-    //const dispatch = wrapDispatch(this.context.store.dispatch, 'uploads');
-    //dispatch(setDocuments(state.uploads.documents));
+    this.context.store.dispatch(formActions.setInitial('evidences.search', state.evidences.search));
     this.context.store.dispatch(actions.set('evidences/allEvidences', state.evidences.allEvidences));
   }
-
-  //componentDidMount() {
-    //const dispatch = wrapDispatch(this.context.store.dispatch, 'uploads');
-    //dispatch(enterLibrary());
-  //}
-
-  //componentWillReceiveProps(nextProps) {
-    //if (nextProps.location.query.q !== this.props.location.query.q) {
-      //return this.superComponentWillReceiveProps(nextProps);
-    //}
-  //}
 
   render() {
     return <EvidencesSection />;

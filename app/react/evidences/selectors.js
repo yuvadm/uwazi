@@ -7,6 +7,12 @@ const getEvidences = createSelector(
   evidences => evidences
 );
 
+const getEvidencesFilters = createSelector(
+  state => evidencesState(state).search,
+  evidencesFilters => evidencesFilters
+);
+
 export {
-  getEvidences
+  getEvidences,
+  getEvidencesFilters
 };

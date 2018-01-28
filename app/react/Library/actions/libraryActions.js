@@ -284,7 +284,7 @@ export function deleteEntity(entity) {
   };
 }
 
-export function loadMoreDocuments(storeKey, amount) {
+export function loadMoreDocuments(amount, storeKey) {
   return function (dispatch, getState) {
     searchDocuments({search: getState()[storeKey].search}, storeKey, amount)(dispatch, getState);
   };

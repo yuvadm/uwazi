@@ -102,23 +102,28 @@ fdescribe('evidences actions', () => {
     });
   });
 
-  //describe('loadMoreEvidences', () => {
-    //it('should call searchEvidences with the new limit', (done) => {
-      //const limit = 'limit';
-      //spyOn(actions, 'searchEvidences');
-      //store.dispatch(actions.loadMoreEvidences({}, limit))
-      //.then(() => {
-        //expect(actions.searchEvidences).toHaveBeenCalledWith({}, limit);
-        //done();
-      //});
-    //});
-  //});
-
   describe('searchEvidences', () => {
     it('should change the url with the new params', () => {
       const limit = 'limit';
       spyOn(browserHistory, 'push');
-      store.dispatch(actions.searchEvidences({}, limit));
+      store.dispatch(actions.searchEvidences({filters: {value: {values: ['filter']}}}, limit));
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:(value:(values:!(filter))),limit:limit)');
+    });
+
+    it('should use current filters when filters passed are null', () => {
+      store = mockStore({evidences: {search: {filters: {value: {values: ['filter']}}}}});
+
+      const limit = 'limit';
+      spyOn(browserHistory, 'push');
+      store.dispatch(actions.searchEvidences(null, limit));
+
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:(value:(values:!(filter))),limit:limit)');
+    });
+
+    it('should not add empty filters', () => {
+      const limit = 'limit';
+      spyOn(browserHistory, 'push');
+      store.dispatch(actions.searchEvidences({filters: {value: {values: []}}}, limit));
       expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(limit:limit)');
     });
   });

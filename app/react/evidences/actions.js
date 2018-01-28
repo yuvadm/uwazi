@@ -1,7 +1,10 @@
 import {browserHistory} from 'react-router';
-import {actions} from 'app/BasicReducer';
-import evidencesAPI from './evidencesAPI';
 import rison from 'rison';
+
+import {actions} from 'app/BasicReducer';
+
+import {getEvidencesFilters} from './selectors';
+import evidencesAPI from './evidencesAPI';
 
 export function setSuggestions(suggestions) {
   return function (dispatch) {
@@ -67,14 +70,24 @@ export function saveEvidence(evidence) {
 }
 
 export function searchEvidences(filters, limit) {
-  return function () {
-    browserHistory.push(`/evidences/?q=${rison.encode(filters)}`);
+  return function (dispatch, getState) {
+    const state = getState();
+    let newFilters = filters;
+    if (!filters) {
+      newFilters = getEvidencesFilters(state);
+    }
+
+    if (newFilters && newFilters.filters && newFilters.filters.value.values.length === 0) {
+      newFilters = {};
+    }
+
+    newFilters = Object.assign({}, newFilters, {limit});
+    browserHistory.push(`/evidences/?q=${rison.encode(newFilters)}`);
   };
 }
 
-export function loadMoreEvidences(filters, limit) {
+export function loadMoreEvidences(limit) {
   return function (dispatch) {
-    dispatch(searchEvidences(filters, limit));
+    dispatch(searchEvidences(null, limit));
   };
 }
-
