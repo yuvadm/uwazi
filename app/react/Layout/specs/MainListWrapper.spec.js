@@ -6,7 +6,7 @@ import MainListWrapper from '../Lists/MainListWrapper';
 import Doc from 'app/Library/components/Doc';
 import {ListSortSection} from 'app/Layout';
 
-fdescribe('MainListWrapper', () => {
+describe('MainListWrapper', () => {
   let component;
   let props;
   let documents = Immutable.fromJS({rows: [{title: 'Document one', _id: '1'}, {title: 'Document two', _id: '2'}], totalRows: 2});

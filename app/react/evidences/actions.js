@@ -5,6 +5,7 @@ import {actions} from 'app/BasicReducer';
 
 import {getEvidencesFilters} from './selectors';
 import evidencesAPI from './evidencesAPI';
+import {actions as formActions} from 'react-redux-form';
 
 export function setSuggestions(suggestions) {
   return function (dispatch) {
@@ -85,6 +86,14 @@ export function searchEvidences(filters, limit) {
     browserHistory.push(`/evidences/?q=${rison.encode(newFilters)}`);
   };
 }
+
+export function resetEvidencesFilters() {
+  return (dispatch) => {
+    dispatch(formActions.reset('evidences.search'));
+    dispatch(searchEvidences({}));
+  };
+}
+
 
 export function loadMoreEvidences(limit) {
   return function (dispatch) {

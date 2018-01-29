@@ -9,7 +9,7 @@ import evidencesAPI from '../evidencesAPI';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-fdescribe('evidences actions', () => {
+describe('evidences actions', () => {
   let store;
 
   beforeEach(() => {
@@ -125,6 +125,19 @@ fdescribe('evidences actions', () => {
       spyOn(browserHistory, 'push');
       store.dispatch(actions.searchEvidences({filters: {value: {values: []}}}, limit));
       expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(limit:limit)');
+    });
+  });
+
+  describe('resetEvidencesFilters', () => {
+    it('should reset filters form and searchEvidences with empty filter object', () => {
+      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
+      spyOn(browserHistory, 'push');
+
+      const expectedActions = [ {type: 'rrf/reset', model: 'evidences.search'} ];
+
+      store.dispatch(actions.resetEvidencesFilters());
+      expect(store.getActions()).toEqual(expectedActions);
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=()');
     });
   });
 });

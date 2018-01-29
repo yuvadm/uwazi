@@ -9,7 +9,7 @@ import FormGroup from 'app/DocumentForm/components/FormGroup';
 
 import {Button, SidePanel} from '../../Layout';
 import {MultiSelect} from '../../ReactReduxForms';
-import {searchEvidences} from '../actions';
+import {resetEvidencesFilters, searchEvidences} from '../actions';
 import {t} from '../../I18N';
 
 const EvidencesFilters = (props) => {
@@ -17,7 +17,7 @@ const EvidencesFilters = (props) => {
     <SidePanel open className="library-filters">
 
       <SidePanel.Footer>
-        <Button icon="refresh">{t('System', 'Reset')}</Button>
+        <Button onClick={props.reset} icon="refresh">{t('System', 'Reset')}</Button>
         <Button success icon="search">{t('System', 'Search')}</Button>
       </SidePanel.Footer>
 
@@ -50,7 +50,8 @@ const EvidencesFilters = (props) => {
 
 EvidencesFilters.propTypes = {
   thesauris: PropTypes.instanceOf(Immutable.List),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  reset: PropTypes.func
 };
 
 export function mapStateToProps({thesauris}) {
@@ -61,7 +62,8 @@ export function mapStateToProps({thesauris}) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    onChange: searchEvidences
+    onChange: searchEvidences,
+    reset: resetEvidencesFilters
   }, dispatch);
 }
 
