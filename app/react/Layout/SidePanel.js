@@ -21,4 +21,23 @@ SidePanel.propTypes = {
   open: PropTypes.bool
 };
 
+const Body = (props) => {
+  return <div className="sidepanel-body">{props.children}</div>;
+};
+
+Body.propTypes = {
+  children: PropTypes.node
+};
+
+const Footer = (props) => {
+  return <div className="sidepanel-footer">{props.children}</div>;
+};
+
+Footer.propTypes = {
+  children: PropTypes.node
+};
+
+
+SidePanel.Body = Body;
+SidePanel.Footer = Footer;
 export default SidePanel;
