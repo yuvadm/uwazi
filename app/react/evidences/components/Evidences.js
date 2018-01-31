@@ -5,12 +5,27 @@ import {bindActionCreators} from 'redux';
 import {getSuggestions, saveEvidence, removeSuggestion} from '../actions';
 import {createSelector} from 'reselect';
 import Immutable from 'immutable';
+import * as templates from 'app/Templates';
+import * as thesauris from 'app/Thesauris';
+
 
 const thesauriValues = createSelector(s => s.thesauris, (thesauris) => {
   let values = {};
   thesauris.forEach((thesauri) => {
     thesauri.get('values').forEach((value) => {
       values[value.get('id')] = value.get('label');
+    });
+  });
+
+  return values;
+});
+
+const thesauriNames = createSelector(s => s.templates, (templates) => {
+  let values = {};
+
+  templates.forEach((template) => {
+    template.get('properties').forEach((property) => {
+      values[property.get('_id')] = property.get('label');
     });
   });
 
@@ -81,7 +96,8 @@ export class Evidences extends Component {
     .groupBy(x => x.get('property'));
     const suggestions = this.props.suggestions.groupBy(x => x.get('property'));
     const properties = this.props.suggestions.concat(this.props.evidences).groupBy((x) => x.get('property')).keySeq().toArray();
-    const valuesLabels = thesauriValues(this.props);
+    const valuesLabels = thesauris.selectors.getAllThesaurisLabels(this.props);
+    const nameLabels = templates.selectors.getAllPropertyNames(this.props);
 
     return <div>
       <div>
@@ -98,13 +114,13 @@ export class Evidences extends Component {
           {evidences.size && evidences.get(property) ? evidences.get(property).map((evidence, index) => {
             return <div key={index} className="card evidence" className={'card evidence' + (evidence.get('isEvidence') ? '' : ' negative')}>
               <p>{evidence.get('evidence').get('text')}</p>
-              <p>{valuesLabels[evidence.get('value')]}</p>
+              <p><b>{nameLabels[evidence.get('property')]}</b>: {valuesLabels[evidence.get('value')]}</p>
             </div>;
           }) : false}
           {suggestions.size && this.state.suggestions ? suggestions.get(property).map((suggestion, index) => {
             return <div key={index} className="card suggestion">
               <p>{suggestion.get('evidence').get('text')}</p>
-              <p>{valuesLabels[suggestion.get('value')]}</p>
+              <p><b>{nameLabels[suggestion.get('property')]}</b>: {valuesLabels[suggestion.get('value')]}</p>
               <button onClick={this.saveValidSuggestion.bind(this, suggestion)}>OK</button>
               <button onClick={this.saveInvalidSuggestion.bind(this, suggestion)}>NO</button>
             </div>;
@@ -128,11 +144,12 @@ Evidences.propTypes = {
   saveEvidence: PropTypes.func
 };
 
-export function mapStateToProps({evidences, documentViewer, thesauris}) {
+export function mapStateToProps({evidences, documentViewer, thesauris, templates}) {
   return {
     suggestions: evidences.suggestions,
     doc: documentViewer.doc,
     thesauris,
+    templates,
     evidences: evidences.evidences
   };
 }

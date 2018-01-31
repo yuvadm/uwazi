@@ -7,6 +7,7 @@ import {RowList} from 'app/Layout/Lists';
 
 import {getEvidences} from '../selectors';
 import Evidence from '../components/Evidence';
+import {createSelector} from 'reselect';
 
 const Evidences = (props) => {
   return (

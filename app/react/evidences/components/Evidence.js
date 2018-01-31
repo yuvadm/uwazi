@@ -5,7 +5,8 @@ import Immutable from 'immutable';
 
 const Evidence = (props) => {
   return <RowList.Item>
-    {props.evidence.get('evidence').get('text')}
+    <p>{props.evidence.get('evidence').get('text')}</p>
+    <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
   </RowList.Item>;
 };
 
