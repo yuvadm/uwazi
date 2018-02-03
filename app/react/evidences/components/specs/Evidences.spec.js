@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 
 import {Evidences} from '../Evidences';
 
-describe('Evidences', () => {
+xdescribe('Evidences', () => {
   let component;
   let instance;
   let props;
