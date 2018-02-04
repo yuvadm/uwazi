@@ -2,8 +2,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 
-import EvidencesFilters from '../containers/EvidencesFilters';
 import EvidencesList from '../containers/EvidencesList';
+import EvidencesSidePanel from '../containers/EvidencesSidePanel';
 
 class EvidencesSection extends Component {
   render() {
@@ -12,7 +12,7 @@ class EvidencesSection extends Component {
         <main className="library-viewer document-viewer with-panel">
           <EvidencesList />
         </main>
-        <EvidencesFilters />
+        <EvidencesSidePanel />
       </div>
     );
   }

@@ -16,6 +16,12 @@ const getAllThesaurisLabels = createSelector(
   }
 );
 
+const get = createSelector(
+  state => thesaurisState(state),
+  thesauris => thesauris
+);
+
 export {
-  getAllThesaurisLabels
+  getAllThesaurisLabels,
+  get
 };

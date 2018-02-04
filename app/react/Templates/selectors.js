@@ -16,6 +16,12 @@ const getAllPropertyNames = createSelector(
     return values;
   });
 
+const get = createSelector(
+  state => templatesState(state),
+  templates => templates
+);
+
 export {
-  getAllPropertyNames
+  getAllPropertyNames,
+  get
 };

@@ -34,4 +34,31 @@ describe('Evidences selectors', () => {
       });
     });
   });
+
+  describe('getFilters', () => {
+    it('should return all filter posibilities based on templates and thesauris', () => {
+      const state = {
+        templates: Immutable.fromJS([
+          {properties: [{_id: 'property1', label: 'propertyLabel1', content: 'thesauri1'}, {_id: 'property2', label: 'propertyLabel2'}]},
+          {properties: [
+            {_id: 'property3', label: 'propertyLabel3', content: 'thesauri2'},
+            {_id: 'property4', label: 'propertyLabel4', content: 'thesauri1'}
+          ]}
+        ]),
+        thesauris: Immutable.fromJS([
+          {_id: 'thesauri1', values: [{id: 'value1', label: 'valueLabel1'}, {id: 'value2', label: 'valueLabel2'}]},
+          {_id: 'thesauri2', values: [{id: 'value3', label: 'valueLabel3'}, {id: 'value4', label: 'valueLabel4'}]}
+        ])
+      };
+
+      const filters = selectors.getFilters(state);
+
+      expect(filters.toJS()).toEqual([
+        {label: 'Used as:', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]},
+        {label: 'propertyLabel1', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]},
+        {label: 'propertyLabel3', values: [{value: 'value3', label: 'valueLabel3'}, {value: 'value4', label: 'valueLabel4'}]},
+        {label: 'propertyLabel4', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]}
+      ]);
+    });
+  });
 });
