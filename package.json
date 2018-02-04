@@ -24,9 +24,7 @@
   },
   "jest": {
     "testMatch": [
-      "**/react/**/evidences/**/specs/*spec.js?(x)",
-      "**/react/**/Thesauris/**/specs/*spec.js?(x)",
-      "**/react/**/Templates/**/specs/*spec.js?(x)"
+      "**/react/**/specs/*spec.js?(x)"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/setupTests.js",
     "moduleNameMapper": {

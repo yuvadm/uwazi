@@ -4,6 +4,14 @@ const Adapter = require('enzyme-adapter-react-15');
 // Setup enzyme's react adapter
 configure({adapter: new Adapter()});
 
+var error = console.error.bind(console);
+console.error = function(message){
+  if (message.match('/api/i18n/systemKeys')) {
+    return;
+  }
+  error(message);
+};
+
 jasmine.createSpyObj = (name, methodNames) => {
   if (Array.isArray(name)) {
     methodNames = name;
