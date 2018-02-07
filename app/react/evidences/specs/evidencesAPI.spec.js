@@ -19,6 +19,16 @@ describe('evidencesAPI', () => {
   afterEach(() => backend.restore());
 
   describe('filter()', () => {
+    it('should work if data sent is undefined', (done) => {
+      spyOn(api, 'get').and.returnValue(Promise.resolve({json: 'response'}));
+      evidencesAPI.search()
+      .then((response) => {
+        expect(response).toEqual('response');
+        done();
+      })
+      .catch(done.fail);
+    });
+
     it('should cleanup the filters "_" names and search evidences', (done) => {
       spyOn(api, 'get').and.returnValue(Promise.resolve({json: 'response'}));
       let data = {filters: {filter1: 'filter1', _filter2: 'filter2', _filter3: 'filter3'}};
