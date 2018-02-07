@@ -20,7 +20,7 @@ jasmine.createSpyObj = (name, methodNames) => {
   let obj = {};
 
   for (let i = 0; i < methodNames.length; i++) {
-    obj[methodNames[i]] = jest.fn();
+    obj[methodNames[i]] = jasmine.createSpy(methodNames[i]);
   }
 
   return obj;

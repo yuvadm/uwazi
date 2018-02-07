@@ -1,11 +1,12 @@
 import {browserHistory} from 'react-router';
+import {actions as formActions} from 'react-redux-form';
+import Immutable from 'immutable';
 import rison from 'rison';
 
 import {actions} from 'app/BasicReducer';
 
 import {getEvidencesFilters} from './selectors';
 import evidencesAPI from './evidencesAPI';
-import {actions as formActions} from 'react-redux-form';
 
 export function setSuggestions(suggestions) {
   return function (dispatch) {
@@ -70,19 +71,18 @@ export function saveEvidence(evidence) {
   };
 }
 
-export function searchEvidences(filters, limit) {
+export function searchEvidences(query, limit) {
   return function (dispatch, getState) {
-    const state = getState();
-    let newFilters = filters;
-    if (!filters) {
-      newFilters = getEvidencesFilters(state);
-    }
+    let newFilters = Immutable.fromJS(query || getEvidencesFilters(getState()));
 
-    if (newFilters && newFilters.filters && newFilters.filters.value.values.length === 0) {
-      newFilters = {};
-    }
+    newFilters = newFilters.set('filters', newFilters.get('filters').reduce((filters, filter, key) => {
+      if (!filter.get('values').size) {
+        return filters;
+      }
+      return Immutable.Map().set(key, filter);
+    }, Immutable.Map()));
 
-    newFilters = Object.assign({}, newFilters, {limit});
+    newFilters = Object.assign({}, Object.assign({}, newFilters.toJS()), {limit});
     browserHistory.push(`/evidences/?q=${rison.encode(newFilters)}`);
   };
 }
@@ -90,7 +90,7 @@ export function searchEvidences(filters, limit) {
 export function resetEvidencesFilters() {
   return (dispatch) => {
     dispatch(formActions.reset('evidences.search'));
-    dispatch(searchEvidences({}));
+    dispatch(searchEvidences({filters: {}}));
   };
 }
 

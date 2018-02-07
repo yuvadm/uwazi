@@ -22,6 +22,7 @@ const getEvidences = createSelector(
 const buildFilter = (property, thesauris) => {
   return Immutable.Map({
     label: property.get('label'),
+    _id: property.get('_id'),
     values: thesauris.find((t) => t.get('_id') === property.get('content'))
     .get('values').map((value) => {
       return value.set('value', value.get('id')).delete('id');
@@ -34,7 +35,7 @@ const getFilters = createSelector(
   thesaurisSelectors.get,
   (templates, thesauris) => {
     return Immutable.fromJS([
-      {label: 'Used as:', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]}
+      {label: 'Used as:', _id: 'isEvidence', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]}
     ])
     .concat(
       templates

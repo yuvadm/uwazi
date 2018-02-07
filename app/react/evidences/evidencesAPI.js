@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import api from 'app/utils/api';
 
 export default {
@@ -5,8 +7,13 @@ export default {
     return api.get('evidences', {document: docId}).then(response => response.json);
   },
 
-  search(filters) {
-    return api.get('evidences/search', filters).then(response => response.json);
+  search(data) {
+    let filters = Immutable.fromJS(data);
+    filters = filters.set('filters', filters.get('filters').reduce((newFilters, filter, key) => {
+      return newFilters.set(key.replace('_', ''), filter);
+    }, Immutable.Map()));
+    return api.get('evidences/search', filters.toJS()).then(response => response.json);
+
   },
 
   getSuggestions(id) {

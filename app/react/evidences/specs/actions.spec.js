@@ -123,8 +123,8 @@ describe('evidences actions', () => {
     it('should not add empty filters', () => {
       const limit = 'limit';
       spyOn(browserHistory, 'push');
-      store.dispatch(actions.searchEvidences({filters: {value: {values: []}}}, limit));
-      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(limit:limit)');
+      store.dispatch(actions.searchEvidences({filters: {filter1: {values: []}, filter2: {values: []}}}, limit));
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:(),limit:limit)');
     });
   });
 
@@ -137,7 +137,7 @@ describe('evidences actions', () => {
 
       store.dispatch(actions.resetEvidencesFilters());
       expect(store.getActions()).toEqual(expectedActions);
-      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=()');
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:())');
     });
   });
 });

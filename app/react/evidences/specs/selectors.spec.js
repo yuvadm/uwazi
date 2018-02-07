@@ -54,10 +54,10 @@ describe('Evidences selectors', () => {
       const filters = selectors.getFilters(state);
 
       expect(filters.toJS()).toEqual([
-        {label: 'Used as:', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]},
-        {label: 'propertyLabel1', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]},
-        {label: 'propertyLabel3', values: [{value: 'value3', label: 'valueLabel3'}, {value: 'value4', label: 'valueLabel4'}]},
-        {label: 'propertyLabel4', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]}
+        {label: 'Used as:', _id: 'isEvidence', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]},
+        {label: 'propertyLabel1', _id: 'property1', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]},
+        {label: 'propertyLabel3', _id: 'property3', values: [{value: 'value3', label: 'valueLabel3'}, {value: 'value4', label: 'valueLabel4'}]},
+        {label: 'propertyLabel4', _id: 'property4', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]}
       ]);
     });
   });
