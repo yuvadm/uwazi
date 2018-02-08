@@ -1,7 +1,6 @@
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 import elastic from '../search/elastic';
 import queryBuilder from './evidencesQueryBuilder';
-//import queryBuilder from './documentQueryBuilder';
 
 export default {
   search(filters, limit) {

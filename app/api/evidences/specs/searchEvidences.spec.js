@@ -2,15 +2,13 @@
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 import search from '../searchEvidences.js';
 import elastic from '../../search/elastic';
-//import queryBuilder from 'api/search/documentQueryBuilder';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 
-import fixtures, {evidenceId, value1, value2} from './fixtures';
-//import elasticFixtures, {ids} from './fixtures_elastic';
+import fixtures, {evidenceId, value1, value2, propertyID1} from './fixtures';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
-describe('searchEvidences', () => {
+fdescribe('searchEvidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -37,12 +35,26 @@ describe('searchEvidences', () => {
     });
 
     it('should search by value', (done) => {
+      const query1 = {};
+      query1[propertyID1.toString()] = {values: [value1]};
+      const query2 = {};
+      query2[propertyID1.toString()] = {values: [value2]};
+      const query3 = {};
+      query3[propertyID1.toString()] = {values: [value1, value2]};
+      const query4 = {};
+      query4[propertyID1.toString()] = {values: [value1]};
+      query4.isEvidence = {values: [true]};
+      const query5 = {};
+      query5[propertyID1.toString()] = {values: [value1]};
+      query5.isEvidence = {values: [false]};
       Promise.all([
-        search.search({value: {values: [value1]}}),
-        search.search({value: {values: [value2]}}),
-        search.search({value: {values: [value1, value2]}})
+        search.search(query1),
+        search.search(query2),
+        search.search(query3),
+        search.search(query4),
+        search.search(query5)
       ])
-      .then(([value1Evidences, value2Evidences, value12Evidences]) => {
+      .then(([value1Evidences, value2Evidences, value12Evidences, value1TrueEvidence, value1FalseEvidence]) => {
         expect(value1Evidences.rows.length).toBe(2);
         expect(value1Evidences.rows[0].value).toBe(value1);
         expect(value1Evidences.rows[1].value).toBe(value1);
@@ -50,7 +62,13 @@ describe('searchEvidences', () => {
         expect(value2Evidences.rows.length).toBe(1);
         expect(value2Evidences.rows[0].value).toBe(value2);
 
-        expect(value12Evidences.rows.length).toBe(3);
+        expect(value12Evidences.rows.length).toBe(0);
+
+        expect(value1TrueEvidence.rows.length).toBe(1);
+        expect(value1TrueEvidence.rows[0].isEvidence).toBe(true);
+
+        expect(value1FalseEvidence.rows.length).toBe(1);
+        expect(value1FalseEvidence.rows[0].isEvidence).toBe(false);
         done();
       })
       .catch(catchErrors(done));

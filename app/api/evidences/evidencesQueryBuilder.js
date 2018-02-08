@@ -1,13 +1,7 @@
 /* eslint-disable camelcase */
 export default function () {
   let baseQuery = {
-    _source: {
-      //include: [
-        //'title', 'icon', 'processed', 'creationDate', 'template',
-        //'metadata', 'type', 'sharedId', 'toc', 'attachments',
-        //'language', 'file', 'uploaded', 'published'
-      //]
-    },
+    _source: {},
     from: 0,
     size: 30,
     query: {
@@ -17,33 +11,9 @@ export default function () {
         filter: []
       }
     },
-    sort: []
-    //aggregations: {
-      //all: {
-        //global: {},
-        //aggregations: {
-          //types: {
-            //terms: {
-              //field: 'template.raw',
-              //missing: 'missing',
-              //size: 9999
-            //},
-            //aggregations: {
-              //filtered: {
-                //filter: {
-                  //bool: {
-                    //must: [{match: {published: true}}]
-                  //}
-                //}
-              //}
-            //}
-          //}
-        //}
-      //}
-    //}
+    sort: [],
+    aggregations: {}
   };
-
-  //const aggregations = baseQuery.aggregations.all.aggregations;
 
   return {
     query() {
@@ -53,35 +23,24 @@ export default function () {
     language(language) {
       let match = {term: {language: language}};
       baseQuery.query.bool.filter.push(match);
-      //aggregations.types.aggregations.filtered.filter.bool.must.push(match);
       return this;
     },
 
     filter(filters) {
-      Object.keys(filters).forEach((property) => {
-        const match = this.filterProperty(filters, property);
-        baseQuery.query.bool.filter.push(match);
-          //baseQuery.aggregations.all.aggregations.types.aggregations.filtered.filter.bool.must.push(match);
-      });
-      return this;
-    },
-
-    filterProperty(filters, property) {
-      const filter = filters[property];
-      const values = filter.values;
-      let match = {terms: {}};
-      match.terms[`${property}.raw`] = values;
-
-      if (filter.and) {
-        match = {bool: {must: []}};
-        match.bool.must = values.map((value) => {
-          let m = {term: {}};
-          m.term[`${property}.raw`] = value;
-          return m;
-        });
+      if (filters.isEvidence) {
+        baseQuery.query.bool.filter.push({terms: {isEvidence: filters.isEvidence.values}});
+        delete filters.isEvidence;
       }
 
-      return match;
+      Object.keys(filters).forEach((property) => {
+        filters[property].values.forEach((value) => {
+          let valueMatch = {};
+          valueMatch['value.raw'] = value;
+          baseQuery.query.bool.filter.push({term: valueMatch});
+          baseQuery.query.bool.filter.push({term: {property}});
+        });
+      });
+      return this;
     },
 
     from(from) {
