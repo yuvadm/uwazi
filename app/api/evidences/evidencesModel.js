@@ -6,6 +6,7 @@ const evidenceSchema = new mongoose.Schema({
   value: String,
   document: String,
   language: String,
+  probability: Number,
   isEvidence: Boolean,
   evidence: {
     text: String

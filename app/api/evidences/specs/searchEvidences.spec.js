@@ -8,7 +8,7 @@ import fixtures, {evidenceId, value1, value2, propertyID1} from './fixtures';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
-fdescribe('searchEvidences', () => {
+describe('searchEvidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {

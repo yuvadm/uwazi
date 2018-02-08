@@ -67,7 +67,7 @@ export default {
       let properties = [];
       multiselects.forEach((property) => {
         dictionaries.find((d) => d._id.toString() === property.content.toString()).values.forEach((value) => {
-          properties.push({document: docId, language: language, property: property._id, value: value.id});
+          properties.push({document: docId, language: language, property: property._id.toString(), value: value.id});
         });
       });
       return MLAPI.getSuggestions({
@@ -79,11 +79,12 @@ export default {
       });
     })
     .then((evidences) => {
-      return evidences.map((evidence) => {
+      return model.save(evidences.map((evidence) => {
         evidence.evidence = {text: evidence.evidence};
         return evidence;
-      });
-    });
+      }));
+    })
+    .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(() => evidences) : evidences);
   },
 
   getById(_id) {
