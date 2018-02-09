@@ -29,7 +29,6 @@
     "testPathIgnorePatterns": [
       "SearchBar.spec.js",
       "Scroller.spec.js",
-      "DocumentsList.spec.js",
       "SearchText.spec.js",
       "Connections",
       "Text.spec.js",

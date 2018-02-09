@@ -1,12 +1,13 @@
-import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {wrapDispatch} from 'app/Multireducer';
-import {actions as actionCreators} from 'app/BasicReducer';
+import {connect} from 'react-redux';
 
-import {MainListWrapper} from 'app/Layout';
-import Documents from './Documents.js';
-import DocumentSortSelector from './DocumentSortSelector';
+import {actions as actionCreators} from 'app/BasicReducer';
 import {loadMoreDocuments} from 'app/Library/actions/libraryActions';
+import {wrapDispatch} from 'app/Multireducer';
+
+import {MainListWrapper} from '../../Layout';
+import DocumentSortSelector from './DocumentSortSelector';
+import Documents from './Documents.js';
 
 export function mapStateToProps(state, props) {
   return {

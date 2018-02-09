@@ -77,13 +77,8 @@ describe('evidences actions', () => {
 
   describe('evidencesActions', () => {
     describe('setTotalRows', () => {
-      it('should set totalRows', (done) => {
-        const expectedActions = [evidencesUIActions.set({totalRows: 5})];
-        evidencesActions.setTotalRows(5)(store.dispatch)
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions);
-          done();
-        });
+      it('should set totalRows', () => {
+        expect(evidencesActions.setTotalRows(5)).toEqual(evidencesUIActions.set({totalRows: 5}));
       });
     });
 
