@@ -11,7 +11,7 @@ import {fromJS as Immutable} from 'immutable';
 
 describe('EvidencesRoute', () => {
   let evidences = {rows: [{_id: 'evidence1'}, {_id: 'evidence2'}]};
-  let aggregations = [{1: '23'}, {2: '123'}];
+  //let aggregations = [{1: '23'}, {2: '123'}];
   let component;
   let instance;
   let context;
@@ -48,7 +48,7 @@ describe('EvidencesRoute', () => {
       EvidencesRoute.requestState(params, query, globalResources)
       .then((state) => {
         expect(evidencesAPI.search).toHaveBeenCalledWith(expectedSearch);
-        expect(state.evidences.evidences).toEqual(evidences);
+        expect(state.evidences.evidences).toEqual(evidences.rows);
         done();
       })
       .catch(done.fail);

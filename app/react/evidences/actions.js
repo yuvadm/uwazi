@@ -9,16 +9,6 @@ import evidencesAPI from './evidencesAPI';
 
 import {evidencesActions, docEvidencesActions} from './reducer';
 
-
-export function getSuggestions(docId) {
-  return function (dispatch) {
-    return evidencesAPI.getSuggestions(docId)
-    .then((suggestions) => {
-      dispatch(docEvidencesActions.concat(suggestions));
-    });
-  };
-}
-
 docEvidencesActions.getSuggestions = (docId) => {
   return (dispatch) => {
     return evidencesAPI.getSuggestions(docId)
@@ -42,6 +32,7 @@ docEvidencesActions.saveValidSuggestion = (evidence) => {
     return docEvidencesActions.saveEvidence(evidence.set('isEvidence', true).toJS())(dispatch);
   };
 };
+
 docEvidencesActions.saveInvalidSuggestion = (evidence) => {
   return function (dispatch) {
     return docEvidencesActions.saveEvidence(evidence.set('isEvidence', false).toJS())(dispatch);
@@ -56,6 +47,25 @@ docEvidencesActions.saveEvidence = (evidence) => {
       dispatch(actions.set('viewer/doc', response.entity));
       dispatch(docEvidencesActions.update(response.evidence));
     });
+  };
+};
+
+evidencesActions.saveValidSuggestion = (evidence) => {
+  return function (dispatch) {
+    return evidencesActions.saveEvidence(evidence.set('isEvidence', true).toJS())(dispatch);
+  };
+};
+
+evidencesActions.saveInvalidSuggestion = (evidence) => {
+  return function (dispatch) {
+    return evidencesActions.saveEvidence(evidence.set('isEvidence', false).toJS())(dispatch);
+  };
+};
+
+evidencesActions.saveEvidence = (evidence) => {
+  return function (dispatch) {
+    return evidencesAPI.save(evidence)
+    .then((response) => dispatch(evidencesActions.update(response.evidence)));
   };
 };
 

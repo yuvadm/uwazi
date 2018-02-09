@@ -7,7 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import * as actions from '../actions.js';
 import evidencesAPI from '../evidencesAPI';
 import {actions as baseReducerActions} from 'app/BasicReducer';
-import {docEvidencesActions} from '../actions';
+import {evidencesActions, docEvidencesActions} from '../actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -63,6 +63,52 @@ describe('evidences actions', () => {
         const evidence = Immutable.fromJS({test: 'test'});
 
         docEvidencesActions.saveInvalidSuggestion(evidence)(store.dispatch)
+        .then(() => {
+          expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: false});
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('docEvidencesActions', () => {
+    //describe('getSuggestions', () => {
+      //it('should request suggestions and add them to the evidences', (done) => {
+        //spyOn(evidencesAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestionsResponse'));
+        //const expectedActions = [evidencesActions.concat('suggestionsResponse')];
+
+        //docEvidencesActions.getSuggestions('docId')(store.dispatch)
+        //.then(() => {
+          //expect(evidencesAPI.getSuggestions).toHaveBeenCalledWith('docId');
+          //expect(store.getActions()).toEqual(expectedActions);
+          //done();
+        //});
+      //});
+    //});
+
+    describe('saveValidSuggestion', () => {
+      it('should save the evidence with "isEvidence = true"', (done) => {
+        spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
+        const expectedActions = [evidencesActions.update('savedEvidence')];
+        const evidence = Immutable.fromJS({test: 'test'});
+
+        evidencesActions.saveValidSuggestion(evidence)(store.dispatch)
+        .then(() => {
+          expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: true});
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+      });
+    });
+
+    describe('saveInvalidSuggestion', () => {
+      it('should save the evidence with "isEvidence = true"', (done) => {
+        spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
+        const expectedActions = [evidencesActions.update('savedEvidence')];
+        const evidence = Immutable.fromJS({test: 'test'});
+
+        evidencesActions.saveInvalidSuggestion(evidence)(store.dispatch)
         .then(() => {
           expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: false});
           expect(store.getActions()).toEqual(expectedActions);

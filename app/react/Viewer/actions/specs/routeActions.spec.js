@@ -3,6 +3,7 @@ import backend from 'fetch-mock';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 
 import * as routeActions from '../routeActions';
+import {docEvidencesActions} from 'app/evidences';
 
 describe('Viewer routeActions', () => {
   let document = {_id: '1', title: 'title', pdfInfo: 'test'};
@@ -29,7 +30,7 @@ describe('Viewer routeActions', () => {
       .then((state) => {
         let documentResponse = state.documentViewer.doc;
         let relationTypesResponse = state.documentViewer.relationTypes;
-        let evidencesResponse = state.docEvidences;
+        let evidencesResponse = state.evidences.docEvidences;
 
         expect(documentResponse._id).toBe('1');
         expect(relationTypesResponse).toEqual(relationTypes.rows);
@@ -68,16 +69,18 @@ describe('Viewer routeActions', () => {
           relationTypes: 'relationTypes'
         },
         relationTypes: 'relationTypes',
-        evidences: 'evidences'
+        evidences: {
+          docEvidences: 'evidences'
+        }
       })(dispatch);
     });
 
-    it('should call setTemplates with templates passed', () => {
+    it('should set initial state', () => {
       expect(dispatch).toHaveBeenCalledWith({type: 'relationTypes/SET', value: 'relationTypes'});
       expect(dispatch).toHaveBeenCalledWith({type: 'SET_REFERENCES', references: 'references'});
       expect(dispatch).toHaveBeenCalledWith({type: 'viewer/doc/SET', value: 'doc'});
       expect(dispatch).toHaveBeenCalledWith({type: 'viewer/relationTypes/SET', value: 'relationTypes'});
-      expect(dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/SET', value: 'evidences'});
+      expect(dispatch).toHaveBeenCalledWith(docEvidencesActions.set('evidences'));
     });
   });
 });

@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import {selectors} from '..';
-import {docEvidences} from '../selectors';
+import {evidences, docEvidences} from '../selectors';
 
 describe('Evidences selectors', () => {
   let state;
@@ -24,13 +24,22 @@ describe('Evidences selectors', () => {
     };
   });
 
-  describe('getEvidences', () => {
-    it('should return evidences with added property and value labels', () => {
-      const evidences = selectors.getEvidences(state);
-      expect(evidences.toJS()).toEqual([
-        {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
-        {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'}
-      ]);
+  describe('evidencesSelectors', () => {
+    describe('get', () => {
+      it('should return evidences with added property and value labels', () => {
+        const result = evidences.get(state);
+        expect(result.toJS()).toEqual([
+          {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
+          {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'}
+        ]);
+      });
+    });
+
+    describe('count', () => {
+      it('should return evidences with added property and value labels', () => {
+        const result = evidences.count(state);
+        expect(result).toBe(2);
+      });
     });
   });
 

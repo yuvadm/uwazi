@@ -23,6 +23,11 @@ const docEvidences = {
   get: (state) => getEvidences(state, 'docEvidences')
 };
 
+const evidences = {
+  get: (state) => getEvidences(state),
+  count: (state) => evidencesState(state).evidences.size
+};
+
 const buildFilter = (property, thesauris) => {
   return Immutable.Map({
     label: property.get('label'),
@@ -56,8 +61,8 @@ const getEvidencesFilters = createSelector(
 );
 
 export {
-  getEvidences,
   getEvidencesFilters,
   getFilters,
-  docEvidences
+  docEvidences,
+  evidences
 };

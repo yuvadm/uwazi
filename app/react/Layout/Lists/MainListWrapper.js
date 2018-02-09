@@ -21,7 +21,7 @@ export default class MainListWrapper extends Component {
 
   loadMoreDocuments() {
     this.setState({loading: true});
-    this.props.loadMoreDocuments(this.props.documents.get('rows').size + loadMoreAmmount, this.props.storeKey);
+    this.props.loadMoreDocuments(this.props.numberOfDocuments + loadMoreAmmount, this.props.storeKey);
   }
 
   componentWillReceiveProps() {
@@ -61,13 +61,13 @@ export default class MainListWrapper extends Component {
           })()}
           <div className="row">
             <p className="col-sm-12 text-center documents-counter">
-                <b>{documents.get('rows').size}</b>
+                <b>{this.props.numberOfDocuments}</b>
                 {` ${t('System', 'of')} `}
-                <b>{documents.get('totalRows')}</b>
+                <b>{this.props.totalDocuments}</b>
                 {` ${t('System', 'documents')}`}
             </p>
             {(() => {
-              if (documents.get('rows').size < documents.get('totalRows') && !this.state.loading) {
+              if (this.props.numberOfDocuments < this.props.totalDocuments && !this.state.loading) {
                 return (
                   <div className="col-sm-12 text-center">
                     <button onClick={this.loadMoreDocuments} className="btn btn-default btn-load-more">
@@ -104,7 +104,8 @@ MainListWrapper.defaultProps = {
 };
 
 MainListWrapper.propTypes = {
-  documents: PropTypes.object.isRequired,
+  numberOfDocuments: PropTypes.number.isRequired,
+  totalDocuments: PropTypes.number.isRequired,
   connections: PropTypes.object,
   SearchBar: PropTypes.func,
   List: PropTypes.func.isRequired,

@@ -9,7 +9,7 @@ import {ListSortSection} from 'app/Layout';
 describe('MainListWrapper', () => {
   let component;
   let props;
-  let documents = Immutable.fromJS({rows: [{title: 'Document one', _id: '1'}, {title: 'Document two', _id: '2'}], totalRows: 2});
+  let documents = Immutable.fromJS([{title: 'Document one', _id: '1'}, {title: 'Document two', _id: '2'}]);
 
   beforeEach(() => {
     props = {

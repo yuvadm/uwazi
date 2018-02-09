@@ -31,7 +31,7 @@ export default class EvidencesRoute extends RouteHandler {
     .then((allEvidences) => {
       return {
         evidences: {
-          evidences: allEvidences,
+          evidences: allEvidences.rows,
           search: query
         }
       };

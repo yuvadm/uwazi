@@ -1,3 +1,4 @@
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
@@ -5,27 +6,37 @@ import React from 'react';
 
 import {RowList} from 'app/Layout/Lists';
 
-import {getEvidences} from '../selectors';
+import {evidencesActions} from '../actions';
+import {evidences} from '../selectors';
 import Evidence from '../components/Evidence';
 
 const Evidences = (props) => {
   return (
     <RowList>
       {props.evidences.map((evidence, index) =>
-        <Evidence evidence={evidence} key={index} />
+        <Evidence evidence={evidence} key={index} accept={props.accept} reject={props.reject}/>
       )}
     </RowList>
   );
 };
 
 Evidences.propTypes = {
-  evidences: PropTypes.instanceOf(Immutable.List)
+  evidences: PropTypes.instanceOf(Immutable.List),
+  accept: PropTypes.func,
+  reject: PropTypes.func
 };
 
 export function mapStateToProps(state) {
   return {
-    evidences: getEvidences(state).get('rows')
+    evidences: evidences.get(state)
   };
 }
 
-export default connect(mapStateToProps)(Evidences);
+export function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    accept: evidencesActions.saveValidSuggestion,
+    reject: evidencesActions.saveInvalidSuggestion
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Evidences);
