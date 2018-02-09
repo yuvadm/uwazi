@@ -29,13 +29,7 @@ export default class MainListWrapper extends Component {
   }
 
   render() {
-    const {documents, GraphView, view} = this.props;
-    //let counter = <span><b>{documents.get('totalRows')}</b> {t('System', 'documents')}</span>;
-    //if (connections) {
-      //counter = <span>
-                  //<b>{connections.totalRows}</b> {t('System', 'connections')}, <b>{documents.get('totalRows')}</b> {t('System', 'documents')}
-                //</span>;
-    //}
+    const {GraphView, view} = this.props;
 
     const Search = this.props.SearchBar;
     const SortSection = this.props.Sort;
