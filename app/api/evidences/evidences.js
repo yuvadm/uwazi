@@ -10,7 +10,6 @@ export default {
     evidence.language = language;
     return model.save(evidence)
     .then((updatedEvidence) => {
-      console.log(updatedEvidence);
       return Promise.all([
         updatedEvidence,
         entities.getById(evidence.document, language),

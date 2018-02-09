@@ -1,17 +1,17 @@
+import {fromJS as Immutable} from 'immutable';
 import React from 'react';
-import {shallow} from 'enzyme';
 import rison from 'rison';
 
+import {shallow} from 'enzyme';
+import RouteHandler from 'app/App/RouteHandler';
+
+import {evidencesActions} from '../actions';
 import EvidencesRoute from '../EvidencesRoute';
 import EvidencesSection from '../components/EvidencesSection';
 import evidencesAPI from '../evidencesAPI';
 
-import RouteHandler from 'app/App/RouteHandler';
-import {fromJS as Immutable} from 'immutable';
-
 describe('EvidencesRoute', () => {
-  let evidences = {rows: [{_id: 'evidence1'}, {_id: 'evidence2'}]};
-  //let aggregations = [{1: '23'}, {2: '123'}];
+  let evidences = {rows: [{_id: 'evidence1'}, {_id: 'evidence2'}], totalRows: 5};
   let component;
   let instance;
   let context;
@@ -33,7 +33,6 @@ describe('EvidencesRoute', () => {
 
   it('should render the EvidencesSection', () => {
     expect(component.find(EvidencesSection).length).toBe(1);
-    //expect(component.find(DocumentsList).props().storeKey).toBe('uploads');
   });
 
   describe('static requestState()', () => {
@@ -49,6 +48,7 @@ describe('EvidencesRoute', () => {
       .then((state) => {
         expect(evidencesAPI.search).toHaveBeenCalledWith(expectedSearch);
         expect(state.evidences.evidences).toEqual(evidences.rows);
+        expect(state.evidences.evidencesUI.totalRows).toEqual(evidences.totalRows);
         done();
       })
       .catch(done.fail);
@@ -56,27 +56,10 @@ describe('EvidencesRoute', () => {
   });
 
   describe('setReduxState()', () => {
-    it('should call setDocuments with the documents', () => {
-      instance.setReduxState({evidences: {evidences}});
-      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/SET', value: evidences});
+    it('should dispatch all setters', () => {
+      instance.setReduxState({evidences: {evidences, evidencesUI: {totalRows: 5}}});
+      expect(context.store.dispatch).toHaveBeenCalledWith(evidencesActions.set(evidences));
+      expect(context.store.dispatch).toHaveBeenCalledWith(evidencesActions.setTotalRows(5));
     });
   });
-
-  //describe('componentWillReceiveProps()', () => {
-    //beforeEach(() => {
-      //instance.superComponentWillReceiveProps = jasmine.createSpy('superComponentWillReceiveProps');
-    //});
-
-    //it('should update if "q" has changed', () => {
-      //const nextProps = {location: {query: {q: '(a:2)'}}};
-      //instance.componentWillReceiveProps(nextProps);
-      //expect(instance.superComponentWillReceiveProps).toHaveBeenCalledWith(nextProps);
-    //});
-
-    //it('should not update if "q" is the same', () => {
-      //const nextProps = {location: {query: {q: '(a:1)'}}};
-      //instance.componentWillReceiveProps(nextProps);
-      //expect(instance.superComponentWillReceiveProps).not.toHaveBeenCalled();
-    //});
-  //});
 });

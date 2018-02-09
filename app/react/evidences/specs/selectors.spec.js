@@ -19,7 +19,8 @@ describe('Evidences selectors', () => {
         evidences: Immutable.fromJS([
           {property: 'id3', value: 'id2'},
           {property: 'id1', value: 'id4'}
-        ])
+        ]),
+        evidencesUI: Immutable.fromJS({totalRows: 3})
       }
     };
   });
@@ -32,6 +33,13 @@ describe('Evidences selectors', () => {
           {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
           {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'}
         ]);
+      });
+    });
+
+    describe('totalRows', () => {
+      it('should return totalRows', () => {
+        const result = evidences.totalRows(state);
+        expect(result).toBe(3);
       });
     });
 

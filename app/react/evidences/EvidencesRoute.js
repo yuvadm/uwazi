@@ -32,6 +32,7 @@ export default class EvidencesRoute extends RouteHandler {
       return {
         evidences: {
           evidences: allEvidences.rows,
+          evidencesUI: {totalRows: allEvidences.totalRows},
           search: query
         }
       };
@@ -41,6 +42,7 @@ export default class EvidencesRoute extends RouteHandler {
   setReduxState(state) {
     this.context.store.dispatch(formActions.setInitial('evidences.search', state.evidences.search));
     this.context.store.dispatch(evidencesActions.set(state.evidences.evidences));
+    this.context.store.dispatch(evidencesActions.setTotalRows(state.evidences.evidencesUI.totalRows));
   }
 
   render() {

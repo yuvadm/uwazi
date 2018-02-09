@@ -25,7 +25,8 @@ const docEvidences = {
 
 const evidences = {
   get: (state) => getEvidences(state),
-  count: (state) => evidencesState(state).evidences.size
+  count: (state) => evidencesState(state).evidences.size,
+  totalRows: (state) => evidencesState(state).evidencesUI.get('totalRows')
 };
 
 const buildFilter = (property, thesauris) => {

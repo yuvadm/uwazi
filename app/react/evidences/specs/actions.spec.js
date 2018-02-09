@@ -8,6 +8,7 @@ import * as actions from '../actions.js';
 import evidencesAPI from '../evidencesAPI';
 import {actions as baseReducerActions} from 'app/BasicReducer';
 import {evidencesActions, docEvidencesActions} from '../actions';
+import {evidencesUIActions} from '../reducer';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -52,6 +53,8 @@ describe('evidences actions', () => {
         });
       });
     });
+
+
     describe('saveInvalidSuggestion', () => {
       it('should save the evidence with "isEvidence = true"', (done) => {
         spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
@@ -72,20 +75,17 @@ describe('evidences actions', () => {
     });
   });
 
-  describe('docEvidencesActions', () => {
-    //describe('getSuggestions', () => {
-      //it('should request suggestions and add them to the evidences', (done) => {
-        //spyOn(evidencesAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestionsResponse'));
-        //const expectedActions = [evidencesActions.concat('suggestionsResponse')];
-
-        //docEvidencesActions.getSuggestions('docId')(store.dispatch)
-        //.then(() => {
-          //expect(evidencesAPI.getSuggestions).toHaveBeenCalledWith('docId');
-          //expect(store.getActions()).toEqual(expectedActions);
-          //done();
-        //});
-      //});
-    //});
+  describe('evidencesActions', () => {
+    describe('setTotalRows', () => {
+      it('should set totalRows', (done) => {
+        const expectedActions = [evidencesUIActions.set({totalRows: 5})];
+        evidencesActions.setTotalRows(5)(store.dispatch)
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+      });
+    });
 
     describe('saveValidSuggestion', () => {
       it('should save the evidence with "isEvidence = true"', (done) => {

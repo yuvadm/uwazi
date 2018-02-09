@@ -7,7 +7,7 @@ import {actions} from 'app/BasicReducer';
 import {getEvidencesFilters} from './selectors';
 import evidencesAPI from './evidencesAPI';
 
-import {evidencesActions, docEvidencesActions} from './reducer';
+import {evidencesActions, docEvidencesActions, evidencesUIActions} from './reducer';
 
 docEvidencesActions.getSuggestions = (docId) => {
   return (dispatch) => {
@@ -68,6 +68,8 @@ evidencesActions.saveEvidence = (evidence) => {
     .then((response) => dispatch(evidencesActions.update(response.evidence)));
   };
 };
+
+evidencesActions.setTotalRows = (totalRows) => evidencesUIActions.set({totalRows});
 
 export {
   evidencesActions,

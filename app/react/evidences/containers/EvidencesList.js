@@ -12,7 +12,7 @@ export function mapStateToProps(state) {
     SearchBar: () => false,
     List: Evidences,
     numberOfDocuments: evidences.count(state),
-    totalDocuments: 400
+    totalDocuments: evidences.totalRows(state)
   };
 }
 
