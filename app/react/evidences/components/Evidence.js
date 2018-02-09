@@ -1,7 +1,9 @@
+import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+
+import {Badge} from 'app/Layout';
 import {RowList} from 'app/Layout/Lists';
-import Immutable from 'immutable';
 
 class Evidence extends Component {
   constructor(props) {
@@ -22,8 +24,8 @@ class Evidence extends Component {
         <p>{props.evidence.get('evidence').get('text')}</p>
         <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
 
-        {props.evidence.get('isEvidence') === true ? <p>Positive</p> : <p/>}
-        {props.evidence.get('isEvidence') === false ? <p>Negative</p> : <p/>}
+        {props.evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : <p/>}
+        {props.evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : <p/>}
         {props.evidence.has('isEvidence') ? <div/> :
             <div>
               <p>Probability: <b>{Math.round(props.evidence.get('probability') * 100 * 100) / 100}%</b></p>

@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {fromJS as Immutable} from 'immutable';
 import {searchReferences, loadMoreReferences} from '../actions/actions';
 
-import {MainListWrapper} from 'app/Layout';
+import MainListWrapper from '../../Layout/Lists/MainListWrapper';
 import SearchBar from 'app/ConnectionsList/components/SearchBar';
 import ToggleStyleButtons from 'app/ConnectionsList/components/ToggleStyleButtons';
 import RelationshipsGraph from 'app/Relationships/components/RelationshipsGraph';
