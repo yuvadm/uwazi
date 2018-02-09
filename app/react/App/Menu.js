@@ -39,6 +39,11 @@ class Menu extends Component {
                   <i className="fa fa-th"></i>
               </I18NLink>
             </li>
+            <li className="menuNav-item">
+              <I18NLink to='/evidences' className="menuNav-btn btn btn-default">
+                  <i className="fa fa-flask"></i>
+              </I18NLink>
+            </li>
             <NeedAuthorization roles={['admin', 'editor']}>
               <li className="menuNav-item">
                 <I18NLink to={this.uploadsUrl()} className="menuNav-btn btn btn-default">
