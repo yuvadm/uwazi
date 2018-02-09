@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {actions as formActions, LocalForm} from 'react-redux-form';
 //import {Field, LocalForm} from 'react-redux-form';
 import {unsetEvidence, saveEvidence} from '../actions';
+import {docEvidencesActions} from '../actions';
 import {Select as SimpleSelect} from 'app/ReactReduxForms';
 
 export class EvidenceForm extends Component {
@@ -132,7 +133,10 @@ const mapStateToProps = ({thesauris, templates}, {doc}) => {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({unsetEvidence, saveEvidence}, dispatch);
+  return bindActionCreators({
+    unsetEvidence,
+    saveEvidence: docEvidencesActions.saveEvidence
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EvidenceForm);

@@ -7,7 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import * as actions from '../actions.js';
 import evidencesAPI from '../evidencesAPI';
 import {actions as baseReducerActions} from 'app/BasicReducer';
-import {evidencesActions, docEvidencesActions} from '../actions';
+import {docEvidencesActions} from '../actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -113,25 +113,6 @@ describe('evidences actions', () => {
       actions.rejectSuggestion(evidence)(store.dispatch)
       .then(() => {
         expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: false});
-        expect(store.getActions()).toEqual(expectedActions);
-        done();
-      });
-    });
-  });
-
-  describe('saveEvidence', () => {
-    it('should save the evidence', (done) => {
-      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));
-      const expectedActions = [
-        {type: 'evidences/evidence/UNSET'},
-        {type: 'viewer/doc/SET', value: 'savedDoc'},
-        {type: 'evidences/evidences/PUSH', value: 'savedEvidence'}
-      ];
-      const evidence = {test: 'test'};
-
-      actions.saveEvidence(evidence)(store.dispatch)
-      .then(() => {
-        expect(evidencesAPI.save).toHaveBeenCalledWith(evidence);
         expect(store.getActions()).toEqual(expectedActions);
         done();
       });

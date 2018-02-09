@@ -83,17 +83,6 @@ export function removeSuggestion(suggestion) {
   };
 }
 
-export function saveEvidence(evidence) {
-  return function (dispatch) {
-    return evidencesAPI.save(evidence)
-    .then((response) => {
-      dispatch(actions.unset('evidences/evidence'));
-      dispatch(actions.set('viewer/doc', response.entity));
-      dispatch(actions.push('evidences/evidences', response.evidence));
-    });
-  };
-}
-
 export function acceptSuggestion(evidence) {
   return function (dispatch) {
     return evidencesAPI.save(evidence.set('isEvidence', true).toJS())
