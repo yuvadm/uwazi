@@ -4,6 +4,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 
 import Evidence from '../Evidence.js';
+import {Button} from 'app/Layout';
 
 describe('Evidence', () => {
   let component;
@@ -34,7 +35,7 @@ describe('Evidence', () => {
 
     it('should be treated as a suggestion and render the action buttons', () => {
       render();
-      const buttons = component.find('button');
+      const buttons = component.find(Button);
       const acceptButton = buttons.findWhere((b) => b.props().onClick === instance.accept);
       const rejectButton = buttons.findWhere((b) => b.props().onClick === instance.reject);
       expect(acceptButton.exists()).toBe(true);

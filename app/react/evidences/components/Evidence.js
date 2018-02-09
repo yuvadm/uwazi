@@ -2,8 +2,10 @@ import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
-import {Badge} from 'app/Layout';
+import {Badge, Button} from 'app/Layout';
 import {RowList} from 'app/Layout/Lists';
+
+import {ItemFooter} from '../../Layout/Lists';
 
 class Evidence extends Component {
   constructor(props) {
@@ -20,19 +22,24 @@ class Evidence extends Component {
   render() {
     const {props} = this;
     return (
-      <RowList.Item>
-        <p>{props.evidence.get('evidence').get('text')}</p>
-        <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
-
-        {props.evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : <p/>}
-        {props.evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : <p/>}
-        {props.evidence.has('isEvidence') ? <div/> :
-            <div>
-              <p>Probability: <b>{Math.round(props.evidence.get('probability') * 100 * 100) / 100}%</b></p>
-              <button onClick={this.accept}>Accept</button>
-              <button onClick={this.reject}>Reject</button>
-            </div>
-        }
+      <RowList.Item className='item-entity'>
+        <div className="item-info">
+          <div className="item-name">
+            <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
+          </div>
+          <div className="item-snippet-wrapper">
+            <p>{props.evidence.get('evidence').get('text')}</p>
+          </div>
+          {props.evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : false}
+          {props.evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : false}
+          {props.evidence.has('isEvidence') ? <div/> :
+              <div>
+                <p>Probability: <b>{Math.round(props.evidence.get('probability') * 100 * 100) / 100}%</b></p>
+                <Button success icon='thumbs-up' onClick={this.accept}> Accept</Button>
+                &nbsp;<Button danger icon='thumbs-down' onClick={this.reject}> Reject</Button>
+              </div>
+          }
+        </div>
       </RowList.Item>
     );
   }
