@@ -37,16 +37,45 @@ docEvidencesActions.getEvidences = (docId) => {
   };
 };
 
+docEvidencesActions.saveValidSuggestion = (evidence) => {
+  return function (dispatch) {
+    return docEvidencesActions.saveEvidence(evidence.set('isEvidence', true).toJS())(dispatch);
+  };
+};
+docEvidencesActions.saveInvalidSuggestion = (evidence) => {
+  return function (dispatch) {
+    return docEvidencesActions.saveEvidence(evidence.set('isEvidence', false).toJS())(dispatch);
+  };
+};
+
+docEvidencesActions.saveEvidence = (evidence) => {
+  return function (dispatch) {
+    return evidencesAPI.save(evidence)
+    .then((response) => {
+      dispatch(actions.unset('evidences/evidence'));
+      dispatch(actions.set('viewer/doc', response.entity));
+      dispatch(docEvidencesActions.update(response.evidence));
+    });
+  };
+};
+
 export {
   evidencesActions,
   docEvidencesActions
 };
+//
+export function setEvidence(evidence) {
+  return function (dispatch) {
+    return dispatch(actions.set('evidences/evidence', evidence));
+  };
+}
 
 export function unsetEvidence() {
   return function (dispatch) {
     return dispatch(actions.unset('evidences/evidence'));
   };
 }
+//
 
 export function removeSuggestion(suggestion) {
   return function (dispatch) {

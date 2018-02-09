@@ -40,24 +40,6 @@ export class Evidences extends Component {
     this.setState({negative: !this.state.negative});
   }
 
-  saveValidSuggestion(suggestion) {
-    let evidence = suggestion.toJS();
-    evidence.isEvidence = true;
-    return this.props.saveEvidence(evidence)
-    .then(() => {
-      this.props.removeSuggestion(suggestion);
-    });
-  }
-
-  saveInvalidSuggestion(suggestion) {
-    let evidence = suggestion.toJS();
-    evidence.isEvidence = false;
-    return this.props.saveEvidence(evidence)
-    .then(() => {
-      this.props.removeSuggestion(suggestion);
-    });
-  }
-
   render() {
     const {evidences} = this.props;
 
@@ -71,7 +53,7 @@ export class Evidences extends Component {
         <button type="button" onClick={this.toggleNegativeEvidences} className={'btn ' + (this.state.negative ? 'btn-success' : '')}>negative</button>
       </div>
 
-      {evidences.map((evidence, index) => <Evidence key={index} evidence={evidence}/>)}
+      {evidences.map((evidence, index) => <Evidence key={index} evidence={evidence} accept={this.props.accept} reject={this.props.reject}/>)}
     </div>;
   }
 }
@@ -80,8 +62,8 @@ Evidences.propTypes = {
   evidences: PropTypes.instanceOf(Immutable.List),
   doc: PropTypes.object,
   getSuggestions: PropTypes.func,
-  removeSuggestion: PropTypes.func,
-  saveEvidence: PropTypes.func
+  accept: PropTypes.func,
+  reject: PropTypes.func
 };
 
 export function mapStateToProps(state) {
@@ -94,8 +76,8 @@ export function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getSuggestions: docEvidencesActions.getSuggestions,
-    saveEvidence,
-    removeSuggestion
+    accept: docEvidencesActions.saveValidSuggestion,
+    reject: docEvidencesActions.saveInvalidSuggestion
   }, dispatch);
 }
 
