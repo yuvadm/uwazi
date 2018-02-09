@@ -17,7 +17,7 @@ import SidePanel from 'app/Layout/SidePanel';
 import SearchText from './SearchText';
 import ShowToc from './ShowToc';
 import SnippetsTab from './SnippetsTab';
-import {Evidences} from 'app/evidences';
+import {DocEvidences} from 'app/evidences';
 
 const selectReferences = createSelector(
   s => s.references,
@@ -145,7 +145,7 @@ export class DocumentSidePanel extends Component {
                 if (docType !== 'entity') {
                   return <li>
                     <TabLink to="suggestions">
-                      <i className="fa fa-search"></i>
+                      <i className="fa fa-flask"></i>
                       <span className="tab-link-tooltip">{t('System', 'Suggestions')}</span>
                     </TabLink>
                   </li>;
@@ -272,7 +272,7 @@ export class DocumentSidePanel extends Component {
               />
             </TabContent>
             <TabContent for="suggestions">
-              <Evidences />
+              <DocEvidences />
             </TabContent>
             <TabContent for="connections">
               <Connections references={connections}

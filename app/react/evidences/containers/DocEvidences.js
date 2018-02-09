@@ -4,12 +4,12 @@ import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 
-import {docEvidencesActions, removeSuggestion, saveEvidence} from '../actions';
+import {docEvidencesActions} from '../actions';
 import {docEvidences} from '../selectors';
 
-import Evidence from './Evidence';
+import Evidence from '../components/Evidence';
 
-export class Evidences extends Component {
+export class DocEvidences extends Component {
 
   constructor(props) {
     super(props);
@@ -41,7 +41,20 @@ export class Evidences extends Component {
   }
 
   render() {
-    const {evidences} = this.props;
+    //
+    const evidences = this.props.evidences.filter((evidence) => {
+      if (this.state.positive && evidence.get('isEvidence')) {
+        return evidence;
+      }
+      if (this.state.negative && evidence.get('isEvidence') === false) {
+        return evidence;
+      }
+      if (this.state.suggestions && !evidence.has('isEvidence')) {
+        return evidence;
+      }
+      return false;
+    });
+    //
 
     return <div>
       <div>
@@ -58,7 +71,7 @@ export class Evidences extends Component {
   }
 }
 
-Evidences.propTypes = {
+DocEvidences.propTypes = {
   evidences: PropTypes.instanceOf(Immutable.List),
   doc: PropTypes.object,
   getSuggestions: PropTypes.func,
@@ -81,4 +94,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Evidences);
+export default connect(mapStateToProps, mapDispatchToProps)(DocEvidences);
