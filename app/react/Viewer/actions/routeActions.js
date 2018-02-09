@@ -14,7 +14,7 @@ export function requestViewerState(documentId, lang) {
     relationTypesAPI.get(),
     evidencesAPI.get(documentId)
   ])
-  .then(([doc, references, relationTypes, evidences]) => {
+  .then(([doc, references, relationTypes, docEvidences]) => {
     return {
       documentViewer: {
         doc,
@@ -22,7 +22,7 @@ export function requestViewerState(documentId, lang) {
         relationTypes
       },
       relationTypes,
-      evidences
+      docEvidences
     };
   });
 }

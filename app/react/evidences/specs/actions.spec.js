@@ -1,10 +1,12 @@
 import {browserHistory} from 'react-router';
+import Immutable from 'immutable';
 import thunk from 'redux-thunk';
 
 import configureMockStore from 'redux-mock-store';
 
 import * as actions from '../actions.js';
 import evidencesAPI from '../evidencesAPI';
+import {actions as baseReducerActions} from 'app/BasicReducer';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -63,6 +65,44 @@ describe('evidences actions', () => {
 
       actions.unsetEvidence()(store.dispatch);
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  describe('acceptSuggestion', () => {
+    fit('should set isEvidence to true and save it', (done) => {
+      const apiResponse = {entity: 'savedDoc', evidence: 'savedEvidence'};
+      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve(apiResponse));
+
+      const evidence = Immutable.fromJS({test: 'test'});
+      const expectedActions = [
+        baseReducerActions.update('evidences/evidences', apiResponse.evidence)
+      ];
+
+      actions.acceptSuggestion(evidence)(store.dispatch)
+      .then(() => {
+        expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: true});
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      });
+    });
+  });
+
+  describe('rejectSuggestion', () => {
+    fit('should set isEvidence to false and save it', (done) => {
+      const apiResponse = {entity: 'savedDoc', evidence: 'savedEvidence'};
+      spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve(apiResponse));
+
+      const evidence = Immutable.fromJS({test: 'test'});
+      const expectedActions = [
+        baseReducerActions.update('evidences/evidences', apiResponse.evidence)
+      ];
+
+      actions.rejectSuggestion(evidence)(store.dispatch)
+      .then(() => {
+        expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: false});
+        expect(store.getActions()).toEqual(expectedActions);
+        done();
+      });
     });
   });
 

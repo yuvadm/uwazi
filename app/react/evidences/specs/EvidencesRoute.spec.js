@@ -6,13 +6,8 @@ import EvidencesRoute from '../EvidencesRoute';
 import EvidencesSection from '../components/EvidencesSection';
 import evidencesAPI from '../evidencesAPI';
 
-// import LibraryCharts from 'app/Charts/components/LibraryCharts';
-// import ListChartToggleButtons from 'app/Charts/components/ListChartToggleButtons';
 import RouteHandler from 'app/App/RouteHandler';
 import {fromJS as Immutable} from 'immutable';
-
-
-//import prioritySortingCriteria from 'app/utils/prioritySortingCriteria';
 
 describe('EvidencesRoute', () => {
   let evidences = {rows: [{_id: 'evidence1'}, {_id: 'evidence2'}]};
@@ -53,7 +48,7 @@ describe('EvidencesRoute', () => {
       EvidencesRoute.requestState(params, query, globalResources)
       .then((state) => {
         expect(evidencesAPI.search).toHaveBeenCalledWith(expectedSearch);
-        expect(state.evidences.allEvidences).toEqual(evidences);
+        expect(state.evidences.evidences).toEqual(evidences);
         done();
       })
       .catch(done.fail);
@@ -62,8 +57,8 @@ describe('EvidencesRoute', () => {
 
   describe('setReduxState()', () => {
     it('should call setDocuments with the documents', () => {
-      instance.setReduxState({evidences: {allEvidences: evidences}});
-      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/allEvidences/SET', value: evidences});
+      instance.setReduxState({evidences: {evidences}});
+      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/SET', value: evidences});
     });
   });
 

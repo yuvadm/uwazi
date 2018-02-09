@@ -15,7 +15,7 @@ describe('Evidences selectors', () => {
           {values: [{id: 'id3', label: 'value3'}, {id: 'id4', label: 'value4'}]}
         ]),
         evidences: {
-          allEvidences: Immutable.fromJS({
+          evidences: Immutable.fromJS({
             rows: [
               {property: 'id3', value: 'id2'},
               {property: 'id1', value: 'id4'}

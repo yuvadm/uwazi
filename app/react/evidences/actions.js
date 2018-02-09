@@ -2,7 +2,6 @@ import {browserHistory} from 'react-router';
 import {actions as formActions} from 'react-redux-form';
 import Immutable from 'immutable';
 import rison from 'rison';
-
 import {actions} from 'app/BasicReducer';
 
 import {getEvidencesFilters} from './selectors';
@@ -67,6 +66,24 @@ export function saveEvidence(evidence) {
       dispatch(actions.unset('evidences/evidence'));
       dispatch(actions.set('viewer/doc', response.entity));
       dispatch(actions.push('evidences/evidences', response.evidence));
+    });
+  };
+}
+
+export function acceptSuggestion(evidence) {
+  return function (dispatch) {
+    return evidencesAPI.save(evidence.set('isEvidence', true).toJS())
+    .then((response) => {
+      dispatch(actions.update('evidences/evidences', response.evidence));
+    });
+  };
+}
+
+export function rejectSuggestion(evidence) {
+  return function (dispatch) {
+    return evidencesAPI.save(evidence.set('isEvidence', false).toJS())
+    .then((response) => {
+      dispatch(actions.update('evidences/evidences', response.evidence));
     });
   };
 }

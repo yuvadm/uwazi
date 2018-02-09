@@ -7,15 +7,14 @@ import {RowList} from 'app/Layout/Lists';
 
 import {getEvidences} from '../selectors';
 import Evidence from '../components/Evidence';
-import {createSelector} from 'reselect';
 
 const Evidences = (props) => {
   return (
-  <RowList>
-    {props.evidences.map((evidence, index) =>
-      <Evidence evidence={evidence} key={index} />
-    )}
-  </RowList>
+    <RowList>
+      {props.evidences.map((evidence, index) =>
+        <Evidence evidence={evidence} key={index} />
+      )}
+    </RowList>
   );
 };
 

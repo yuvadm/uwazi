@@ -29,7 +29,7 @@ describe('Viewer routeActions', () => {
       .then((state) => {
         let documentResponse = state.documentViewer.doc;
         let relationTypesResponse = state.documentViewer.relationTypes;
-        let evidencesResponse = state.evidences;
+        let evidencesResponse = state.docEvidences;
 
         expect(documentResponse._id).toBe('1');
         expect(relationTypesResponse).toEqual(relationTypes.rows);

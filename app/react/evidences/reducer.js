@@ -7,9 +7,9 @@ const defaultSearch = {};
 
 export default combineReducers({
   evidence: createReducer('evidences/evidence', {}),
-  suggestions: createReducer('evidences/suggestions', []),
+  //suggestions: createReducer('evidences/suggestions', []),
+  docEvidences: createReducer('evidences/docEvidences', []),
   evidences: createReducer('evidences/evidences', []),
-  allEvidences: createReducer('evidences/allEvidences', []),
   search: modelReducer('evidences.search', defaultSearch),
   searchForm: formReducer('evidences.search', defaultSearch)
 });

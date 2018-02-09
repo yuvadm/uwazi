@@ -30,7 +30,7 @@ export default class EvidencesRoute extends RouteHandler {
     .then((allEvidences) => {
       return {
         evidences: {
-          allEvidences: allEvidences,
+          evidences: allEvidences,
           search: query
         }
       };
@@ -39,7 +39,7 @@ export default class EvidencesRoute extends RouteHandler {
 
   setReduxState(state) {
     this.context.store.dispatch(formActions.setInitial('evidences.search', state.evidences.search));
-    this.context.store.dispatch(actions.set('evidences/allEvidences', state.evidences.allEvidences));
+    this.context.store.dispatch(actions.set('evidences/evidences', state.evidences.evidences));
   }
 
   render() {

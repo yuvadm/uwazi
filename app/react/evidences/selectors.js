@@ -7,7 +7,7 @@ import {selectors as thesaurisSelectors} from 'app/Thesauris';
 const evidencesState = (state) => state.evidences;
 
 const getEvidences = createSelector(
-  state => evidencesState(state).allEvidences,
+  state => evidencesState(state).evidences,
   templateSelectors.getAllPropertyNames,
   thesaurisSelectors.getAllThesaurisLabels,
   (evidences, propertyNames, thesauriLabels) => {
