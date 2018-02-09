@@ -1,36 +1,13 @@
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {getSuggestions, saveEvidence, removeSuggestion} from '../actions';
-import {createSelector} from 'reselect';
-import Immutable from 'immutable';
-import * as templates from 'app/Templates';
-import * as thesauris from 'app/Thesauris';
 
+import {docEvidencesActions, removeSuggestion, saveEvidence} from '../actions';
+import {docEvidences} from '../selectors';
 
-const thesauriValues = createSelector(s => s.thesauris, (thesauris) => {
-  let values = {};
-  thesauris.forEach((thesauri) => {
-    thesauri.get('values').forEach((value) => {
-      values[value.get('id')] = value.get('label');
-    });
-  });
-
-  return values;
-});
-
-const thesauriNames = createSelector(s => s.templates, (templates) => {
-  let values = {};
-
-  templates.forEach((template) => {
-    template.get('properties').forEach((property) => {
-      values[property.get('_id')] = property.get('label');
-    });
-  });
-
-  return values;
-});
+import Evidence from './Evidence';
 
 export class Evidences extends Component {
 
@@ -82,22 +59,7 @@ export class Evidences extends Component {
   }
 
   render() {
-    const evidences = this.props.evidences.filter((e) => {
-      if (!this.state.positive) {
-        return !e.get('isEvidence');
-      }
-      return true;
-    }).filter((e) => {
-      if (!this.state.negative) {
-        return e.get('isEvidence');
-      }
-      return true;
-    })
-    .groupBy(x => x.get('property'));
-    const suggestions = this.props.suggestions.groupBy(x => x.get('property'));
-    const properties = this.props.suggestions.concat(this.props.evidences).groupBy((x) => x.get('property')).keySeq().toArray();
-    const valuesLabels = thesauris.selectors.getAllThesaurisLabels(this.props);
-    const nameLabels = templates.selectors.getAllPropertyNames(this.props);
+    const {evidences} = this.props;
 
     return <div>
       <div>
@@ -109,53 +71,32 @@ export class Evidences extends Component {
         <button type="button" onClick={this.toggleNegativeEvidences} className={'btn ' + (this.state.negative ? 'btn-success' : '')}>negative</button>
       </div>
 
-      {properties.map((property) => {
-        return <div key={property}>
-          {evidences.size && evidences.get(property) ? evidences.get(property).map((evidence, index) => {
-            return <div key={index} className="card evidence" className={'card evidence' + (evidence.get('isEvidence') ? '' : ' negative')}>
-              <p>{evidence.get('evidence').get('text')}</p>
-              <p><b>{nameLabels[evidence.get('property')]}</b>: {valuesLabels[evidence.get('value')]}</p>
-            </div>;
-          }) : false}
-          {suggestions.size && this.state.suggestions ? suggestions.get(property).map((suggestion, index) => {
-            return <div key={index} className="card suggestion">
-              <p>{suggestion.get('evidence').get('text')}</p>
-              <p><b>{nameLabels[suggestion.get('property')]}</b>: {valuesLabels[suggestion.get('value')]}</p>
-              <button onClick={this.saveValidSuggestion.bind(this, suggestion)}>OK</button>
-              <button onClick={this.saveInvalidSuggestion.bind(this, suggestion)}>NO</button>
-            </div>;
-          }) : false}
-        </div>;
-      })}
+      {evidences.map((evidence, index) => <Evidence key={index} evidence={evidence}/>)}
     </div>;
   }
 }
 
-Evidences.defaultProps = {
-  suggestions: Immutable.fromJS([])
-};
-
 Evidences.propTypes = {
-  suggestions: PropTypes.object,
-  evidences: PropTypes.object,
+  evidences: PropTypes.instanceOf(Immutable.List),
   doc: PropTypes.object,
   getSuggestions: PropTypes.func,
   removeSuggestion: PropTypes.func,
   saveEvidence: PropTypes.func
 };
 
-export function mapStateToProps({evidences, documentViewer, thesauris, templates}) {
+export function mapStateToProps(state) {
   return {
-    suggestions: evidences.suggestions,
-    doc: documentViewer.doc,
-    thesauris,
-    templates,
-    evidences: evidences.evidences
+    doc: state.documentViewer.doc,
+    evidences: docEvidences.get(state)
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({getSuggestions, saveEvidence, removeSuggestion}, dispatch);
+  return bindActionCreators({
+    getSuggestions: docEvidencesActions.getSuggestions,
+    saveEvidence,
+    removeSuggestion
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Evidences);

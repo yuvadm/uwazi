@@ -7,17 +7,21 @@ import {selectors as thesaurisSelectors} from 'app/Thesauris';
 const evidencesState = (state) => state.evidences;
 
 const getEvidences = createSelector(
-  state => evidencesState(state).evidences,
+  (state, namespace = 'evidences') => evidencesState(state)[namespace],
   templateSelectors.getAllPropertyNames,
   thesaurisSelectors.getAllThesaurisLabels,
   (evidences, propertyNames, thesauriLabels) => {
-    return evidences.set('rows', evidences.get('rows').map((evidence) => {
+    return evidences.map((evidence) => {
       return evidence
       .set('propertyLabel', propertyNames[evidence.get('property')])
       .set('valueLabel', thesauriLabels[evidence.get('value')]);
-    }));
+    });
   }
 );
+
+const docEvidences = {
+  get: (state) => getEvidences(state, 'docEvidences')
+};
 
 const buildFilter = (property, thesauris) => {
   return Immutable.Map({
@@ -54,5 +58,6 @@ const getEvidencesFilters = createSelector(
 export {
   getEvidences,
   getEvidencesFilters,
-  getFilters
+  getFilters,
+  docEvidences
 };

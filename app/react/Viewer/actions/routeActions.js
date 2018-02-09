@@ -1,11 +1,12 @@
 import referencesAPI from 'app/Viewer/referencesAPI';
-import {evidencesAPI, evidencesActions} from 'app/evidences';
+import {evidencesAPI} from 'app/evidences';
 import relationTypesAPI from 'app/RelationTypes/RelationTypesAPI';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 import {getDocument} from 'app/Viewer/actions/documentActions';
 
 import {actions} from 'app/BasicReducer';
 import {setReferences} from './referencesActions';
+import {docEvidencesActions} from 'app/evidences';
 
 export function requestViewerState(documentId, lang) {
   return Promise.all([
@@ -22,7 +23,9 @@ export function requestViewerState(documentId, lang) {
         relationTypes
       },
       relationTypes,
-      docEvidences
+      evidences: {
+        docEvidences
+      }
     };
   });
 }
@@ -34,6 +37,6 @@ export function setViewerState(state) {
     dispatch(actions.set('viewer/doc', documentViewer.doc));
     dispatch(actions.set('viewer/relationTypes', documentViewer.relationTypes));
     dispatch(setReferences(documentViewer.references));
-    dispatch(evidencesActions.setEvidences(state.evidences));
+    dispatch(docEvidencesActions.set(state.evidences.docEvidences));
   };
 }

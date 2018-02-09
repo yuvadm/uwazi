@@ -1,43 +1,61 @@
 import Immutable from 'immutable';
 
 import {selectors} from '..';
+import {docEvidences} from '../selectors';
 
 describe('Evidences selectors', () => {
+  let state;
+  beforeEach(() => {
+    state = {
+      templates: Immutable.fromJS([
+        {properties: [{_id: 'id1', label: 'property1'}, {_id: 'id2', label: 'property2'}]},
+        {properties: [{_id: 'id3', label: 'property3'}, {_id: 'id4', label: 'property4'}]}
+      ]),
+      thesauris: Immutable.fromJS([
+        {values: [{id: 'id1', label: 'value1'}, {id: 'id2', label: 'value2'}]},
+        {values: [{id: 'id3', label: 'value3'}, {id: 'id4', label: 'value4'}]}
+      ]),
+      evidences: {
+        evidences: Immutable.fromJS([
+          {property: 'id3', value: 'id2'},
+          {property: 'id1', value: 'id4'}
+        ])
+      }
+    };
+  });
+
   describe('getEvidences', () => {
     it('should return evidences with added property and value labels', () => {
-      const state = {
-        templates: Immutable.fromJS([
-          {properties: [{_id: 'id1', label: 'property1'}, {_id: 'id2', label: 'property2'}]},
-          {properties: [{_id: 'id3', label: 'property3'}, {_id: 'id4', label: 'property4'}]}
-        ]),
-        thesauris: Immutable.fromJS([
-          {values: [{id: 'id1', label: 'value1'}, {id: 'id2', label: 'value2'}]},
-          {values: [{id: 'id3', label: 'value3'}, {id: 'id4', label: 'value4'}]}
-        ]),
-        evidences: {
-          evidences: Immutable.fromJS({
-            rows: [
-              {property: 'id3', value: 'id2'},
-              {property: 'id1', value: 'id4'}
-            ]
-          })
-        }
-      };
-
       const evidences = selectors.getEvidences(state);
+      expect(evidences.toJS()).toEqual([
+        {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
+        {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'}
+      ]);
+    });
+  });
 
-      expect(evidences.toJS()).toEqual({
-        rows: [
+  describe('docEvidencesSelectors', () => {
+    describe('getEvidences', () => {
+      it('should get Evidences from docEvidences', () => {
+        state.evidences.docEvidences = Immutable.fromJS([
+          {property: 'id3', value: 'id2'},
+          {property: 'id1', value: 'id4'},
+          {property: 'id3', value: 'id2'}
+        ]);
+
+        const evidences = docEvidences.get(state);
+        expect(evidences.toJS()).toEqual([
           {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
-          {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'}
-        ]
+          {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'},
+          {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'}
+        ]);
       });
     });
   });
 
   describe('getFilters', () => {
     it('should return all filter posibilities based on templates and thesauris', () => {
-      const state = {
+      state = {
         templates: Immutable.fromJS([
           {properties: [{_id: 'property1', label: 'propertyLabel1', content: 'thesauri1'}, {_id: 'property2', label: 'propertyLabel2'}]},
           {properties: [

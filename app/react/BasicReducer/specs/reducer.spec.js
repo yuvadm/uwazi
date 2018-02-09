@@ -85,6 +85,20 @@ describe('BasicReducer', () => {
     });
   });
 
+  describe('concat', () => {
+    it('should concat an array to the array', () => {
+      let reducer1 = createReducer('namespace1', []);
+      let reducer2 = createReducer('namespace2', []);
+
+      let newState1 = reducer1(Immutable([{_id: '1'}]), actions.concat('namespace1', [{_id: '2'}, {_id: '3'}]));
+      let newState2 = reducer2(Immutable([{_id: '1'}]), actions.concat('namespace1', [{_id: '2'}, {_id: '3'}]));
+
+      expect(newState1.toJS()).toEqual([{_id: '1'}, {_id: '2'}, {_id: '3'}]);
+      expect(newState1.get(1).toJS()).toEqual({_id: '2'});
+      expect(newState2.toJS()).toEqual([{_id: '1'}]);
+    });
+  });
+
   describe('Push', () => {
     it('should add an element to an array', () => {
       let reducer1 = createReducer('namespace1', []);

@@ -7,45 +7,40 @@ import {actions} from 'app/BasicReducer';
 import {getEvidencesFilters} from './selectors';
 import evidencesAPI from './evidencesAPI';
 
-export function setSuggestions(suggestions) {
-  return function (dispatch) {
-    return dispatch(actions.set('evidences/suggestions', suggestions));
-  };
-}
+import {evidencesActions, docEvidencesActions} from './reducer';
 
-export function setEvidences(evidences) {
-  return actions.set('evidences/evidences', evidences);
-}
-
-export function unsetSuggestions() {
-  return function (dispatch) {
-    return dispatch(actions.unset('evidences/suggestions'));
-  };
-}
 
 export function getSuggestions(docId) {
   return function (dispatch) {
     return evidencesAPI.getSuggestions(docId)
     .then((suggestions) => {
-      dispatch(setSuggestions(suggestions));
+      dispatch(docEvidencesActions.concat(suggestions));
     });
   };
 }
 
-export function getEvidences(docId) {
-  return function (dispatch) {
+docEvidencesActions.getSuggestions = (docId) => {
+  return (dispatch) => {
+    return evidencesAPI.getSuggestions(docId)
+    .then((suggestions) => {
+      dispatch(docEvidencesActions.concat(suggestions));
+    });
+  };
+};
+
+docEvidencesActions.getEvidences = (docId) => {
+  return (dispatch) => {
     return evidencesAPI.get(docId)
     .then((evidences) => {
-      dispatch(setEvidences(evidences));
+      dispatch(docEvidencesActions.set(evidences));
     });
   };
-}
+};
 
-export function setEvidence(evidence) {
-  return function (dispatch) {
-    return dispatch(actions.set('evidences/evidence', evidence));
-  };
-}
+export {
+  evidencesActions,
+  docEvidencesActions
+};
 
 export function unsetEvidence() {
   return function (dispatch) {

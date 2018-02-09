@@ -5,6 +5,7 @@ import Viewer from 'app/Viewer/components/Viewer';
 import ViewDocument from 'app/Viewer/ViewDocument';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 import * as routeActions from '../actions/routeActions';
+import {docEvidencesActions} from 'app/evidences';
 
 describe('ViewDocument', () => {
   let component;
@@ -71,7 +72,7 @@ describe('ViewDocument', () => {
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'rrf/reset', model: 'documentViewer.tocForm'});
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'viewer/targetDoc/UNSET'});
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/suggestions/UNSET'});
-      expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidences/UNSET'});
+      expect(context.store.dispatch).toHaveBeenCalledWith(docEvidencesActions.unset());
       expect(context.store.dispatch).toHaveBeenCalledWith({type: 'evidences/evidence/UNSET'});
     });
   });

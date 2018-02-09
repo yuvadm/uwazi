@@ -4,6 +4,7 @@ import Evidences from './components/Evidences';
 import evidencesAPI from './evidencesAPI';
 import * as evidencesActions from './actions';
 import * as selectors from './selectors';
+import {docEvidencesActions} from './actions';
 
 export {
   AddEvidenceModal,
@@ -11,5 +12,6 @@ export {
   Evidences,
   evidencesAPI,
   evidencesActions,
-  selectors
+  selectors,
+  docEvidencesActions
 };

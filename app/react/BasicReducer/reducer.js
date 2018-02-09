@@ -1,5 +1,5 @@
 import {fromJS as Immutable} from 'immutable';
-import {PUSH, REMOVE, SET, UNSET, UPDATE} from './actionsTypes';
+import {PUSH, REMOVE, SET, UNSET, UPDATE, CONCAT} from './actionsTypes';
 
 export default function createReducer(namespace, defaultValue) {
   return (currentState = defaultValue, action = {}) => {
@@ -12,6 +12,9 @@ export default function createReducer(namespace, defaultValue) {
 
     case `${namespace}/${PUSH}`:
       return currentState.push(Immutable(action.value));
+
+    case `${namespace}/${CONCAT}`:
+      return currentState.concat(Immutable(action.value));
 
     case `${namespace}/${REMOVE}`:
       return Immutable(currentState).filter((object) => {

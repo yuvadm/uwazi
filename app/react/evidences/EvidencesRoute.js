@@ -4,9 +4,10 @@ import rison from 'rison';
 import api from './evidencesAPI';
 import RouteHandler from 'app/App/RouteHandler';
 import SearchButton from 'app/Library/components/SearchButton';
-import {actions} from 'app/BasicReducer';
 import {actions as formActions} from 'react-redux-form';
 import EvidencesSection from './components/EvidencesSection';
+
+import {evidencesActions} from './actions';
 
 export default class EvidencesRoute extends RouteHandler {
 
@@ -39,7 +40,7 @@ export default class EvidencesRoute extends RouteHandler {
 
   setReduxState(state) {
     this.context.store.dispatch(formActions.setInitial('evidences.search', state.evidences.search));
-    this.context.store.dispatch(actions.set('evidences/evidences', state.evidences.evidences));
+    this.context.store.dispatch(evidencesActions.set(state.evidences.evidences));
   }
 
   render() {

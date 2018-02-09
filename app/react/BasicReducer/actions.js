@@ -1,4 +1,4 @@
-import {PUSH, REMOVE, SET, UNSET, UPDATE} from './actionsTypes';
+import {PUSH, REMOVE, SET, UNSET, UPDATE, CONCAT} from './actionsTypes';
 
 export const actions = {
   update: (namespace, value) => ({
@@ -14,6 +14,10 @@ export const actions = {
   }),
   push: (namespace, value) => ({
     type: `${namespace}/${PUSH}`,
+    value
+  }),
+  concat: (namespace, value) => ({
+    type: `${namespace}/${CONCAT}`,
     value
   }),
   remove: (namespace, value) => ({
