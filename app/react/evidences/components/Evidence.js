@@ -5,8 +5,6 @@ import React, {Component} from 'react';
 import {Badge, Button} from 'app/Layout';
 import {RowList} from 'app/Layout/Lists';
 
-import {ItemFooter} from '../../Layout/Lists';
-
 class Evidence extends Component {
   constructor(props) {
     super(props);
