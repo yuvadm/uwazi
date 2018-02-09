@@ -81,6 +81,7 @@ export default {
     .then((evidences) => {
       return model.save(evidences.map((evidence) => {
         evidence.evidence = {text: evidence.evidence};
+        evidence.language = language;
         return evidence;
       }));
     })

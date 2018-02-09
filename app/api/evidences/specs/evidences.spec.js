@@ -143,8 +143,10 @@ fdescribe('evidences', () => {
       .then(([suggestion1, suggestion2]) => {
         expect(suggestion1.evidence.text).toBe('text');
         expect(suggestion1.probability).toBe(0.86543);
+        expect(suggestion1.language).toBe('en');
         expect(suggestion2.evidence.text).toBe('text2');
         expect(suggestion2.probability).toBe(0.9);
+        expect(suggestion2.language).toBe('en');
 
         expect(search.bulkIndex).toHaveBeenCalledWith([suggestion1, suggestion2]);
         done();
