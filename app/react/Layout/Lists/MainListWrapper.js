@@ -105,7 +105,7 @@ MainListWrapper.defaultProps = {
 
 MainListWrapper.propTypes = {
   numberOfDocuments: PropTypes.number.isRequired,
-  totalDocuments: PropTypes.number.isRequired,
+  totalDocuments: PropTypes.number,
   connections: PropTypes.object,
   SearchBar: PropTypes.func,
   List: PropTypes.func.isRequired,

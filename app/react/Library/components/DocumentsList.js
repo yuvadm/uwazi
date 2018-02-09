@@ -13,7 +13,8 @@ export function mapStateToProps(state, props) {
   return {
     List: Documents,
     Sort: DocumentSortSelector,
-    documents: state[props.storeKey].documents
+    numberOfDocuments: state[props.storeKey].documents.get('rows').size,
+    totalDocuments: state[props.storeKey].documents.get('totalRows')
   };
 }
 
