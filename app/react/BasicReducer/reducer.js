@@ -1,10 +1,5 @@
 import {fromJS as Immutable} from 'immutable';
-
-const SET = 'SET';
-const UPDATE = 'UPDATE';
-const UNSET = 'UNSET';
-const REMOVE = 'REMOVE';
-const PUSH = 'PUSH';
+import {PUSH, REMOVE, SET, UNSET, UPDATE} from './actionsTypes';
 
 export default function createReducer(namespace, defaultValue) {
   return (currentState = defaultValue, action = {}) => {
@@ -35,39 +30,5 @@ export default function createReducer(namespace, defaultValue) {
     default:
       return Immutable(currentState);
     }
-  };
-}
-
-export function update(namespace, value) {
-  return {
-    type: `${namespace}/${UPDATE}`,
-    value
-  };
-}
-
-export function set(namespace, value) {
-  return {
-    type: `${namespace}/${SET}`,
-    value
-  };
-}
-
-export function unset(namespace) {
-  return {
-    type: `${namespace}/${UNSET}`
-  };
-}
-
-export function push(namespace, value) {
-  return {
-    type: `${namespace}/${PUSH}`,
-    value
-  };
-}
-
-export function remove(namespace, value) {
-  return {
-    type: `${namespace}/${REMOVE}`,
-    value
   };
 }

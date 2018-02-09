@@ -69,7 +69,7 @@ describe('evidences actions', () => {
   });
 
   describe('acceptSuggestion', () => {
-    fit('should set isEvidence to true and save it', (done) => {
+    it('should set isEvidence to true and save it', (done) => {
       const apiResponse = {entity: 'savedDoc', evidence: 'savedEvidence'};
       spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve(apiResponse));
 
@@ -88,7 +88,7 @@ describe('evidences actions', () => {
   });
 
   describe('rejectSuggestion', () => {
-    fit('should set isEvidence to false and save it', (done) => {
+    it('should set isEvidence to false and save it', (done) => {
       const apiResponse = {entity: 'savedDoc', evidence: 'savedEvidence'};
       spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve(apiResponse));
 

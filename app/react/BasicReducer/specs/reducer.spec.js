@@ -1,4 +1,6 @@
-import createReducer, * as actions from 'app/BasicReducer/reducer';
+import createReducer from 'app/BasicReducer/reducer';
+import createReducerNamespaced from 'app/BasicReducer/createReducerNamespaced';
+import {actions} from 'app/BasicReducer/actions';
 import {fromJS as Immutable} from 'immutable';
 
 describe('BasicReducer', () => {
@@ -7,6 +9,21 @@ describe('BasicReducer', () => {
       let reducer = createReducer('namespace', {});
       let newState = reducer();
       expect(newState.toJS()).toEqual({});
+    });
+  });
+
+  describe('createReducerNamespaced', () => {
+    it('should return a reducer function with default', () => {
+      const namespace = createReducerNamespaced('namespace', {});
+      const newState = namespace.reducer();
+      expect(newState.toJS()).toEqual({});
+    });
+
+    it('should return namespaced actions', () => {
+      const namespace = createReducerNamespaced('namespace', {});
+      const previousState = {};
+      const newState = namespace.reducer(previousState, namespace.actions.set({newState: 'newState'}));
+      expect(newState.toJS()).toEqual({newState: 'newState'});
     });
   });
 
