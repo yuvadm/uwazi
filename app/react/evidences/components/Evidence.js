@@ -21,6 +21,9 @@ class Evidence extends Component {
       <RowList.Item>
         <p>{props.evidence.get('evidence').get('text')}</p>
         <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
+
+        {props.evidence.get('isEvidence') === true ? <p>Positive</p> : <p/>}
+        {props.evidence.get('isEvidence') === false ? <p>Negative</p> : <p/>}
         {props.evidence.has('isEvidence') ? <div/> :
             <div>
               <p>Probability: <b>{Math.round(props.evidence.get('probability') * 100 * 100) / 100}%</b></p>
