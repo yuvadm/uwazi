@@ -88,6 +88,13 @@ export default {
     .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(() => evidences) : evidences);
   },
 
+  retrainModel(property, value) {
+    return model.get({property, value})
+    .then((evidences) => {
+      return MLAPI.retrainModel({property, value, evidences});
+    });
+  },
+
   getById(_id) {
     return model.get({_id}).then(([evidence]) => evidence);
   },

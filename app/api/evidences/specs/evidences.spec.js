@@ -4,10 +4,10 @@ import db from 'api/utils/testing_db';
 import MLAPI from '../MLAPI';
 import entities from '../../entities';
 import evidences from '../evidences.js';
-import fixtures, {evidenceId, propertyID1, entityID, value3, value4} from './fixtures.js';
+import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-fdescribe('evidences', () => {
+describe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -149,6 +149,29 @@ fdescribe('evidences', () => {
         expect(suggestion2.language).toBe('en');
 
         expect(search.bulkIndex).toHaveBeenCalledWith([suggestion1, suggestion2]);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+  });
+
+  describe('retrainModel', () => {
+    it('should call ML api endpoint with model to retrain and all evidences belonging to the model', (done) => {
+      spyOn(MLAPI, 'retrainModel').and.returnValue(Promise.resolve('response'));
+      const property = propertyID1.toString();
+      const value = value1;
+      evidences.retrainModel(property, value)
+      .then((response) => {
+        expect(response).toBe('response');
+        const args = MLAPI.retrainModel.calls.mostRecent().args;
+
+        expect(args[0].property).toBe(property);
+        expect(args[0].value).toBe(value);
+        expect(args[0].evidences.length).toBe(2);
+        expect(args[0].evidences.length).toBe(2);
+        expect(args[0].evidences[0].evidence.text).toBe('evidence1');
+        expect(args[0].evidences[1].evidence.text).toBe('evidence1.1');
+
         done();
       })
       .catch(catchErrors(done));

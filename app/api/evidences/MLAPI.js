@@ -10,6 +10,10 @@ export default {
     return request.post(MLAPIURL + 'classification/train', data);
   },
 
+  retrainModel: (data) => {
+    return request.post(MLAPIURL + 'classification/retrain', data);
+  },
+
   setUp: (data) => {
     return request.post(MLAPIURL + 'classification/setUp', data)
     .then((response) => {

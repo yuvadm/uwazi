@@ -52,6 +52,27 @@ describe('evidences routes', () => {
     });
   });
 
+  describe('retrainModel', () => {
+    let req;
+    beforeEach(() => {
+      req = {
+        body: {property: 'property', value: 'value'}
+      };
+    });
+
+    it('should retrainModel', (done) => {
+      spyOn(evidences, 'retrainModel').and.returnValue(Promise.resolve('response'));
+
+      routes.post('/api/evidences/retrainModel', req)
+      .then((result) => {
+        expect(result).toBe('response');
+        expect(evidences.retrainModel).toHaveBeenCalledWith('property', 'value');
+        done();
+      })
+      .catch(catchErrors);
+    });
+  });
+
   describe('GET', () => {
     let req;
     beforeEach(() => {
