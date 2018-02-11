@@ -213,4 +213,15 @@ describe('evidences actions', () => {
       expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:())');
     });
   });
+
+  describe('retrainModel', () => {
+    it('should reset filters form and searchEvidences with empty filter object', () => {
+      spyOn(evidencesAPI, 'retrainModel').and.returnValue(Promise.resolve('response'));
+
+      const property = 'property';
+      const value = 'value';
+      store.dispatch(actions.retrainModel(property, value));
+      expect(evidencesAPI.retrainModel).toHaveBeenCalledWith(property, value);
+    });
+  });
 });

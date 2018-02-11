@@ -136,6 +136,11 @@ export function resetEvidencesFilters() {
   };
 }
 
+export function retrainModel(property, value) {
+  return () => {
+    return evidencesAPI.retrainModel(property, value);
+  };
+}
 
 export function loadMoreEvidences(limit) {
   return function (dispatch) {

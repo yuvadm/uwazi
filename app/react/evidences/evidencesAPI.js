@@ -20,6 +20,10 @@ export default {
     return api.get('evidences/suggestions', {_id: id}).then(response => response.json);
   },
 
+  retrainModel(property, value) {
+    return api.post('evidences/retrainModel', {property, value}).then(response => response.json);
+  },
+
   save(evidence) {
     return api.post('evidences', evidence).then(response => response.json);
   },

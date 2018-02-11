@@ -18,7 +18,23 @@ describe('evidencesAPI', () => {
 
   afterEach(() => backend.restore());
 
-  describe('filter()', () => {
+  describe('retrainModel', () => {
+    it('should request to retrain a property/value model', (done) => {
+      spyOn(api, 'post').and.returnValue(Promise.resolve({json: 'response'}));
+      evidencesAPI.retrainModel('property', 'value')
+      .then((response) => {
+        expect(api.post).toHaveBeenCalledWith(
+          'evidences/retrainModel',
+          {property: 'property', value: 'value'}
+        );
+        expect(response).toEqual('response');
+        done();
+      })
+      .catch(done.fail);
+    });
+  });
+
+  describe('search()', () => {
     it('should work if data sent is undefined', (done) => {
       spyOn(api, 'get').and.returnValue(Promise.resolve({json: 'response'}));
       evidencesAPI.search()
