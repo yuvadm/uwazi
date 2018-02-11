@@ -54,6 +54,16 @@ describe('MultiSelect', () => {
     });
   });
 
+  describe('option actions', () => {
+    it('execute renderActions function for each option passing the option', () => {
+      props.renderActions = (option) => <span className='renderActions'>{option.value}</span>;
+      render();
+      let optionElements = component.find('.multiselectItem');
+      expect(optionElements.at(0).find('.renderActions').text()).toBe('option1');
+      expect(optionElements.at(1).find('.renderActions').text()).toBe('option2');
+    });
+  });
+
   describe('filtering', () => {
     it('should render only options matching the filter', () => {
       render();

@@ -141,6 +141,7 @@ export default class MultiSelect extends Component {
                   </span>
                 </ShowIf>
             </label>
+            {this.props.renderActions ? this.props.renderActions(option) : false}
           </li>;
         })}
 
@@ -160,6 +161,7 @@ export default class MultiSelect extends Component {
 
 MultiSelect.propTypes = {
   onChange: PropTypes.func,
+  renderActions: PropTypes.func,
   label: PropTypes.string,
   options: PropTypes.array,
   value: PropTypes.array,
