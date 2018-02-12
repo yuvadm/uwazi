@@ -25,8 +25,8 @@ describe('searchEvidences', () => {
     it('should return all results if no params passed', (done) => {
       search.search()
       .then((allEvidences) => {
-        expect(allEvidences.totalRows).toBe(4);
-        expect(allEvidences.rows.length).toBe(4);
+        expect(allEvidences.totalRows).toBe(5);
+        expect(allEvidences.rows.length).toBe(5);
         const value1Evidence = allEvidences.rows.find((e) => e._id === evidenceId.toString());
         expect(value1Evidence.value).toBe(value1);
         done();
@@ -55,7 +55,7 @@ describe('searchEvidences', () => {
         search.search(query5)
       ])
       .then(([value1Evidences, value2Evidences, value12Evidences, value1TrueEvidence, value1FalseEvidence]) => {
-        expect(value1Evidences.rows.length).toBe(2);
+        expect(value1Evidences.rows.length).toBe(3);
         expect(value1Evidences.rows[0].value).toBe(value1);
         expect(value1Evidences.rows[1].value).toBe(value1);
 
@@ -121,7 +121,7 @@ describe('searchEvidences', () => {
   });
 
   describe('bulkIndex', () => {
-    it('should update evidences using the bulk functionality', (done) => {
+    it('should update evidences using the bulk functionality and not have side effects', (done) => {
       spyOn(elastic, 'bulk').and.returnValue(Promise.resolve({items: []}));
       const evidences = [
         {_id: 'id1', document: 'doc1'},
@@ -136,6 +136,8 @@ describe('searchEvidences', () => {
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id2'}},
           {document: 'doc2'}
         ]});
+        expect(evidences[0]._id).toBeDefined();
+        expect(evidences[1]._id).toBeDefined();
         done();
       })
       .catch(catchErrors(done));

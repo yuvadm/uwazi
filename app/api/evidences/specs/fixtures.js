@@ -19,6 +19,7 @@ export default {
   ],
   evidences: [
     {_id: evidenceId, value: value1, property: propertyID1, isEvidence: true, evidence: {text: 'evidence1'}},
+    {_id: db.id(), value: value1, property: propertyID1},
     {_id: db.id(), value: value1, property: propertyID1, isEvidence: false, evidence: {text: 'evidence1.1'}},
     {_id: db.id(), value: value2, property: propertyID1, isEvidence: true},
     {_id: db.id(), value: value3, isEvidence: true}

@@ -1,4 +1,7 @@
+import Immutable from 'immutable';
+
 import {index as elasticIndex} from 'api/config/elasticIndexes';
+
 import elastic from '../search/elastic';
 import queryBuilder from './evidencesQueryBuilder';
 
@@ -31,7 +34,8 @@ export default {
     return elastic.index({index: elasticIndex, type: 'evidence', id, body});
   },
 
-  bulkIndex(evidences) {
+  bulkIndex(evidencesToIndex) {
+    const evidences = Immutable.fromJS(evidencesToIndex).toJS();
     const body = evidences.reduce((value, evidence) => {
       value.push({index: {_index: elasticIndex, _type: 'evidence', _id: evidence._id}});
       delete evidence._id;

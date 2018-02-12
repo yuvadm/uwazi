@@ -156,7 +156,7 @@ describe('evidences', () => {
   });
 
   describe('retrainModel', () => {
-    it('should call ML api endpoint with model to retrain and all evidences belonging to the model', (done) => {
+    it('should call ML api endpoint with model to retrain and all evidences that are not suggestions belonging to the model', (done) => {
       spyOn(MLAPI, 'retrainModel').and.returnValue(Promise.resolve('response'));
       const property = propertyID1.toString();
       const value = value1;
@@ -184,7 +184,7 @@ describe('evidences', () => {
       evidences.delete(evidenceId)
       .then(() => evidences.get())
       .then((results) => {
-        expect(results.length).toBe(3);
+        expect(results.length).toBe(4);
         expect(search.delete).toHaveBeenCalledWith(evidenceId);
         done();
       });

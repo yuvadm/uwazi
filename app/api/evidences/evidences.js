@@ -89,7 +89,7 @@ export default {
   },
 
   retrainModel(property, value) {
-    return model.get({property, value})
+    return model.get({property, value, isEvidence: {$exists: true}})
     .then((evidences) => {
       return MLAPI.retrainModel({property, value, evidences});
     });
