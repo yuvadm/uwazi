@@ -181,6 +181,57 @@ describe('evidences', () => {
     });
   });
 
+  describe('getSuggestionsForOneValue', () => {
+    it('should getSuggestionsForOneValue passing all docs containing the property', (done) => {
+      spyOn(MLAPI, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve([]));
+      const property = propertyID1.toString();
+      const value = value1;
+      evidences.getSuggestionsForOneValue(property, value, 'en')
+      .then((suggestions) => {
+        expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
+          property,
+          value,
+          docs: [
+            {_id: entityID.toString(), text: 'this is a test'}
+          ]
+        });
+        expect(suggestions).toEqual([]);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+
+    it('should save the suggestions and then return them', (done) => {
+      spyOn(MLAPI, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve([
+        {evidence: 'text', probability: 0.86543},
+        {evidence: 'text2', probability: 0.9}
+      ]));
+      spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
+
+      const property = propertyID1.toString();
+      const value = value1;
+      evidences.getSuggestionsForOneValue(property, value, 'en')
+      .then((suggestions) => {
+        return Promise.all([
+          evidences.getById(suggestions[0]._id),
+          evidences.getById(suggestions[1]._id)
+        ]);
+      })
+      .then(([suggestion1, suggestion2]) => {
+        expect(suggestion1.evidence.text).toBe('text');
+        expect(suggestion1.probability).toBe(0.86543);
+        expect(suggestion1.language).toBe('en');
+        expect(suggestion2.evidence.text).toBe('text2');
+        expect(suggestion2.probability).toBe(0.9);
+        expect(suggestion2.language).toBe('en');
+
+        expect(search.bulkIndex).toHaveBeenCalledWith([suggestion1, suggestion2]);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+  });
+
   describe('retrainModel', () => {
     it('should call ML api endpoint with model to retrain and all evidences that are not suggestions belonging to the model', (done) => {
       spyOn(MLAPI, 'retrainModel').and.returnValue(Promise.resolve('response'));

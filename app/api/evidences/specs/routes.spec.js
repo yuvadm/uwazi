@@ -73,6 +73,28 @@ describe('evidences routes', () => {
     });
   });
 
+  describe('getSuggestionsForPropertyValue', () => {
+    let req;
+    beforeEach(() => {
+      req = {
+        body: {property: 'property', value: 'value'},
+        language: 'en'
+      };
+    });
+
+    it('should retrainModel', (done) => {
+      spyOn(evidences, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve('response'));
+
+      routes.post('/api/evidences/get_suggestions_property_value', req)
+      .then((result) => {
+        expect(result).toBe('response');
+        expect(evidences.getSuggestionsForOneValue).toHaveBeenCalledWith('property', 'value', 'en');
+        done();
+      })
+      .catch(catchErrors);
+    });
+  });
+
   describe('GET', () => {
     let req;
     beforeEach(() => {

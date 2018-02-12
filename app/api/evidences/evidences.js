@@ -45,6 +45,28 @@ export default {
     return model.get(query, select, pagination);
   },
 
+  getSuggestionsForOneValue(property, value, language) {
+    return templates.get({'properties._id': property})
+    .then(([template]) => {
+      return entities.get({template: template._id}, '+fullText');
+    })
+    .then((documents) => {
+      return MLAPI.getSuggestionsForOneValue({
+        property,
+        value,
+        docs: documents.map((d) => ({_id: d._id.toString(), text: d.fullText.replace(/\[\[[0-9]*\]\]/g, '')}))
+      });
+    })
+    .then((evidences) => {
+      return model.save(evidences.map((evidence) => {
+        evidence.evidence = {text: evidence.evidence};
+        evidence.language = language;
+        return evidence;
+      }));
+    })
+    .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(() => evidences) : evidences);
+  },
+
   getSuggestions(docId, language) {
     return entities.get({sharedId: docId, language}, '+fullText')
     .then(([entity]) => {

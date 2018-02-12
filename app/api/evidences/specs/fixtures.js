@@ -4,6 +4,7 @@ import db from 'api/utils/testing_db';
 const evidenceId = db.id();
 const entityID = db.id();
 const templateId = db.id();
+const templateId2 = db.id();
 const propertyID1 = db.id();
 const propertyID2 = db.id();
 const dictionary1 = db.id();
@@ -15,7 +16,8 @@ const value4 = 'value4';
 
 export default {
   entities: [
-    {_id: entityID, sharedId: 'shared', template: templateId, language: 'en', metadata: {}, title: 'Suggestions doc', fullText: 'this[[1]] is[[1]] a[[14]] test[[66]]'}
+    {_id: entityID, sharedId: 'shared', template: templateId, language: 'en', metadata: {}, title: 'Suggestions doc', fullText: 'this[[1]] is[[1]] a[[14]] test[[66]]'},
+    {_id: db.id(), sharedId: 'shared2', template: templateId2}
   ],
   evidences: [
     {_id: evidenceId, value: value1, property: propertyID1, isEvidence: true, evidence: {text: 'evidence1'}},
@@ -29,7 +31,7 @@ export default {
       {type: 'text', name: 'text', _id: db.id()},
       {type: 'multiselect', name: 'multiselect', _id: propertyID1, content: dictionary2}
     ]},
-    {_id: db.id(), name: 'template_test2', properties: [
+    {_id: templateId2, name: 'template_test2', properties: [
       {type: 'text', name: 'text', _id: db.id()},
       {type: 'multiselect', name: 'multiselect', _id: propertyID2, content: dictionary1}
     ]}
