@@ -60,8 +60,7 @@ describe('Evidences selectors', () => {
           {property: 'id3', value: 'id2'}
         ]);
 
-        const evidences = docEvidences.get(state);
-        expect(evidences.toJS()).toEqual([
+        expect(docEvidences.get(state).toJS()).toEqual([
           {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'},
           {property: 'id1', value: 'id4', propertyLabel: 'property1', valueLabel: 'value4'},
           {property: 'id3', value: 'id2', propertyLabel: 'property3', valueLabel: 'value2'}

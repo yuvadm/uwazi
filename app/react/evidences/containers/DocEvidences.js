@@ -61,9 +61,15 @@ export class DocEvidences extends Component {
         <button onClick={this.getSuggestions}>Get suggestions</button>
       </div>
       <div className="text-center">
-        <button type="button" onClick={this.toggleSuggestions} className={'btn ' + (this.state.suggestions ? 'btn-success' : '')}>suggestions </button>
-        <button type="button" onClick={this.togglePositiveEvidences} className={'btn ' + (this.state.positive ? 'btn-success' : '')}>positive </button>
-        <button type="button" onClick={this.toggleNegativeEvidences} className={'btn ' + (this.state.negative ? 'btn-success' : '')}>negative</button>
+        <button type="button" onClick={this.toggleSuggestions} className={'btn ' + (this.state.suggestions ? 'btn-success' : '')}>
+          suggestions
+        </button>
+        <button type="button" onClick={this.togglePositiveEvidences} className={'btn ' + (this.state.positive ? 'btn-success' : '')}>
+          positive
+        </button>
+        <button type="button" onClick={this.toggleNegativeEvidences} className={'btn ' + (this.state.negative ? 'btn-success' : '')}>
+          negative
+        </button>
       </div>
 
       {evidences.map((evidence, index) => <Evidence key={index} evidence={evidence} accept={this.props.accept} reject={this.props.reject}/>)}

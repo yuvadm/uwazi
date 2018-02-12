@@ -4,8 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions as formActions, LocalForm} from 'react-redux-form';
 //import {Field, LocalForm} from 'react-redux-form';
-import {unsetEvidence, saveEvidence} from '../actions';
-import {docEvidencesActions} from '../actions';
+import {docEvidencesActions, unsetEvidence} from '../actions';
 import {Select as SimpleSelect} from 'app/ReactReduxForms';
 
 export class EvidenceForm extends Component {
