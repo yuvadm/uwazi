@@ -41,7 +41,8 @@ describe('evidences', () => {
         document: 'shared',
         property: propertyID1,
         value: 'value',
-        evidence: {text: 'test evidence'}
+        evidence: {text: 'test evidence'},
+        isEvidence: true
       };
 
       evidences.save(newEvidence, {}, 'en')
@@ -77,7 +78,8 @@ describe('evidences', () => {
         document: 'shared',
         property: propertyID1,
         value: 'value',
-        evidence: {text: 'test evidence'}
+        evidence: {text: 'test evidence'},
+        isEvidence: true
       };
 
       evidences.save(evidence, {}, 'en')
@@ -103,6 +105,30 @@ describe('evidences', () => {
       })
       .catch(catchErrors(done));
     });
+  });
+
+  it('should not save the value on the entity property if isEvidence is False', (done) => {
+    let evidence = {
+      document: 'shared',
+      property: propertyID1,
+      value: 'value',
+      evidence: {text: 'test evidence'},
+      isEvidence: false
+    };
+
+    evidences.save(evidence, {}, 'en')
+    .then(({entity}) => {
+      return Promise.all([
+        entity,
+        entities.getById(entityID)
+      ]);
+    })
+    .then(([returnedEntity, entityOnDB]) => {
+      expect(returnedEntity.metadata.multiselect).toEqual([]);
+      expect(entityOnDB.metadata.multiselect).toEqual([]);
+      done();
+    })
+    .catch(catchErrors(done));
   });
 
   describe('getSuggestions', () => {

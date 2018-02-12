@@ -28,7 +28,7 @@ export default {
       if (!entity.metadata[propertyName]) {
         entity.metadata[propertyName] = [];
       }
-      if (!entity.metadata[propertyName].includes(evidence.value)) {
+      if (evidence.isEvidence && !entity.metadata[propertyName].includes(evidence.value)) {
         entity.metadata[propertyName].push(evidence.value);
       }
       return entities.save(entity, {user, language})
