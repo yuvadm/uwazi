@@ -1,12 +1,11 @@
 import referencesAPI from 'app/Viewer/referencesAPI';
-import {evidencesAPI} from 'app/evidences';
 import relationTypesAPI from 'app/RelationTypes/RelationTypesAPI';
 import referencesUtils from 'app/Viewer/utils/referencesUtils';
 import {getDocument} from 'app/Viewer/actions/documentActions';
 
 import {actions} from 'app/BasicReducer';
 import {setReferences} from './referencesActions';
-import {docEvidencesActions} from 'app/evidences';
+import {evidencesAPI, docEvidencesActions} from 'app/evidences';
 
 export function requestViewerState(documentId, lang) {
   return Promise.all([
