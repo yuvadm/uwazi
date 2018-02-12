@@ -8,7 +8,7 @@ import EvidencesSidePanel from '../containers/EvidencesSidePanel';
 class EvidencesSection extends Component {
   render() {
     return (
-      <div className="row panels-layout">
+      <div className="row panels-layout evidences">
         <main className="library-viewer document-viewer with-panel">
           <EvidencesList />
         </main>

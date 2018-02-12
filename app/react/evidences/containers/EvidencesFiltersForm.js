@@ -38,7 +38,7 @@ const EvidencesFiltersForm = (props) => {
                   model={`.filters._${filter.get('_id')}.values`}
                   options={filter.get('values').toJS()}
                   prefix={filter.get('_id')}
-                  renderActions={(option) => <button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button>}
+                  renderActions={(option) => <div><button>Predict</button><button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button></div>}
                 />
               </li>
             </ul>
