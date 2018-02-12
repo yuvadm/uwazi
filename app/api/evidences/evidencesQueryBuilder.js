@@ -28,7 +28,12 @@ export default function () {
 
     filter(filters) {
       if (filters.isEvidence) {
-        baseQuery.query.bool.filter.push({terms: {isEvidence: filters.isEvidence.values}});
+        let isEvidenceMatch = {bool: {should: []}};
+        if (filters.isEvidence.values.includes('null')) {
+          isEvidenceMatch.bool.should.push({bool: {must_not: {exists: {field: 'isEvidence'}}}});
+        }
+        isEvidenceMatch.bool.should.push({terms: {isEvidence: filters.isEvidence.values.filter((v) => v !== 'null')}});
+        baseQuery.query.bool.filter.push(isEvidenceMatch);
         delete filters.isEvidence;
       }
 

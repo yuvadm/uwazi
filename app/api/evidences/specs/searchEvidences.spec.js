@@ -47,14 +47,18 @@ describe('searchEvidences', () => {
       const query5 = {};
       query5[propertyID1.toString()] = {values: [value1]};
       query5.isEvidence = {values: [false]};
+      const query6 = {};
+      query6[propertyID1.toString()] = {values: [value1]};
+      query6.isEvidence = {values: ['null']};
       Promise.all([
         search.search(query1),
         search.search(query2),
         search.search(query3),
         search.search(query4),
-        search.search(query5)
+        search.search(query5),
+        search.search(query6)
       ])
-      .then(([value1Evidences, value2Evidences, value12Evidences, value1TrueEvidence, value1FalseEvidence]) => {
+      .then(([value1Evidences, value2Evidences, value12Evidences, value1TrueEvidence, value1FalseEvidence, onlySuggestions]) => {
         expect(value1Evidences.rows.length).toBe(3);
         expect(value1Evidences.rows[0].value).toBe(value1);
         expect(value1Evidences.rows[1].value).toBe(value1);
@@ -69,6 +73,9 @@ describe('searchEvidences', () => {
 
         expect(value1FalseEvidence.rows.length).toBe(1);
         expect(value1FalseEvidence.rows[0].isEvidence).toBe(false);
+
+        expect(onlySuggestions.rows.length).toBe(1);
+        expect(onlySuggestions.rows[0].isEvidence).not.toBeDefined();
         done();
       })
       .catch(catchErrors(done));

@@ -45,7 +45,11 @@ const getFilters = createSelector(
   thesaurisSelectors.get,
   (templates, thesauris) => {
     return Immutable.fromJS([
-      {label: 'Used as:', _id: 'isEvidence', values: [{value: true, label: 'True evidence'}, {value: false, label: 'False evidence'}]}
+      {label: 'Type:', _id: 'isEvidence', values: [
+        {value: 'null', label: 'Suggestion'},
+        {value: true, label: 'Positive'},
+        {value: false, label: 'Negative'}
+      ]}
     ])
     .concat(
       templates
