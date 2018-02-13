@@ -130,7 +130,7 @@ export function searchEvidences(query, limit) {
       if (!filter.get('values').size) {
         return filters;
       }
-      return Immutable.Map().set(key, filter);
+      return filters.set(key, filter);
     }, Immutable.Map()));
 
     newFilters = Object.assign({}, Object.assign({}, newFilters.toJS()), {limit});

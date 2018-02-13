@@ -199,6 +199,14 @@ describe('evidences actions', () => {
       expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(filters:(value:(values:!(filter))),limit:limit)');
     });
 
+    it('should change the url with the new params', () => {
+      const limit = 'limit';
+      spyOn(browserHistory, 'push');
+      store.dispatch(actions.searchEvidences({filters: {value: {values: ['filter']}, value2: {values: ['filter2']}}}, limit));
+      expect(browserHistory.push)
+      .toHaveBeenCalledWith('/evidences/?q=(filters:(value:(values:!(filter)),value2:(values:!(filter2))),limit:limit)');
+    });
+
     it('should use current filters when filters passed are null', () => {
       store = mockStore({evidences: {search: {filters: {value: {values: ['filter']}}}}});
 
