@@ -126,12 +126,14 @@ export function searchEvidences(query, limit) {
   return function (dispatch, getState) {
     let newFilters = Immutable.fromJS(query || getEvidencesFilters(getState()));
 
-    newFilters = newFilters.set('filters', newFilters.get('filters').reduce((filters, filter, key) => {
+    if (newFilters.get('filters')) {
+      newFilters = newFilters.set('filters', newFilters.get('filters').reduce((filters, filter, key) => {
       if (!filter.get('values').size) {
         return filters;
       }
       return filters.set(key, filter);
     }, Immutable.Map()));
+    }
 
     newFilters = Object.assign({}, Object.assign({}, newFilters.toJS()), {limit});
     browserHistory.push(`/evidences/?q=${rison.encode(newFilters)}`);

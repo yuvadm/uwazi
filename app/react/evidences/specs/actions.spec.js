@@ -192,6 +192,14 @@ describe('evidences actions', () => {
   });
 
   describe('searchEvidences', () => {
+    it('should work with null filters', () => {
+      store = mockStore({evidences: {search: {}}});
+      const limit = 'limit';
+      spyOn(browserHistory, 'push');
+      store.dispatch(actions.searchEvidences(null, limit));
+      expect(browserHistory.push).toHaveBeenCalledWith('/evidences/?q=(limit:limit)');
+    });
+
     it('should change the url with the new params', () => {
       const limit = 'limit';
       spyOn(browserHistory, 'push');
