@@ -7,7 +7,7 @@ import evidences from '../evidences.js';
 import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-describe('evidences', () => {
+fdescribe('evidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -192,7 +192,7 @@ describe('evidences', () => {
           property,
           value,
           docs: [
-            {_id: entityID.toString(), text: 'this is a test'}
+            {_id: 'shared', text: 'this is a test'}
           ]
         });
         expect(suggestions).toEqual([]);
@@ -261,7 +261,7 @@ describe('evidences', () => {
       evidences.delete(evidenceId)
       .then(() => evidences.get())
       .then((results) => {
-        expect(results.length).toBe(4);
+        expect(results.length).toBe(6);
         expect(search.delete).toHaveBeenCalledWith(evidenceId);
         done();
       });

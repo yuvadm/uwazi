@@ -54,7 +54,7 @@ export default {
       return MLAPI.getSuggestionsForOneValue({
         property,
         value,
-        docs: documents.map((d) => ({_id: d._id.toString(), text: d.fullText.replace(/\[\[[0-9]*\]\]/g, '')}))
+        docs: documents.map((d) => ({_id: d.sharedId, text: d.fullText.replace(/\[\[[0-9]*\]\]/g, '')}))
       });
     })
     .then((evidences) => {
