@@ -24,7 +24,9 @@ export default {
     {_id: db.id(), value: value1, property: propertyID1},
     {_id: db.id(), value: value1, property: propertyID1, isEvidence: false, evidence: {text: 'evidence1.1'}},
     {_id: db.id(), value: value2, property: propertyID1, isEvidence: true},
-    {_id: db.id(), value: value3, isEvidence: true}
+    {_id: db.id(), value: value3, isEvidence: true},
+    {_id: db.id(), value: value2, property: propertyID1},
+    {_id: db.id(), value: value3, property: propertyID1}
   ],
   templates: [
     {_id: templateId, name: 'template_test', properties: [

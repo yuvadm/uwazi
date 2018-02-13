@@ -8,7 +8,7 @@ import fixtures, {evidenceId, value1, value2, propertyID1} from './fixtures';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
-describe('searchEvidences', () => {
+fdescribe('searchEvidences', () => {
   beforeEach((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -25,8 +25,8 @@ describe('searchEvidences', () => {
     it('should return all results if no params passed', (done) => {
       search.search()
       .then((allEvidences) => {
-        expect(allEvidences.totalRows).toBe(5);
-        expect(allEvidences.rows.length).toBe(5);
+        expect(allEvidences.totalRows).toBe(7);
+        expect(allEvidences.rows.length).toBe(7);
         const value1Evidence = allEvidences.rows.find((e) => e._id === evidenceId.toString());
         expect(value1Evidence.value).toBe(value1);
         done();
@@ -50,6 +50,7 @@ describe('searchEvidences', () => {
       const query6 = {};
       query6[propertyID1.toString()] = {values: [value1]};
       query6.isEvidence = {values: ['null']};
+
       Promise.all([
         search.search(query1),
         search.search(query2),
@@ -63,8 +64,9 @@ describe('searchEvidences', () => {
         expect(value1Evidences.rows[0].value).toBe(value1);
         expect(value1Evidences.rows[1].value).toBe(value1);
 
-        expect(value2Evidences.rows.length).toBe(1);
+        expect(value2Evidences.rows.length).toBe(2);
         expect(value2Evidences.rows[0].value).toBe(value2);
+        expect(value2Evidences.rows[1].value).toBe(value2);
 
         expect(value12Evidences.rows.length).toBe(0);
 
