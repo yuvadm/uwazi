@@ -73,27 +73,30 @@ describe('evidences routes', () => {
     });
   });
 
-  describe('getSuggestionsForPropertyValue', () => {
-    let req;
-    beforeEach(() => {
-      req = {
-        body: {property: 'property', value: 'value'},
-        language: 'en'
-      };
-    });
+  describe('getSuggestions', () => {
+    describe('when passing property and value', () => {
+      let req;
+      beforeEach(() => {
+        req = {
+          query: {property: 'property', value: 'value'},
+          language: 'en'
+        };
+      });
 
-    it('should retrainModel', (done) => {
-      spyOn(evidences, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve('response'));
+      it('should use getSuggestionsForOneValue', (done) => {
+        spyOn(evidences, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve('response'));
 
-      routes.post('/api/evidences/get_suggestions_property_value', req)
-      .then((result) => {
-        expect(result).toBe('response');
-        expect(evidences.getSuggestionsForOneValue).toHaveBeenCalledWith('property', 'value', 'en');
-        done();
-      })
-      .catch(catchErrors);
+        routes.get('/api/evidences/suggestions', req)
+        .then((result) => {
+          expect(result).toBe('response');
+          expect(evidences.getSuggestionsForOneValue).toHaveBeenCalledWith('property', 'value', 'en');
+          done();
+        })
+        .catch(catchErrors);
+      });
     });
   });
+
 
   describe('GET', () => {
     let req;

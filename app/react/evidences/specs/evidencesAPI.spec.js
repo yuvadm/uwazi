@@ -76,7 +76,7 @@ describe('evidencesAPI', () => {
 
   describe('getSuggestions()', () => {
     it('should request evidences', (done) => {
-      evidencesAPI.getSuggestions('docId')
+      evidencesAPI.getSuggestions({_id: 'docId'})
       .then((response) => {
         expect(response).toEqual(arrayResponse);
         done();

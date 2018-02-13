@@ -48,7 +48,7 @@ export default {
   getSuggestionsForOneValue(property, value, language) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
-      return entities.get({template: template._id}, '+fullText');
+      return entities.get({template: template._id}, '+fullText', {limit: 10});
     })
     .then((documents) => {
       return MLAPI.getSuggestionsForOneValue({

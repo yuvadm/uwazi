@@ -11,7 +11,7 @@ import {evidencesActions, docEvidencesActions, evidencesUIActions} from './reduc
 
 docEvidencesActions.getSuggestions = (docId) => {
   return (dispatch) => {
-    return evidencesAPI.getSuggestions(docId)
+    return evidencesAPI.getSuggestions({_id: docId})
     .then((suggestions) => {
       dispatch(docEvidencesActions.concat(suggestions));
     });
@@ -66,6 +66,15 @@ evidencesActions.saveEvidence = (evidence) => {
   return function (dispatch) {
     return evidencesAPI.save(evidence)
     .then((response) => dispatch(evidencesActions.update(response.evidence)));
+  };
+};
+
+evidencesActions.getSuggestions = (property, value) => {
+  return (dispatch) => {
+    return evidencesAPI.getSuggestions({property, value})
+    .then((suggestions) => {
+      dispatch(evidencesActions.concat(suggestions));
+    });
   };
 };
 

@@ -6,9 +6,11 @@ export default {
     return request.post(MLAPIURL + 'classification/predict', data).then((response) => response.json);
   },
 
+  //
   getSuggestionsForOneValue: (data) => {
-    //return request.post(MLAPIURL + 'classification/predictOneModel', data).then((response) => response.json);
+    return request.post(MLAPIURL + 'classification/predictOneModel', data).then((response) => response.json);
   },
+  //
 
   train: (data) => {
     return request.post(MLAPIURL + 'classification/train', data);

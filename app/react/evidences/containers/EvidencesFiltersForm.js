@@ -9,7 +9,7 @@ import FormGroup from 'app/DocumentForm/components/FormGroup';
 
 import {MultiSelect} from '../../ReactReduxForms';
 import {getFilters} from '../selectors';
-import {searchEvidences, retrainModel} from '../actions';
+import {evidencesActions, searchEvidences, retrainModel} from '../actions';
 
 const EvidencesFiltersForm = (props) => {
   const isEvidenceFilter = props.filters.find((f) => f.get('_id') === 'isEvidence');
@@ -38,7 +38,9 @@ const EvidencesFiltersForm = (props) => {
                   model={`.filters._${filter.get('_id')}.values`}
                   options={filter.get('values').toJS()}
                   prefix={filter.get('_id')}
-                  renderActions={(option) => <div><button>Predict</button><button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button></div>}
+                  renderActions={(option) =>
+                    <div><button onClick={() => props.getSuggestions(filter.get('_id'), option.value)}>Predict</button><button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button></div>
+                  }
                 />
               </li>
             </ul>
@@ -52,7 +54,8 @@ const EvidencesFiltersForm = (props) => {
 EvidencesFiltersForm.propTypes = {
   filters: PropTypes.instanceOf(Immutable.List),
   onChange: PropTypes.func,
-  retrainModel: PropTypes.func
+  retrainModel: PropTypes.func,
+  getSuggestions: PropTypes.func
 };
 
 export function mapStateToProps(state) {
@@ -64,7 +67,8 @@ export function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     onChange: searchEvidences,
-    retrainModel
+    retrainModel,
+    getSuggestions: evidencesActions.getSuggestions
   }, dispatch);
 }
 
