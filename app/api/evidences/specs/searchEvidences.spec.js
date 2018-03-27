@@ -6,8 +6,6 @@ import elasticTesting from 'api/utils/elastic_testing';
 
 import elastic from '../../search/elastic';
 import fixtures, {
-  entityID,
-  entityID2,
   evidenceId,
   propertyID1,
   value1,
@@ -131,7 +129,8 @@ describe('searchEvidences', () => {
 
       const evidence = {
         _id: id,
-        document: entityID
+        document: 'shared',
+        language: 'en'
       };
 
       search.index(evidence)
@@ -143,8 +142,9 @@ describe('searchEvidences', () => {
           type: 'evidence',
           id: id.toString(),
           body: {
-            document: entityID,
-            documentTitle: 'Suggestions doc'
+            document: 'shared',
+            documentTitle: 'Suggestions doc',
+            language: 'en'
           }
         });
         done();
@@ -172,17 +172,17 @@ describe('searchEvidences', () => {
     it('should update evidences using the bulk functionality and not have side effects', (done) => {
       spyOn(elastic, 'bulk').and.returnValue(Promise.resolve({items: []}));
       const evidences = [
-        {_id: 'id1', document: entityID},
-        {_id: 'id2', document: entityID2}
+        {_id: 'id1', document: 'shared'},
+        {_id: 'id2', document: 'shared2'}
       ];
 
       search.bulkIndex(evidences)
       .then(() => {
         expect(elastic.bulk).toHaveBeenCalledWith({body: [
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id1'}},
-          {document: entityID, documentTitle: 'Suggestions doc'},
+          {document: 'shared', documentTitle: 'Suggestions doc'},
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id2'}},
-          {document: entityID2, documentTitle: 'doc2'}
+          {document: 'shared2', documentTitle: 'doc2'}
         ]});
         expect(evidences[0]._id).toBeDefined();
         expect(evidences[1]._id).toBeDefined();

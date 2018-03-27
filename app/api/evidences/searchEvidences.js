@@ -29,7 +29,7 @@ export default {
   },
 
   index(evidence) {
-    return entities.getById(evidence.document)
+    return entities.getById(evidence.document, evidence.language)
     .then((doc) => {
       const id = evidence._id.toString();
       let body = Object.assign({documentTitle: doc.title}, evidence);
@@ -40,10 +40,10 @@ export default {
 
   bulkIndex(evidencesToIndex) {
     const documentIds = evidencesToIndex.map(e => e.document).filter(v => v).filter((el, i, a) => i === a.indexOf(el));
-    return entities.get({_id: {$in: documentIds}}, 'title')
+    return entities.get({sharedId: {$in: documentIds}, language: 'en'}, 'title sharedId')
     .then((documents) => {
       const documentTitles = documents.reduce((titles, document) => {
-        titles[document._id.toString()] = document.title;
+        titles[document.sharedId] = document.title;
         return titles;
       }, {});
       const evidences = Immutable.fromJS(evidencesToIndex).toJS();
