@@ -13,7 +13,8 @@ import {evidencesActions, searchEvidences, retrainModel} from '../actions';
 
 const EvidencesFiltersForm = (props) => {
   const isEvidenceFilter = props.filters.find((f) => f.get('_id') === 'isEvidence');
-  const filters = props.filters.filter((f) => f.get('_id') !== 'isEvidence');
+  const probabilityFilter = props.filters.find((f) => f.get('_id') === 'probability');
+  const filters = props.filters.filter((f) => f.get('_id') !== 'isEvidence' && f.get('_id') !== 'probability');
   return (
     <Form model='evidences.search' onChange={props.onChange}>
       <FormGroup>
@@ -24,6 +25,18 @@ const EvidencesFiltersForm = (props) => {
               model={`.filters._${isEvidenceFilter.get('_id')}.values`}
               options={isEvidenceFilter.get('values').toJS()}
               prefix={isEvidenceFilter.get('_id')}
+            />
+          </li>
+        </ul>
+      </FormGroup>
+      <FormGroup>
+        <ul className="search__filter is-active">
+          <li>{probabilityFilter.get('label')}</li>
+          <li className="wide">
+            <MultiSelect
+              model={`.filters._${probabilityFilter.get('_id')}.values`}
+              options={probabilityFilter.get('values').toJS()}
+              prefix={probabilityFilter.get('_id')}
             />
           </li>
         </ul>
@@ -39,7 +52,10 @@ const EvidencesFiltersForm = (props) => {
                   options={filter.get('values').toJS()}
                   prefix={filter.get('_id')}
                   renderActions={(option) =>
-                    <div><button onClick={() => props.getSuggestions(filter.get('_id'), option.value)}>Predict</button><button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button></div>
+                      <div>
+                        <button onClick={() => props.getSuggestions(filter.get('_id'), option.value)}>Predict</button>
+                        <button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button>
+                      </div>
                   }
                 />
               </li>

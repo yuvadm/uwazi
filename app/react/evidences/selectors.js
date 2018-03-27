@@ -49,6 +49,13 @@ const getFilters = createSelector(
         {value: 'null', label: 'Suggestion'},
         {value: true, label: 'Positive'},
         {value: false, label: 'Negative'}
+      ]},
+      {label: 'Probability:', _id: 'probability', values: [
+        {value: '0.5-0.6', label: '50-60'},
+        {value: '0.6-0.7', label: '60-70'},
+        {value: '0.7-0.8', label: '70-80'},
+        {value: '0.8-0.9', label: '80-90'},
+        {value: '0.9-1', label: '90-100'}
       ]}
     ])
     .concat(

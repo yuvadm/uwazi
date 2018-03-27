@@ -38,14 +38,18 @@ export default function () {
       }
 
       if (filters.probability) {
-        const rangeFilter = {
-          range: {
-            probability: {
-              gte: Number.parseFloat(filters.probability.split('-')[0]),
-              lt: Number.parseFloat(filters.probability.split('-')[1])
+        const rangeFilter = {bool: {should: []}};
+        filters.probability.values.forEach((value) => {
+          const filter = {
+            range: {
+              probability: {
+                gte: Number.parseFloat(value.split('-')[0]),
+                lt: Number.parseFloat(value.split('-')[1])
+              }
             }
-          }
-        };
+          };
+          rangeFilter.bool.should.push(filter);
+        });
         baseQuery.query.bool.filter.push(rangeFilter);
         delete filters.probability;
       }

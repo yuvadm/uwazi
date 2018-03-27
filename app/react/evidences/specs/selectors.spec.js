@@ -70,7 +70,7 @@ describe('Evidences selectors', () => {
   });
 
   describe('getFilters', () => {
-    it('should return all filter posibilities based on templates and thesauris', () => {
+    fit('should return all filter posibilities based on templates and thesauris', () => {
       state = {
         templates: Immutable.fromJS([
           {properties: [{_id: 'property1', label: 'propertyLabel1', content: 'thesauri1'}, {_id: 'property2', label: 'propertyLabel2'}]},
@@ -89,6 +89,15 @@ describe('Evidences selectors', () => {
 
       expect(filters.toJS()).toEqual([
         {label: 'Type:', _id: 'isEvidence', values: [{value: 'null', label: 'Suggestion'}, {value: true, label: 'Positive'}, {value: false, label: 'Negative'}]},
+        {label: 'Probability:', _id: 'probability', 
+          values: [
+            {value: '0.5-0.6', label: '50-60'},
+            {value: '0.6-0.7', label: '60-70'},
+            {value: '0.7-0.8', label: '70-80'},
+            {value: '0.8-0.9', label: '80-90'},
+            {value: '0.9-1', label: '90-100'}
+          ]
+        },
         {label: 'propertyLabel1', _id: 'property1', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]},
         {label: 'propertyLabel3', _id: 'property3', values: [{value: 'value3', label: 'valueLabel3'}, {value: 'value4', label: 'valueLabel4'}]},
         {label: 'propertyLabel4', _id: 'property4', values: [{value: 'value1', label: 'valueLabel1'}, {value: 'value2', label: 'valueLabel2'}]}

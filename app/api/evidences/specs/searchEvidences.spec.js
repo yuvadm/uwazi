@@ -8,7 +8,7 @@ import fixtures, {evidenceId, value1, value2, propertyID1} from './fixtures';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
-fdescribe('searchEvidences', () => {
+describe('searchEvidences', () => {
   beforeAll((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
@@ -34,13 +34,14 @@ fdescribe('searchEvidences', () => {
       .catch(catchErrors(done));
     });
 
-    fit('should filter by probability', (done) => {
+    it('should filter by probability', (done) => {
       Promise.all([
-        search.search({probability: '0.5-0.6'}),
-        search.search({probability: '0.9-1'}),
-        search.search({[propertyID1.toString()]: {values: [value1]}, probability: '0.8-0.9'})
+        search.search({probability: {values: ['0.5-0.6']}}),
+        search.search({probability: {values: ['0.9-1']}}),
+        search.search({probability: {values: ['0.9-1', '0.5-0.6']}}),
+        search.search({[propertyID1.toString()]: {values: [value1]}, probability: {values: ['0.8-0.9']}})
       ])
-      .then(([range5060, range90100, range8090WithSearch]) => {
+      .then(([range5060, range90100, multipleRanges, range8090WithSearch]) => {
         expect(range5060.totalRows).toBe(2);
         expect(range5060.rows.length).toBe(2);
         expect(range5060.rows.find((e) => e.probability === 0.55)).toBeDefined();
@@ -51,6 +52,11 @@ fdescribe('searchEvidences', () => {
         expect(range90100.rows.find((e) => e.probability === 0.90)).toBeDefined();
         expect(range90100.rows.find((e) => e.probability === 0.91)).toBeDefined();
         expect(range90100.rows.find((e) => e.probability === 0.99)).toBeDefined();
+
+        expect(multipleRanges.totalRows).toBe(5);
+        expect(multipleRanges.rows.length).toBe(5);
+        expect(multipleRanges.rows.find((e) => e.probability === 0.90)).toBeDefined();
+        expect(multipleRanges.rows.find((e) => e.probability === 0.59)).toBeDefined();
 
         expect(range8090WithSearch.totalRows).toBe(1);
         expect(range8090WithSearch.rows.length).toBe(1);
