@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 
 import elastic from '../search/elastic';
+import entities from '../entities';
 import queryBuilder from './evidencesQueryBuilder';
 
 export default {
@@ -28,31 +29,43 @@ export default {
   },
 
   index(evidence) {
-    const id = evidence._id.toString();
-    let body = Object.assign({}, evidence);
-    delete body._id;
-    return elastic.index({index: elasticIndex, type: 'evidence', id, body});
+    return entities.getById(evidence.document)
+    .then((doc) => {
+      const id = evidence._id.toString();
+      let body = Object.assign({documentTitle: doc.title}, evidence);
+      delete body._id;
+      return elastic.index({index: elasticIndex, type: 'evidence', id, body});
+    });
   },
 
   bulkIndex(evidencesToIndex) {
-    const evidences = Immutable.fromJS(evidencesToIndex).toJS();
-    const body = evidences.reduce((value, evidence) => {
-      value.push({index: {_index: elasticIndex, _type: 'evidence', _id: evidence._id}});
-      delete evidence._id;
-      value.push(evidence);
-      return value;
-    }, []);
+    const documentIds = evidencesToIndex.map(e => e.document).filter(v => v).filter((el, i, a) => i === a.indexOf(el));
+    return entities.get({_id: {$in: documentIds}}, 'title')
+    .then((documents) => {
+      const documentTitles = documents.reduce((titles, document) => {
+        titles[document._id.toString()] = document.title;
+        return titles;
+      }, {});
+      const evidences = Immutable.fromJS(evidencesToIndex).toJS();
+      const body = evidences.reduce((value, evidence) => {
+        value.push({index: {_index: elasticIndex, _type: 'evidence', _id: evidence._id}});
+        evidence.documentTitle = documentTitles[evidence.document];
+        delete evidence._id;
+        value.push(evidence);
+        return value;
+      }, []);
 
-    return elastic.bulk({body})
-    .then((res) => {
-      if (res.items) {
-        res.items.forEach((f) => {
-          if (f.index.error) {
-            console.log(`ERROR Failed to index evidence ${f.index._id}: ${JSON.stringify(f.index.error, null, ' ')}`);
-          }
-        });
-      }
-      return res;
+      return elastic.bulk({body})
+      .then((res) => {
+        if (res.items) {
+          res.items.forEach((f) => {
+            if (f.index.error) {
+              console.log(`ERROR Failed to index evidence ${f.index._id}: ${JSON.stringify(f.index.error, null, ' ')}`);
+            }
+          });
+        }
+        return res;
+      });
     });
   },
 

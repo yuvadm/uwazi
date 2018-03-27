@@ -1,12 +1,19 @@
 /* eslint-disable max-nested-callbacks */
-import {index as elasticIndex} from 'api/config/elasticIndexes';
-import search from '../searchEvidences.js';
-import elastic from '../../search/elastic';
 import {catchErrors} from 'api/utils/jasmineHelpers';
-
-import fixtures, {evidenceId, value1, value2, propertyID1} from './fixtures';
+import {index as elasticIndex} from 'api/config/elasticIndexes';
 import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
+
+import elastic from '../../search/elastic';
+import fixtures, {
+  entityID,
+  entityID2,
+  evidenceId,
+  propertyID1,
+  value1,
+  value2
+} from './fixtures';
+import search from '../searchEvidences.js';
 
 describe('searchEvidences', () => {
   beforeAll((done) => {
@@ -117,15 +124,14 @@ describe('searchEvidences', () => {
   });
 
   describe('index', () => {
-    it('should index the evidence', (done) => {
-      done();
+    it('should index the evidence, with the documentName', (done) => {
       spyOn(elastic, 'index').and.returnValue(Promise.resolve());
 
       const id = db.id();
 
       const evidence = {
         _id: id,
-        document: 'documentId'
+        document: entityID
       };
 
       search.index(evidence)
@@ -137,7 +143,8 @@ describe('searchEvidences', () => {
           type: 'evidence',
           id: id.toString(),
           body: {
-            document: 'documentId'
+            document: entityID,
+            documentTitle: 'Suggestions doc'
           }
         });
         done();
@@ -165,17 +172,17 @@ describe('searchEvidences', () => {
     it('should update evidences using the bulk functionality and not have side effects', (done) => {
       spyOn(elastic, 'bulk').and.returnValue(Promise.resolve({items: []}));
       const evidences = [
-        {_id: 'id1', document: 'doc1'},
-        {_id: 'id2', document: 'doc2'}
+        {_id: 'id1', document: entityID},
+        {_id: 'id2', document: entityID2}
       ];
 
       search.bulkIndex(evidences)
       .then(() => {
         expect(elastic.bulk).toHaveBeenCalledWith({body: [
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id1'}},
-          {document: 'doc1'},
+          {document: entityID, documentTitle: 'Suggestions doc'},
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id2'}},
-          {document: 'doc2'}
+          {document: entityID2, documentTitle: 'doc2'}
         ]});
         expect(evidences[0]._id).toBeDefined();
         expect(evidences[1]._id).toBeDefined();

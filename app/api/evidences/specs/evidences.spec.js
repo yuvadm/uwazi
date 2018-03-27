@@ -9,6 +9,8 @@ import search from '../searchEvidences';
 
 describe('evidences', () => {
   beforeEach((done) => {
+    spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
+    spyOn(search, 'index');
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
         done.fail(err);
@@ -56,7 +58,6 @@ describe('evidences', () => {
     });
 
     it('should index the newly created evidence', (done) => {
-      spyOn(search, 'index');
       let evidence = {
         document: 'shared',
         property: propertyID1,
@@ -157,7 +158,6 @@ describe('evidences', () => {
         {evidence: 'text', probability: 0.86543},
         {evidence: 'text2', probability: 0.9}
       ]));
-      spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
 
       evidences.getSuggestions('shared', 'en')
       .then((suggestions) => {
@@ -206,7 +206,6 @@ describe('evidences', () => {
         {evidence: 'text', probability: 0.86543},
         {evidence: 'text2', probability: 0.9}
       ]));
-      spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
 
       const property = propertyID1.toString();
       const value = value1;
