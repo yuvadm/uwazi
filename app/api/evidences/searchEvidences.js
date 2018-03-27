@@ -34,7 +34,7 @@ export default {
       const id = evidence._id.toString();
       let body = Object.assign({documentTitle: doc.title}, evidence);
       delete body._id;
-      return elastic.index({index: elasticIndex, type: 'evidence', id, body});
+      return elastic.index({index: elasticIndex, type: 'evidence', id, body}).then(() => Object.assign({documentTitle: doc.title}, evidence));
     });
   },
 
@@ -47,9 +47,11 @@ export default {
         return titles;
       }, {});
       const evidences = Immutable.fromJS(evidencesToIndex).toJS();
+      const indexedEvidences = [];
       const body = evidences.reduce((value, evidence) => {
         value.push({index: {_index: elasticIndex, _type: 'evidence', _id: evidence._id}});
         evidence.documentTitle = documentTitles[evidence.document];
+        indexedEvidences.push(Object.assign({}, evidence));
         delete evidence._id;
         value.push(evidence);
         return value;
@@ -64,7 +66,7 @@ export default {
             }
           });
         }
-        return res;
+        return indexedEvidences;
       });
     });
   },

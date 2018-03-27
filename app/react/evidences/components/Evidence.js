@@ -1,3 +1,4 @@
+import {Link} from 'react-router';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -18,21 +19,29 @@ class Evidence extends Component {
     this.props.reject(this.props.evidence);
   }
   render() {
-    const {props} = this;
+    const {evidence} = this.props;
     return (
       <RowList.Item className='item-entity'>
         <div className="item-info">
           <div className="item-name">
-            <p><b>{props.evidence.get('propertyLabel')}</b>: {props.evidence.get('valueLabel')}</p>
+            <p><b>{evidence.get('propertyLabel')}</b>: {evidence.get('valueLabel')}</p>
+            {
+              evidence.get('documentTitle') ?
+                <p>
+                  <b>Document</b>:
+                  <Link to={`/${evidence.get('language')}/document/${evidence.get('document')}`}>{evidence.get('documentTitle')}</Link>
+                </p>
+                : false
+            }
           </div>
           <div className="item-snippet-wrapper">
-            <p>{props.evidence.get('evidence').get('text')}</p>
+            <p>{evidence.get('evidence').get('text')}</p>
           </div>
-          {props.evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : false}
-          {props.evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : false}
-          {props.evidence.has('isEvidence') ? <div/> :
+          {evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : false}
+          {evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : false}
+          {evidence.has('isEvidence') ? <div/> :
               <div>
-                <p>Probability: <b>{Math.round(props.evidence.get('probability') * 100 * 100) / 100}%</b></p>
+                <p>Probability: <b>{Math.round(evidence.get('probability') * 100 * 100) / 100}%</b></p>
                 <Button success icon='thumbs-up' onClick={this.accept}> Accept</Button>
                 &nbsp;<Button danger icon='thumbs-down' onClick={this.reject}> Reject</Button>
               </div>

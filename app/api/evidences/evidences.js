@@ -11,19 +11,18 @@ export default {
     return model.save(evidence)
     .then((updatedEvidence) => {
       return Promise.all([
-        updatedEvidence,
         entities.getById(evidence.document, language),
         search.index(updatedEvidence)
       ]);
     })
-    .then(([updatedEvidence, entity]) => {
+    .then(([entity, indexedEvidences]) => {
       return Promise.all([
-        updatedEvidence,
+        indexedEvidences,
         entity,
         templates.getById(entity.template)
       ]);
     })
-    .then(([updatedEvidence, entity, template]) => {
+    .then(([indexedEvidences, entity, template]) => {
       const propertyName = template.properties.find((p) => p._id.toString() === evidence.property.toString()).name;
       if (!entity.metadata[propertyName]) {
         entity.metadata[propertyName] = [];
@@ -35,7 +34,7 @@ export default {
       .then((updatedEntity) => {
         return {
           entity: updatedEntity,
-          evidence: updatedEvidence
+          evidence: indexedEvidences
         };
       });
     });
@@ -64,7 +63,7 @@ export default {
         return evidence;
       }));
     })
-    .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(() => evidences) : evidences);
+    .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(indexedEvidences => indexedEvidences) : []);
   },
 
   getSuggestions(docId, language) {
@@ -110,10 +109,21 @@ export default {
     .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(() => evidences) : evidences);
   },
 
+  reindexEvidencesByDocument(docSharedId, language = 'en') {
+    return this.get({document: docSharedId, language})
+    .then((docEvidences) => {
+      return search.bulkIndex(docEvidences);
+    });
+  },
+
   retrainModel(property, value) {
     return model.get({property, value, isEvidence: {$exists: true}})
     .then((evidences) => {
-      return MLAPI.retrainModel({property, value, evidences});
+      return MLAPI.retrainModel({property, value, evidences: evidences.map((e) => {
+        e.sentence = e.evidence.text;
+        e.label = e.isEvidence;
+        return e;
+      })});
     });
   },
 

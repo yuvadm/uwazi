@@ -123,7 +123,7 @@ describe('searchEvidences', () => {
 
   describe('index', () => {
     it('should index the evidence, with the documentName', (done) => {
-      spyOn(elastic, 'index').and.returnValue(Promise.resolve());
+      spyOn(elastic, 'index').and.returnValue(Promise.resolve('indexResponse'));
 
       const id = db.id();
 
@@ -134,7 +134,8 @@ describe('searchEvidences', () => {
       };
 
       search.index(evidence)
-      .then(() => {
+      .then((indexedEvidence) => {
+        expect(indexedEvidence).toEqual({_id: id, document: 'shared', documentTitle: 'Suggestions doc', language: 'en'});
         expect(evidence._id.toString()).toBe(id.toString());
         expect(elastic.index)
         .toHaveBeenCalledWith({
@@ -177,13 +178,18 @@ describe('searchEvidences', () => {
       ];
 
       search.bulkIndex(evidences)
-      .then(() => {
+      .then((evidencesIndexed) => {
         expect(elastic.bulk).toHaveBeenCalledWith({body: [
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id1'}},
           {document: 'shared', documentTitle: 'Suggestions doc'},
           {index: {_index: elasticIndex, _type: 'evidence', _id: 'id2'}},
           {document: 'shared2', documentTitle: 'doc2'}
         ]});
+
+        expect(evidencesIndexed).toEqual([
+          {_id: 'id1', document: 'shared', documentTitle: 'Suggestions doc'},
+          {_id: 'id2', document: 'shared2', documentTitle: 'doc2'}
+        ]);
         expect(evidences[0]._id).toBeDefined();
         expect(evidences[1]._id).toBeDefined();
         done();

@@ -1,13 +1,14 @@
 import {generateNamesAndIds} from 'api/templates/utils';
+import ID from 'shared/uniqueID';
 import date from 'api/utils/date.js';
 import search from 'api/search/search';
-import settings from '../settings';
-import references from '../references/references';
-import templates from '../templates';
-import ID from 'shared/uniqueID';
-import {deleteFiles} from '../utils/files.js';
 
+import {deleteFiles} from '../utils/files.js';
+import evidences from '../evidences/evidences';
 import model from './entitiesModel';
+import references from '../references/references';
+import settings from '../settings';
+import templates from '../templates';
 
 function updateEntity(doc) {
   return Promise.all([
@@ -59,6 +60,9 @@ function updateEntity(doc) {
       return model.save(d)
       .then((_d) => {
         return search.index(_d);
+      })
+      .then(() => {
+        evidences.reindexEvidencesByDocument(doc.sharedId);
       });
     }));
   });

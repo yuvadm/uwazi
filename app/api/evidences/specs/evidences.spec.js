@@ -38,7 +38,8 @@ describe('evidences', () => {
       .catch(catchErrors(done));
     });
 
-    it('should return the updated entity and evidence', (done) => {
+    it('should return the updated entity and indexed evidence', (done) => {
+      search.index.and.returnValue(Promise.resolve('indexedEvidence'));
       let newEvidence = {
         document: 'shared',
         property: propertyID1,
@@ -49,8 +50,7 @@ describe('evidences', () => {
 
       evidences.save(newEvidence, {}, 'en')
       .then(({entity, evidence}) => {
-        expect(evidence.value).toBe('value');
-        expect(evidence._id).toBeDefined();
+        expect(evidence).toBe('indexedEvidence');
         expect(entity.metadata.multiselect).toEqual(['value']);
         done();
       })
@@ -183,7 +183,9 @@ describe('evidences', () => {
 
   describe('getSuggestionsForOneValue', () => {
     it('should getSuggestionsForOneValue passing all docs containing the property', (done) => {
-      spyOn(MLAPI, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve([]));
+      spyOn(MLAPI, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve([{}]));
+      search.bulkIndex.and.returnValue(Promise.resolve('indexedEvidences'));
+
       const property = propertyID1.toString();
       const value = value1;
       evidences.getSuggestionsForOneValue(property, value, 'en')
@@ -195,7 +197,7 @@ describe('evidences', () => {
             {_id: 'shared', text: 'this is a test'}
           ]
         });
-        expect(suggestions).toEqual([]);
+        expect(suggestions).toEqual('indexedEvidences');
         done();
       })
       .catch(catchErrors(done));
@@ -206,6 +208,9 @@ describe('evidences', () => {
         {evidence: 'text', probability: 0.86543},
         {evidence: 'text2', probability: 0.9}
       ]));
+
+      spyOn(entities, 'save').and.callFake((toSave) => Promise.resolve(toSave));
+      search.bulkIndex.and.callFake((toSave) => Promise.resolve(toSave));
 
       const property = propertyID1.toString();
       const value = value1;
