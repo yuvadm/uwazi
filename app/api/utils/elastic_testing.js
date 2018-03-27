@@ -7,7 +7,7 @@ import elastic from 'api/search/elastic';
 
 export default {
   reindex() {
-    return elastic.indices.delete({index: elasticIndex})
+    return elastic.indices.delete({index: elasticIndex, ignore_unavailable: true})
     .then(() => {
       return elastic.indices.create({
         index: elasticIndex,
@@ -23,7 +23,7 @@ export default {
   },
 
   reindexEvidences() {
-    return elastic.indices.delete({index: elasticIndex})
+    return elastic.indices.delete({index: elasticIndex, ignore_unavailable: true})
     .then(() => {
       return elastic.indices.create({
         index: elasticIndex,

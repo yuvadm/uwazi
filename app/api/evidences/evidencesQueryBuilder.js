@@ -37,6 +37,19 @@ export default function () {
         delete filters.isEvidence;
       }
 
+      if (filters.probability) {
+        const rangeFilter = {
+          range: {
+            probability: {
+              gte: Number.parseFloat(filters.probability.split('-')[0]),
+              lt: Number.parseFloat(filters.probability.split('-')[1])
+            }
+          }
+        };
+        baseQuery.query.bool.filter.push(rangeFilter);
+        delete filters.probability;
+      }
+
       Object.keys(filters).forEach((property) => {
         filters[property].values.forEach((value) => {
           let valueMatch = {};

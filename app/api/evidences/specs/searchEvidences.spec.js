@@ -9,7 +9,7 @@ import db from 'api/utils/testing_db';
 import elasticTesting from 'api/utils/elastic_testing';
 
 fdescribe('searchEvidences', () => {
-  beforeEach((done) => {
+  beforeAll((done) => {
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
         done.fail(err);
@@ -29,6 +29,32 @@ fdescribe('searchEvidences', () => {
         expect(allEvidences.rows.length).toBe(7);
         const value1Evidence = allEvidences.rows.find((e) => e._id === evidenceId.toString());
         expect(value1Evidence.value).toBe(value1);
+        done();
+      })
+      .catch(catchErrors(done));
+    });
+
+    fit('should filter by probability', (done) => {
+      Promise.all([
+        search.search({probability: '0.5-0.6'}),
+        search.search({probability: '0.9-1'}),
+        search.search({[propertyID1.toString()]: {values: [value1]}, probability: '0.8-0.9'})
+      ])
+      .then(([range5060, range90100, range8090WithSearch]) => {
+        expect(range5060.totalRows).toBe(2);
+        expect(range5060.rows.length).toBe(2);
+        expect(range5060.rows.find((e) => e.probability === 0.55)).toBeDefined();
+        expect(range5060.rows.find((e) => e.probability === 0.59)).toBeDefined();
+
+        expect(range90100.totalRows).toBe(3);
+        expect(range90100.rows.length).toBe(3);
+        expect(range90100.rows.find((e) => e.probability === 0.90)).toBeDefined();
+        expect(range90100.rows.find((e) => e.probability === 0.91)).toBeDefined();
+        expect(range90100.rows.find((e) => e.probability === 0.99)).toBeDefined();
+
+        expect(range8090WithSearch.totalRows).toBe(1);
+        expect(range8090WithSearch.rows.length).toBe(1);
+        expect(range8090WithSearch.rows.find((e) => e.probability === 0.81)).toBeDefined();
         done();
       })
       .catch(catchErrors(done));
