@@ -4,18 +4,31 @@ describe('PDF', () => {
   let pdf;
 
   describe('extractText', () => {
-    const filepath = `${__dirname}/12345.test.pdf`;
+    let filepath;
     beforeEach(() => {
+      filepath = `${__dirname}/12345.test.pdf`;
       pdf = new PDFObject(filepath);
     });
 
-    it('should extract the text of the pdf by page, every word on every page should have appended the page number in between [[]]', (done) => {
+    fit('should extract the text of the pdf by page, every word on every page should have appended the page number in between [[]]', (done) => {
       pdf.extractText()
-      .then((text) => {
+      .then(([text]) => {
         const lines = text.split(/\f/);
         expect(lines[0]).toBe('Page[[1]] 1[[1]]');
         expect(lines[1]).toBe('Page[[2]] 2[[2]]');
         expect(lines[2]).toBe('Page[[3]] 3[[3]]');
+        done();
+      })
+      .catch(done.fail);
+    });
+
+    fit('should extract number of characters per page', (done) => {
+      filepath = `${__dirname}/batman_wikipedia.pdf`;
+      pdf = new PDFObject(filepath);
+      pdf.extractText()
+      .then((data) => {
+        const pdfInfo = Object.keys(data[1]).map(key => data[1][key].chars).sort((a, b) => a - b);
+        expect(pdfInfo).toMatchSnapshot();
         done();
       })
       .catch(done.fail);
