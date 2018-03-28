@@ -1,9 +1,10 @@
-import model from './evidencesModel.js';
+import MLAPI from './MLAPI';
 import entities from '../entities';
+import entitiesModel from '../entities/entitiesModel';
+import model from './evidencesModel.js';
+import search from './searchEvidences';
 import templates from '../templates';
 import thesauris from '../thesauris/thesauris';
-import MLAPI from './MLAPI';
-import search from './searchEvidences';
 
 export default {
   save(evidence, user, language) {
@@ -44,26 +45,42 @@ export default {
     return model.get(query, select, pagination);
   },
 
-  getSuggestionsForOneValue(property, value, language) {
+  getSuggestionsForOneValue(property, value, language, limit = 10) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
-      return entities.get({template: template._id}, '+fullText', {limit: 10});
-    })
-    .then((documents) => {
-      return MLAPI.getSuggestionsForOneValue({
-        property,
-        value,
-        docs: documents.map((d) => ({_id: d.sharedId, text: d.fullText.replace(/\[\[[0-9]*\]\]/g, '')}))
+      return entities.get({template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit})
+      .then((docs) => {
+        if (!docs.length) {
+          return entitiesModel.db.updateMany({}, {$set: {evidencesAnalyzed: false}})
+          .then(() => entities.get({
+            template: template._id,
+            $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]
+          }, '+fullText', {limit}));
+        }
+        return docs;
       });
     })
-    .then((evidences) => {
-      return model.save(evidences.map((evidence) => {
-        evidence.evidence = {text: evidence.evidence};
-        evidence.language = language;
-        return evidence;
-      }));
+    .then((documents) => {
+      return Promise.all([
+        documents,
+        MLAPI.getSuggestionsForOneValue({
+          property,
+          value,
+          docs: documents.map((d) => ({_id: d.sharedId, text: d.fullText.replace(/\[\[[0-9]*\]\]/g, '')}))
+        })
+      ]);
     })
-    .then((evidences) => evidences.length ? search.bulkIndex(evidences).then(indexedEvidences => indexedEvidences) : []);
+    .then(([documents, evidences]) => {
+      return Promise.all([
+        model.save(evidences.map((evidence) => {
+          evidence.evidence = {text: evidence.evidence};
+          evidence.language = language;
+          return evidence;
+        })),
+        entitiesModel.save(documents.map((d) => ({_id: d._id, evidencesAnalyzed: true})))
+      ]);
+    })
+    .then(([evidences]) => evidences.length ? search.bulkIndex(evidences).then(indexedEvidences => indexedEvidences) : []);
   },
 
   getSuggestions(docId, language) {

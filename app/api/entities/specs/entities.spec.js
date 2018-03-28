@@ -1,20 +1,22 @@
 /* eslint-disable max-nested-callbacks */
-import fs from 'fs';
-import entities from '../entities.js';
 import {catchErrors} from 'api/utils/jasmineHelpers';
 import date from 'api/utils/date.js';
-import search from 'api/search/search';
-import references from 'api/references';
-import entitiesModel from 'api/entities/entitiesModel';
-
-import fixtures, {batmanFinishesId, templateId, templateChangingNames, syncPropertiesEntityId, templateWithEntityAsThesauri} from './fixtures.js';
 import db from 'api/utils/testing_db';
+import entitiesModel from 'api/entities/entitiesModel';
+import fs from 'fs';
+import references from 'api/references';
+import search from 'api/search/search';
+
+import entities from '../entities.js';
+import evidences from '../../evidences/evidences';
+import fixtures, {batmanFinishesId, templateId, templateChangingNames, syncPropertiesEntityId, templateWithEntityAsThesauri} from './fixtures.js';
 
 describe('entities', () => {
   beforeEach((done) => {
     spyOn(references, 'saveEntityBasedReferences').and.returnValue(Promise.resolve());
     spyOn(search, 'index').and.returnValue(Promise.resolve());
     spyOn(search, 'delete').and.returnValue(Promise.resolve());
+    spyOn(evidences, 'reindexEvidencesByDocument').and.returnValue(Promise.resolve());
     db.clearAllAndLoad(fixtures, (err) => {
       if (err) {
         done.fail(err);

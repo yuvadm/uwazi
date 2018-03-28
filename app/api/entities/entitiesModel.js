@@ -38,6 +38,7 @@ const entitySchema = new mongoose.Schema({
   processed: Boolean,
   uploaded: Boolean,
   published: Boolean,
+  evidencesAnalyzed: Boolean,
   metadata: mongoose.Schema.Types.Mixed,
   pdfInfo: mongoose.Schema.Types.Mixed,
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'users'}

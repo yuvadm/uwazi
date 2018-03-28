@@ -4,10 +4,11 @@ import db from 'api/utils/testing_db';
 import MLAPI from '../MLAPI';
 import entities from '../../entities';
 import evidences from '../evidences.js';
+import evidencesModel from '../evidencesModel';
 import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-describe('evidences', () => {
+fdescribe('evidences', () => {
   beforeEach((done) => {
     spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
     spyOn(search, 'index');
@@ -182,13 +183,15 @@ describe('evidences', () => {
   });
 
   describe('getSuggestionsForOneValue', () => {
-    it('should getSuggestionsForOneValue passing all docs containing the property', (done) => {
+    it('should getSuggestionsForOneValue passing the next docs containing the property that have not been analyze before nad cycle them', (done) => {
       spyOn(MLAPI, 'getSuggestionsForOneValue').and.returnValue(Promise.resolve([{}]));
+      spyOn(evidencesModel, 'save').and.returnValue(Promise.resolve([{}]));
       search.bulkIndex.and.returnValue(Promise.resolve('indexedEvidences'));
 
       const property = propertyID1.toString();
       const value = value1;
-      evidences.getSuggestionsForOneValue(property, value, 'en')
+      const limit = 1;
+      evidences.getSuggestionsForOneValue(property, value, 'en', limit)
       .then((suggestions) => {
         expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
           property,
@@ -198,6 +201,28 @@ describe('evidences', () => {
           ]
         });
         expect(suggestions).toEqual('indexedEvidences');
+
+        return evidences.getSuggestionsForOneValue(property, value, 'en', limit);
+      })
+      .then(() => {
+        expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
+          property,
+          value,
+          docs: [
+            {_id: 'shared3', text: 'this is another test'}
+          ]
+        });
+        MLAPI.getSuggestionsForOneValue.calls.reset();
+        return evidences.getSuggestionsForOneValue(property, value, 'en', limit);
+      })
+      .then(() => {
+        expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
+          property,
+          value,
+          docs: [
+            {_id: 'shared', text: 'this is a test'}
+          ]
+        });
         done();
       })
       .catch(catchErrors(done));
