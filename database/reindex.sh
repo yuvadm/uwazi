@@ -1,0 +1,2 @@
+node reindex_elastic.js
+node reindex_evidences_launcher.js
