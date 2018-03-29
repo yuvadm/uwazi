@@ -45,7 +45,7 @@ export default {
     return model.get(query, select, pagination);
   },
 
-  getSuggestionsForOneValue(property, value, language, limit = 10) {
+  getSuggestionsForOneValue(property, value, language, limit = 20) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
       return entities.get({template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit})
