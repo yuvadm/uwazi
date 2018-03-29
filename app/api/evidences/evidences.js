@@ -1,4 +1,7 @@
+import {index as elasticIndex} from 'api/config/elasticIndexes';
+
 import MLAPI from './MLAPI';
+import elastic from '../search/elastic';
 import entities from '../entities';
 import entitiesModel from '../entities/entitiesModel';
 import model from './evidencesModel.js';
@@ -43,6 +46,13 @@ export default {
 
   get(query, select, pagination) {
     return model.get(query, select, pagination);
+  },
+
+  deleteSuggestions() {
+    return model.delete({isEvidence: {$exists: false}})
+    .then(() => {
+      return elastic.deleteByQuery({index: elasticIndex, type: 'evidence', body: {query: {bool: {must_not: {exists: {field: 'isEvidence'}}}}}});
+    });
   },
 
   getSuggestionsForOneValue(property, value, language, limit = 20) {

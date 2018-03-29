@@ -2,13 +2,14 @@ import {catchErrors} from 'api/utils/jasmineHelpers';
 import db from 'api/utils/testing_db';
 
 import MLAPI from '../MLAPI';
+import elasticTesting from '../../utils/elastic_testing';
 import entities from '../../entities';
 import evidences from '../evidences.js';
 import evidencesModel from '../evidencesModel';
 import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-fdescribe('evidences', () => {
+describe('evidences', () => {
   beforeEach((done) => {
     spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
     spyOn(search, 'index');
@@ -281,6 +282,30 @@ fdescribe('evidences', () => {
         done();
       })
       .catch(catchErrors(done));
+    });
+  });
+
+  describe('remove all suggestions', () => {
+    beforeEach((done) => {
+      search.bulkIndex.and.callThrough();
+      elasticTesting.reindexEvidences()
+      .then(done)
+      .catch(done.fail);
+    });
+    it('should remove all suggestions from mongodb and elasticsearch', (done) => {
+      evidences.deleteSuggestions()
+      .then(() => elasticTesting.refresh())
+      .then(() => evidences.get())
+      .then((suggestions) => {
+        expect(suggestions.filter((s) => typeof s.isEvidence !== 'undefined').length).toBe(4);
+        expect(suggestions.filter((s) => typeof s.isEvidence === 'undefined').length).toBe(0);
+        return search.search();
+      })
+      .then(({rows}) => {
+        expect(rows.filter((s) => typeof s.isEvidence !== 'undefined').length).toBe(4);
+        expect(rows.filter((s) => typeof s.isEvidence === 'undefined').length).toBe(0);
+        done();
+      });
     });
   });
 

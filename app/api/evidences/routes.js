@@ -44,6 +44,12 @@ export default (app) => {
   });
   //
 
+  app.delete('/api/evidences/suggestions', needsAuthorization(['admin', 'editor']), (req, res) => {
+    evidences.deleteSuggestions()
+    .then(response => res.json(response))
+    .catch(res.error);
+  });
+
   app.get('/api/evidences', (req, res) => {
     let query = req.query;
     query.language = req.language;
