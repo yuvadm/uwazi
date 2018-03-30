@@ -20,6 +20,10 @@ export default {
     return api.get('evidences/suggestions', data).then(response => response.json);
   },
 
+  deleteSuggestions() {
+    return api.delete('evidences/suggestions').then(response => response.json);
+  },
+
   retrainModel(property, value) {
     return api.post('evidences/retrainModel', {property, value}).then(response => response.json);
   },

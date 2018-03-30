@@ -29,7 +29,7 @@ class Evidence extends Component {
               evidence.get('documentTitle') ?
                 <p>
                   <b>Document</b>:
-                  <Link to={`/${evidence.get('language')}/document/${evidence.get('document')}`}>{evidence.get('documentTitle')}</Link>
+                  &nbsp;<Link to={`/${evidence.get('language')}/document/${evidence.get('document')}`}>{evidence.get('documentTitle')}</Link>
                 </p>
                 : false
             }
@@ -37,8 +37,8 @@ class Evidence extends Component {
           <div className="item-snippet-wrapper">
             <p>{evidence.get('evidence').get('text')}</p>
           </div>
-          {evidence.get('isEvidence') === true ? <Badge>Positive</Badge> : false}
-          {evidence.get('isEvidence') === false ? <Badge red>Negative</Badge> : false}
+          {evidence.get('isEvidence') === true && <Badge>Positive</Badge>}
+          {evidence.get('isEvidence') === false && <Badge red>Negative</Badge>}
           {evidence.has('isEvidence') ? <div/> :
               <div>
                 <p>Probability: <b>{Math.round(evidence.get('probability') * 100 * 100) / 100}%</b></p>

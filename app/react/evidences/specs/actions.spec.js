@@ -35,6 +35,19 @@ describe('evidences actions', () => {
       });
     });
 
+    describe('deleteSuggestions', () => {
+      it('should call api delete suggestions and', (done) => {
+        store = mockStore({evidences: {search: {}}});
+        spyOn(evidencesAPI, 'deleteSuggestions').and.returnValue(Promise.resolve('response'));
+        spyOn(browserHistory, 'push');
+        evidencesActions.deleteSuggestions()(store.dispatch)
+        .then(() => {
+          expect(evidencesAPI.deleteSuggestions).toHaveBeenCalled();
+          done();
+        });
+      });
+    });
+
     describe('saveValidSuggestion', () => {
       it('should save the evidence with "isEvidence = true"', (done) => {
         spyOn(evidencesAPI, 'save').and.returnValue(Promise.resolve({entity: 'savedDoc', evidence: 'savedEvidence'}));

@@ -61,6 +61,19 @@ describe('evidencesAPI', () => {
     });
   });
 
+  describe('deleteSuggestions', () => {
+    it('should delete /evidences/suggestions', (done) => {
+      spyOn(api, 'delete').and.returnValue(Promise.resolve({json: 'response'}));
+      evidencesAPI.deleteSuggestions()
+      .then((response) => {
+        expect(api.delete).toHaveBeenCalledWith('evidences/suggestions');
+        expect(response).toEqual('response');
+        done();
+      })
+      .catch(done.fail);
+    });
+  });
+
   describe('save()', () => {
     it('should post the evidence data to /evidences', (done) => {
       let data = {name: 'evidence name'};

@@ -21,7 +21,7 @@ function migrate(offset, totalRows) {
 
     return search.bulkIndex(docsResponse, 'index')
     .then(() => {
-      process.stdout.write(`Indexing documents and entities... ${spinner[pos]} - ${docsIndexed} indexed\r`);
+      process.stdout.write(`Indexing evidences... ${spinner[pos]} - ${docsIndexed} indexed\r`);
       pos += 1;
       if (pos > 3) {
         pos = 0;
@@ -55,7 +55,7 @@ search.deleteAll()
 })
 .then(() => {
   const end = Date.now();
-  process.stdout.write(`Indexing documents and entities... - ${docsIndexed} indexed\r\n`);
+  process.stdout.write(`Indexing evidences... - ${docsIndexed} indexed\r\n`);
   process.stdout.write(`Done, took ${(end - start) / 1000} seconds\n`);
   mongoose.disconnect();
 });

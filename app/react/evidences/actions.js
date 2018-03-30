@@ -147,6 +147,15 @@ export function resetEvidencesFilters() {
   };
 }
 
+evidencesActions.deleteSuggestions = () => {
+  return dispatch => {
+    return evidencesAPI.deleteSuggestions()
+    .then(() => {
+      dispatch(resetEvidencesFilters());
+    });
+  };
+};
+
 export function retrainModel(property, value) {
   return () => {
     return evidencesAPI.retrainModel(property, value);

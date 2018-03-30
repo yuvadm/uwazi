@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import {Button, SidePanel} from '../../Layout';
-import {resetEvidencesFilters} from '../actions';
+import {resetEvidencesFilters, evidencesActions} from '../actions';
 import {t} from '../../I18N';
 import EvidencesFiltersForm from './EvidencesFiltersForm';
 
@@ -16,6 +16,7 @@ const EvidencesSidePanel = (props) => {
       <SidePanel.Footer>
         <Button onClick={props.reset} icon="refresh">{t('System', 'Reset')}</Button>
         <Button success icon="search">{t('System', 'Search')}</Button>
+        <Button danger onClick={props.deleteSuggestions} icon="trash">Delete Suggestions</Button>
       </SidePanel.Footer>
 
       <SidePanel.Body>
@@ -29,7 +30,7 @@ const EvidencesSidePanel = (props) => {
 
 EvidencesSidePanel.propTypes = {
   thesauris: PropTypes.instanceOf(Immutable.List),
-  onChange: PropTypes.func,
+  deleteSuggestions: PropTypes.func,
   reset: PropTypes.func
 };
 
@@ -39,7 +40,8 @@ export function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    reset: resetEvidencesFilters
+    reset: resetEvidencesFilters,
+    deleteSuggestions: evidencesActions.deleteSuggestions
   }, dispatch);
 }
 
