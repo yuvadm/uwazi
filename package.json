@@ -20,7 +20,8 @@
     "server": "nodemon --ignore 'app/dist/*' --watch 'app/api' --watch 'app/shared'",
     "webpack-server": "node ./webpack/webpack.server.js",
     "start": "export HOT=true;npm run server & npm run webpack-server",
-    "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors"
+    "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "reindex": "cd database; ./reindex.sh"
   },
   "jest": {
     "testMatch": [
