@@ -18,8 +18,8 @@ const value4 = 'value4';
 export default {
   entities: [
     {_id: entityID, sharedId: 'shared', template: templateId, language: 'en', evidencesAnalyzed: false, metadata: {}, title: 'Suggestions doc', fullText: 'this[[1]] is[[1]] a[[14]] test[[66]]'},
-    {_id: db.id(), sharedId: 'shared3', template: templateId, language: 'en', metadata: {}, title: 'Suggestions doc 2', fullText: 'this[[1]] is[[1]] another[[14]] test[[66]]'},
-    {_id: entityID2, sharedId: 'shared2', template: templateId2, title: 'doc2', language: 'en'}
+    {_id: db.id(), sharedId: 'shared3', evidencesAnalyzed: true, template: templateId, language: 'en', metadata: {}, title: 'Suggestions doc 2', fullText: 'this[[1]] is[[1]] another[[14]] test[[66]]'},
+    {_id: entityID2, sharedId: 'shared2', evidencesAnalyzed: true, template: templateId2, title: 'doc2', language: 'en'}
   ],
   evidences: [
     {_id: evidenceId, probability: 0.55, value: value1, property: propertyID1, isEvidence: true, evidence: {text: 'evidence1'}},

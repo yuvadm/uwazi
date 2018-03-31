@@ -50,6 +50,7 @@ export default {
 
   deleteSuggestions() {
     return model.delete({isEvidence: {$exists: false}})
+    .then(() => entitiesModel.db.updateMany({$set: {evidencesAnalyzed: false}}))
     .then(() => {
       return elastic.deleteByQuery({index: elasticIndex, type: 'evidence', body: {query: {bool: {must_not: {exists: {field: 'isEvidence'}}}}}});
     });

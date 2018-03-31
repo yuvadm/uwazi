@@ -192,7 +192,8 @@ describe('evidences', () => {
       const property = propertyID1.toString();
       const value = value1;
       const limit = 1;
-      evidences.getSuggestionsForOneValue(property, value, 'en', limit)
+      evidences.deleteSuggestions()
+      .then(() => evidences.getSuggestionsForOneValue(property, value, 'en', limit))
       .then((suggestions) => {
         expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
           property,
@@ -295,10 +296,16 @@ describe('evidences', () => {
     it('should remove all suggestions from mongodb and elasticsearch', (done) => {
       evidences.deleteSuggestions()
       .then(() => elasticTesting.refresh())
-      .then(() => evidences.get())
-      .then((suggestions) => {
+      .then(() => {
+        return Promise.all([
+          evidences.get(),
+          entities.get({evidencesAnalyzed: true})
+        ]);
+      })
+      .then(([suggestions, entitiesResult]) => {
         expect(suggestions.filter((s) => typeof s.isEvidence !== 'undefined').length).toBe(4);
         expect(suggestions.filter((s) => typeof s.isEvidence === 'undefined').length).toBe(0);
+        expect(entitiesResult.length).toBe(0);
         return search.search();
       })
       .then(({rows}) => {
