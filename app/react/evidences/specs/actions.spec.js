@@ -35,6 +35,19 @@ describe('evidences actions', () => {
       });
     });
 
+    describe('resetDocEvidencesFlags', () => {
+      it('should call api resetevidencesfilters and', (done) => {
+        store = mockStore({evidences: {search: {}}});
+        spyOn(evidencesAPI, 'resetDocEvidencesFlags').and.returnValue(Promise.resolve('response'));
+        spyOn(browserHistory, 'push');
+        evidencesActions.resetDocEvidencesFlags()(store.dispatch)
+        .then(() => {
+          expect(evidencesAPI.resetDocEvidencesFlags).toHaveBeenCalled();
+          done();
+        });
+      });
+    });
+
     describe('deleteSuggestions', () => {
       it('should call api delete suggestions and', (done) => {
         store = mockStore({evidences: {search: {}}});

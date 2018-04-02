@@ -48,15 +48,18 @@ export default {
     return model.get(query, select, pagination);
   },
 
+  resetDocEvidencesFlags() {
+    return entitiesModel.db.updateMany({$set: {evidencesAnalyzed: false}});
+  },
+
   deleteSuggestions() {
     return model.delete({isEvidence: {$exists: false}})
-    .then(() => entitiesModel.db.updateMany({$set: {evidencesAnalyzed: false}}))
     .then(() => {
       return elastic.deleteByQuery({index: elasticIndex, type: 'evidence', body: {query: {bool: {must_not: {exists: {field: 'isEvidence'}}}}}});
     });
   },
 
-  getSuggestionsForOneValue(property, value, language, limit = 20) {
+  getSuggestionsForOneValue(property, value, language, limit = 10) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
       return entities.get({template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit})

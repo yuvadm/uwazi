@@ -20,6 +20,10 @@ export default {
     return api.get('evidences/suggestions', data).then(response => response.json);
   },
 
+  resetDocEvidencesFlags() {
+    return api.get('evidences/resetdocs').then(response => response.json);
+  },
+
   deleteSuggestions() {
     return api.delete('evidences/suggestions').then(response => response.json);
   },

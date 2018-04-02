@@ -9,7 +9,7 @@ import evidencesModel from '../evidencesModel';
 import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-describe('evidences', () => {
+fdescribe('evidences', () => {
   beforeEach((done) => {
     spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
     spyOn(search, 'index');
@@ -192,7 +192,7 @@ describe('evidences', () => {
       const property = propertyID1.toString();
       const value = value1;
       const limit = 1;
-      evidences.deleteSuggestions()
+      evidences.resetDocEvidencesFlags()
       .then(() => evidences.getSuggestionsForOneValue(property, value, 'en', limit))
       .then((suggestions) => {
         expect(MLAPI.getSuggestionsForOneValue).toHaveBeenCalledWith({
@@ -286,6 +286,17 @@ describe('evidences', () => {
     });
   });
 
+  describe('resetDocEvidencesFlags', () => {
+    it('should set all docs evidencesAnalyzed to false', (done) => {
+      evidences.resetDocEvidencesFlags()
+      .then(() => entities.get({evidencesAnalyzed: true}))
+      .then((entitiesResult) => {
+        expect(entitiesResult.length).toBe(0);
+        done();
+      });
+    });
+  });
+
   describe('remove all suggestions', () => {
     beforeEach((done) => {
       search.bulkIndex.and.callThrough();
@@ -296,16 +307,10 @@ describe('evidences', () => {
     it('should remove all suggestions from mongodb and elasticsearch', (done) => {
       evidences.deleteSuggestions()
       .then(() => elasticTesting.refresh())
-      .then(() => {
-        return Promise.all([
-          evidences.get(),
-          entities.get({evidencesAnalyzed: true})
-        ]);
-      })
-      .then(([suggestions, entitiesResult]) => {
+      .then(() => evidences.get())
+      .then((suggestions) => {
         expect(suggestions.filter((s) => typeof s.isEvidence !== 'undefined').length).toBe(4);
         expect(suggestions.filter((s) => typeof s.isEvidence === 'undefined').length).toBe(0);
-        expect(entitiesResult.length).toBe(0);
         return search.search();
       })
       .then(({rows}) => {

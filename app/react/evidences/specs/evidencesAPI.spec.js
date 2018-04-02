@@ -61,6 +61,19 @@ describe('evidencesAPI', () => {
     });
   });
 
+  describe('resetDocEvidencesFlags', () => {
+    it('should get reset /evidences/resetdocs', (done) => {
+      spyOn(api, 'get').and.returnValue(Promise.resolve({json: 'response'}));
+      evidencesAPI.resetDocEvidencesFlags()
+      .then((response) => {
+        expect(api.get).toHaveBeenCalledWith('evidences/resetdocs');
+        expect(response).toEqual('response');
+        done();
+      })
+      .catch(done.fail);
+    });
+  });
+
   describe('deleteSuggestions', () => {
     it('should delete /evidences/suggestions', (done) => {
       spyOn(api, 'delete').and.returnValue(Promise.resolve({json: 'response'}));

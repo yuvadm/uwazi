@@ -7,9 +7,10 @@ import React from 'react';
 
 import FormGroup from 'app/DocumentForm/components/FormGroup';
 
+import {Button} from '../../Layout';
 import {MultiSelect} from '../../ReactReduxForms';
-import {getFilters} from '../selectors';
 import {evidencesActions, searchEvidences, retrainModel} from '../actions';
+import {getFilters} from '../selectors';
 
 const EvidencesFiltersForm = (props) => {
   const isEvidenceFilter = props.filters.find((f) => f.get('_id') === 'isEvidence');
@@ -25,6 +26,16 @@ const EvidencesFiltersForm = (props) => {
               model={`.filters._${isEvidenceFilter.get('_id')}.values`}
               options={isEvidenceFilter.get('values').toJS()}
               prefix={isEvidenceFilter.get('_id')}
+              renderActions={(option) => {
+                const isSuggestionsOption = option.value === 'null';
+                if (isSuggestionsOption) {
+                  return (
+                    <div>
+                      <Button danger icon="trash" onClick={props.deleteSuggestions}> Delete All</Button>
+                    </div>
+                  );
+                }
+              }}
             />
           </li>
         </ul>
@@ -70,6 +81,7 @@ const EvidencesFiltersForm = (props) => {
 EvidencesFiltersForm.propTypes = {
   filters: PropTypes.instanceOf(Immutable.List),
   onChange: PropTypes.func,
+  deleteSuggestions: PropTypes.func,
   retrainModel: PropTypes.func,
   getSuggestions: PropTypes.func
 };
@@ -84,7 +96,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     onChange: searchEvidences,
     retrainModel,
-    getSuggestions: evidencesActions.getSuggestions
+    getSuggestions: evidencesActions.getSuggestions,
+    deleteSuggestions: evidencesActions.deleteSuggestions
   }, dispatch);
 }
 

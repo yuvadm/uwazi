@@ -147,6 +147,12 @@ export function resetEvidencesFilters() {
   };
 }
 
+evidencesActions.resetDocEvidencesFlags = () => {
+  return () => {
+    return evidencesAPI.resetDocEvidencesFlags();
+  };
+};
+
 evidencesActions.deleteSuggestions = () => {
   return dispatch => {
     return evidencesAPI.deleteSuggestions()

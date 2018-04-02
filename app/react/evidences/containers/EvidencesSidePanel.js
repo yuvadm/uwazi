@@ -16,7 +16,7 @@ const EvidencesSidePanel = (props) => {
       <SidePanel.Footer>
         <Button onClick={props.reset} icon="refresh">{t('System', 'Reset')}</Button>
         <Button success icon="search">{t('System', 'Search')}</Button>
-        <Button danger onClick={props.deleteSuggestions} icon="trash">Delete Suggestions</Button>
+        <Button danger onClick={props.resetDocEvidencesFlags} icon="trash">Reset Docs predicted</Button>
       </SidePanel.Footer>
 
       <SidePanel.Body>
@@ -30,7 +30,7 @@ const EvidencesSidePanel = (props) => {
 
 EvidencesSidePanel.propTypes = {
   thesauris: PropTypes.instanceOf(Immutable.List),
-  deleteSuggestions: PropTypes.func,
+  resetDocEvidencesFlags: PropTypes.func,
   reset: PropTypes.func
 };
 
@@ -41,7 +41,7 @@ export function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     reset: resetEvidencesFilters,
-    deleteSuggestions: evidencesActions.deleteSuggestions
+    resetDocEvidencesFlags: evidencesActions.resetDocEvidencesFlags
   }, dispatch);
 }
 
