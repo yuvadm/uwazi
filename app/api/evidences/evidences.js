@@ -1,6 +1,7 @@
 import {index as elasticIndex} from 'api/config/elasticIndexes';
 
 import MLAPI from './MLAPI';
+import searchEntities from '../search/search';
 import elastic from '../search/elastic';
 import entities from '../entities';
 import entitiesModel from '../entities/entitiesModel';
@@ -49,7 +50,8 @@ export default {
   },
 
   resetDocEvidencesFlags() {
-    return entitiesModel.db.updateMany({$set: {evidencesAnalyzed: false}});
+    return entitiesModel.db.updateMany({$set: {evidencesAnalyzed: false}})
+    .then(() => searchEntities.indexEntities({}));
   },
 
   deleteSuggestions() {
@@ -91,7 +93,7 @@ export default {
           evidence.language = language;
           return evidence;
         })),
-        entitiesModel.save(documents.map((d) => ({_id: d._id, evidencesAnalyzed: true})))
+        entities.saveMultiple(documents.map((d) => ({_id: d._id, evidencesAnalyzed: true})), '')
       ]);
     })
     .then(([evidences]) => evidences.length ? search.bulkIndex(evidences).then(indexedEvidences => indexedEvidences) : []);

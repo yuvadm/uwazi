@@ -114,7 +114,9 @@ export function filterIsEmpty(value) {
 
 export function processFilters(readOnlySearch, filters, limit) {
   const search = Object.assign({filters: {}}, readOnlySearch);
-  search.filters = {};
+  search.filters = {
+    evidencesAnalyzed: search.filters.evidencesAnalyzed
+  };
 
   filters.properties.forEach((property) => {
     if (!filterIsEmpty(readOnlySearch.filters[property.name])) {
@@ -161,7 +163,6 @@ export function searchDocuments({search, filters}, storeKey, limit) {
 
     const finalSearchParams = processFilters(search, currentFilters, limit);
     finalSearchParams.searchTerm = state.search.searchTerm;
-
 
     const currentSearch = browserHistory.getCurrentLocation().search.substring(3) || '()';
     const currentSearchParams = rison.decode(decodeURIComponent(currentSearch));

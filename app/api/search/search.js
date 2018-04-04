@@ -101,10 +101,16 @@ const search = {
       properties = !query.types || !query.types.length ? defaultFilters(templates) : properties;
 
       const aggregations = agregationProperties(properties);
+      let evidencesAnalyzed;
+      if (query.filters && query.filters.evidencesAnalyzed) {
+        evidencesAnalyzed = query.filters.evidencesAnalyzed.values;
+        delete query.filters.evidencesAnalyzed;
+      }
       const filters = processFiltes(query.filters, properties);
       const textSearchFilters = filtersBasedOnSearchTerm(allUniqueProperties(templates), entitiesMatchedByTitle, dictionariesMatchByLabel);
 
       documentsQuery.filterMetadataByFullText(textSearchFilters);
+      documentsQuery.filterByEvidencesAnalyzed(evidencesAnalyzed);
       documentsQuery.filterMetadata(filters);
       documentsQuery.aggregations(aggregations);
 

@@ -171,10 +171,10 @@ export default {
     return model.get({sharedId, language}).then((result) => result[0]);
   },
 
-  saveMultiple(docs) {
+  saveMultiple(docs, select = '+fullText') {
     return model.save(docs)
     .then((response) => {
-      return Promise.all(response, search.indexEntities({_id: {$in: response.map(d => d._id)}}, '+fullText'));
+      return Promise.all(response, search.indexEntities({_id: {$in: response.map(d => d._id)}}, select));
     })
     .then(response => response);
   },

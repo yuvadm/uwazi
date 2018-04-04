@@ -5,7 +5,7 @@ export default function () {
       include: [
         'title', 'icon', 'processed', 'creationDate', 'template',
         'metadata', 'type', 'sharedId', 'toc', 'attachments',
-        'language', 'file', 'uploaded', 'published'
+        'language', 'file', 'uploaded', 'published', 'evidencesAnalyzed'
       ]
     },
     from: 0,
@@ -540,6 +540,14 @@ export default function () {
       }
       if (_ids.length) {
         let match = {terms: {'sharedId.raw': _ids}};
+        baseQuery.query.bool.filter.push(match);
+      }
+      return this;
+    },
+
+    filterByEvidencesAnalyzed(values = []) {
+      if (values.length) {
+        let match = {terms: {evidencesAnalyzed: values}};
         baseQuery.query.bool.filter.push(match);
       }
       return this;

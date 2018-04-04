@@ -62,7 +62,7 @@ export class FiltersForm extends Component {
     let translationContext = documentTypes.get(0);
     const allFields = this.props.fields.toJS();
     const fields = libraryHelper.parseWithAggregations(allFields.slice(0), aggregations)
-    .filter((field) => field.type !== 'select' && field.type !== 'multiselect' || field.options.length);
+      .filter((field) => field.type !== 'select' && field.type !== 'multiselect' || field.options.length);
     const model = this.props.storeKey + '.search';
     return (
       <div className="filters-box">
@@ -79,6 +79,19 @@ export class FiltersForm extends Component {
         })()}
 
         <Form model={model} id="filtersForm" onSubmit={this.submit} onChange={this.onChange}>
+          <FormGroup>
+            <ul className='search__filter'>
+              <li>Analyzed</li>
+              <li className="wide">
+                <MultiSelect
+                  model={'.filters.evidencesAnalyzed.values'}
+                  options={[{label: 'analyzed', value: true}, {label: 'Not analyzed', value: false}]}
+                  optionsValue="value"
+                  onChange={this.activateAutoSearch}
+                />
+              </li>
+            </ul>
+          </FormGroup>
           {fields.map((property) => {
             let propertyClass = 'search__filter is-active';
             if (property.type === 'select' || property.type === 'multiselect') {
@@ -100,7 +113,7 @@ export class FiltersForm extends Component {
                       prefix={property.name}
                       options={this.translatedOptions(property)}
                       optionsValue="id"
-                      onChange={this.activateAutoSearch}
+                      onChange={this.search}
                     />
                   </li>
                 </ul>
@@ -187,10 +200,10 @@ export class FiltersForm extends Component {
                     </li>
                     <li className="wide">
                       <input className="form-control" onChange={this.activateAutoSearch} />
-                  </li>
-                </ul>
-              </Field>
-            </FormGroup>
+                    </li>
+                  </ul>
+                </Field>
+              </FormGroup>
             );
           })}
         </Form>

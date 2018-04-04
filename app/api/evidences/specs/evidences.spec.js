@@ -9,7 +9,7 @@ import evidencesModel from '../evidencesModel';
 import fixtures, {evidenceId, propertyID1, entityID, value1, value3, value4} from './fixtures.js';
 import search from '../searchEvidences';
 
-fdescribe('evidences', () => {
+describe('evidences', () => {
   beforeEach((done) => {
     spyOn(search, 'bulkIndex').and.returnValue(Promise.resolve());
     spyOn(search, 'index');

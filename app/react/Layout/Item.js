@@ -170,6 +170,8 @@ export class Item extends Component {
           <div className={`item-label-group ${templateClassName || ''}`}>
             {doc.template ? <TemplateLabel template={doc.template}/> : false}
             {this.props.labels}
+            {doc.evidencesAnalyzed && <span className="item-type item-type-10"><span className="item-type__name">analyzed</span></span>}
+            <span className="item-type__name">analyzed</span>
           </div>
           {buttons}
         </ItemFooter>
