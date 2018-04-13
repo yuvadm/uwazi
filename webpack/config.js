@@ -30,7 +30,7 @@ module.exports = function(production) {
     entry: {
       main: path.join(rootPath, 'app/react/index.js'),
       nprogress: path.join(rootPath, 'node_modules/nprogress/nprogress.js'),
-      'pdf.worker': path.join(rootPath, 'node_modules/pdfjs-dist/build/pdf.worker.entry'),
+      'pdf.worker': path.join(rootPath, 'node_modules/pdfjs-dist/build/pdf.worker.entry')
     },
     output: {
       path: path.join(rootPath, '/dist/'),

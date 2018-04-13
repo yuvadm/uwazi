@@ -133,3 +133,12 @@
 }
 .textLayer ::selection { background: rgba(0,0,255,0.2); }
 .textLayer ::-moz-selection { background: rgba(0,0,255,0.2); }
+
+
+// react-pdf FIX
+.react-pdf__Page__textContent {
+  top: 0 !important;
+  left:0 !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
