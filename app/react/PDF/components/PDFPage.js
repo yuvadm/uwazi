@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import PDFJS from '../PDFJS';
+import { PDFJS } from '../PDFJS';
 
 class PDFPage extends Component {
   componentDidMount() {
@@ -65,8 +65,7 @@ class PDFPage extends Component {
           id: this.props.page,
           scale,
           defaultViewport: page.getViewport(scale),
-          enhanceTextSelection: true,
-          textLayerFactory: new PDFJS.DefaultTextLayerFactory()
+          enhanceTextSelection: true
         });
 
         this.pdfPageView.setPdfPage(page);

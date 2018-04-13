@@ -5,7 +5,7 @@ import { advancedSort } from 'app/utils/advancedSort';
 import { scrollToPage } from 'app/Viewer/actions/uiActions';
 
 import { isClient } from '../../utils';
-import PDFJS from '../PDFJS';
+import { PDFJSLib } from '../PDFJS';
 import PDFPage from './PDFPage.js';
 
 class PDF extends Component {
@@ -14,7 +14,7 @@ class PDF extends Component {
     this.state = { pdf: { numPages: 0 } };
     this.pagesLoaded = {};
     if (isClient) {
-      PDFJS.getDocument(props.file).then((pdf) => {
+      PDFJSLib.getDocument(props.file).then((pdf) => {
         this.setState({ pdf });
       });
     }
@@ -32,7 +32,7 @@ class PDF extends Component {
     if (this.props.filename !== null && this.props.filename !== nextProps.filename) {
       this.pagesLoaded = {};
       this.setState({ pdf: { numPages: 0 } }, () => {
-        PDFJS.getDocument(nextProps.file).then((pdf) => {
+        PDFJSLib.getDocument(nextProps.file).then((pdf) => {
           this.setState({ pdf });
         });
       });
