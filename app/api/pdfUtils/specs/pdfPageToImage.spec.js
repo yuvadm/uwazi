@@ -32,7 +32,8 @@ describe('pdfPageToImage PDF utility', () => {
 
   function expectPDFResults([originalPDF, output, expected, options, done]) {
     pdfPageToImage(`${__dirname}/../fixtures/${originalPDF}`, `${__dirname}/../fixtures/${output}`, options)
-    .then(() => {
+    .then((res) => {
+      expect(res).toContain('Finished converting page to');
       expectIdenticalFiles(`/../fixtures/${output}`, `/../fixtures/${expected}`);
       done();
     })

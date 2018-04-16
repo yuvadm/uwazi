@@ -36,9 +36,7 @@ NodeCanvasFactory.prototype = {
 function readPDFData(pdfURL) {
   return new Promise((resolve, reject) => {
     fs.readFile(pdfURL, (err, rawData) => {
-      if (err) {
-        reject(err);
-      }
+      if (err) { reject(err); }
       resolve(new Uint8Array(rawData));
     });
   });
@@ -64,17 +62,9 @@ function outputJpg(outputURL, canvasAndContext, promise) {
   const out = fs.createWriteStream(outputURL);
   const stream = canvasAndContext.canvas.jpegStream({ bufsize: 4096, quality: 75, progressive: false });
 
-  stream.on('data', (chunk) => {
-    out.write(chunk);
-  });
-
-  stream.on('end', () => {
-    out.end();
-  });
-
-  out.on('error', (err) => {
-    promise.reject(err);
-  });
+  stream.on('data', (chunk) => { out.write(chunk); });
+  stream.on('end', () => { out.end(); });
+  out.on('error', (err) => { promise.reject(err); });
 
   out.on('finish', () => {
     promise.resolve('Finished converting page to JPG.');
@@ -84,11 +74,8 @@ function outputJpg(outputURL, canvasAndContext, promise) {
 function outputPng(outputURL, canvasAndContext, promise) {
   const image = canvasAndContext.canvas.toBuffer();
   fs.writeFile(outputURL, image, (error) => {
-    if (error) {
-      promise.reject(error);
-    } else {
-      promise.resolve('Finished converting page to PNG.');
-    }
+    if (error) { return promise.reject(error); }
+    return promise.resolve('Finished converting page to PNG.');
   });
 }
 
