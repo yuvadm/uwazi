@@ -4,6 +4,9 @@ import EventEmitter from 'events';
 import fs from 'fs';
 import path from 'path';
 
+import { attachmentsPath } from 'api/config/paths';
+import pdfUtils from 'api/pdfUtils';
+
 const basename = (filepath = '') => {
   let finalPath = filepath;
   if (typeof filepath !== 'string') {
@@ -37,6 +40,7 @@ export default class PDF extends EventEmitter {
               .then(([page, text]) => `${text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, `$1[[${Number(page.pageIndex) + 1}]]$2`)}\f`)
             );
           }
+
           Promise.all(pages).then((texts) => {
             resolve(texts.join(''));
           })
@@ -51,9 +55,15 @@ export default class PDF extends EventEmitter {
     });
   }
 
+  generateThumbnail() {
+    const thumbPath = `${attachmentsPath}${basename(this.optimizedPath)}.jpg`;
+    return pdfUtils.pdfPageToImage(this.optimizedPath, thumbPath, { format: 'jpg', scale: 0.2 });
+  }
+
   convert() {
-    return this.extractText()
-    .catch(() => Promise.reject(new Error('conversion_error')))
-    .then(fullText => ({ fullText }));
+    return this.extractText().catch(() => Promise.reject(new Error('conversion_error')))
+    .then(fullText => Promise.all([fullText, this.generateThumbnail().catch(() => Promise.reject(new Error('thumbnail_error')))]))
+    .then(([fullText]) => ({ fullText }))
+    .catch(err => Promise.reject(err));
   }
 }

@@ -21,9 +21,9 @@ describe('pdfPageToImage PDF utility', () => {
   }
 
   function deleteCreatedFiles(done) {
-    safeDeleteFile(`${__dirname}/../fixtures/batmanFullPage1.png`)
-    .then(() => safeDeleteFile(`${__dirname}/../fixtures/jokerThumbPage2.jpg`))
-    .then(() => safeDeleteFile(`${__dirname}/../fixtures/jokerFullPagePage1.png`))
+    safeDeleteFile(`${__dirname}/fixtures/batmanFullPage1.png`)
+    .then(() => safeDeleteFile(`${__dirname}/fixtures/jokerThumbPage2.jpg`))
+    .then(() => safeDeleteFile(`${__dirname}/fixtures/jokerFullPagePage1.png`))
     .then(done)
     .catch(done.fail);
   }
@@ -46,10 +46,10 @@ describe('pdfPageToImage PDF utility', () => {
   }
 
   function expectPDFResults([originalPDF, output, options, reBuffer, done]) {
-    pdfPageToImage(`${__dirname}/../fixtures/${originalPDF}`, `${__dirname}/../fixtures/${output}`, options)
+    pdfPageToImage(`${__dirname}/fixtures/${originalPDF}`, `${__dirname}/fixtures/${output}`, options)
     .then((res) => {
       expect(res).toContain('Finished converting page to');
-      expectIdenticalFiles(`/../fixtures/${output}`, reBuffer, done);
+      expectIdenticalFiles(`/fixtures/${output}`, reBuffer, done);
     })
     .catch(done.fail);
   }

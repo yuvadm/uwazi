@@ -5,6 +5,7 @@ import documents from 'api/documents';
 import entities from 'api/entities';
 import relationships from 'api/relationships';
 import search from 'api/search/search';
+import pdfUtils from 'api/pdfUtils';
 
 import fixtures, { entityId } from './fixtures.js';
 import instrumentRoutes from '../../utils/instrumentRoutes';
@@ -19,6 +20,8 @@ describe('upload routes', () => {
   beforeEach((done) => {
     spyOn(search, 'delete').and.returnValue(Promise.resolve());
     spyOn(entities, 'indexEntities').and.returnValue(Promise.resolve());
+    spyOn(pdfUtils, 'pdfPageToImage').and.returnValue(Promise.resolve());
+
     iosocket = jasmine.createSpyObj('socket', ['emit']);
     const io = { getCurrentSessionSockets: () => ({ sockets: [iosocket], emit: iosocket.emit }) };
     routes = instrumentRoutes(uploadRoutes);
