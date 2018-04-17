@@ -1,6 +1,10 @@
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import Jimp from 'jimp';
 import fs from 'fs';
 
 import pdfPageToImage from '../pdfPageToImage';
+
+expect.extend({ toMatchImageSnapshot });
 
 describe('pdfPageToImage PDF utility', () => {
   function safeDeleteFile(file) {
@@ -24,18 +28,25 @@ describe('pdfPageToImage PDF utility', () => {
     .catch(done.fail);
   }
 
-  function expectIdenticalFiles(file1URL, file2URL) {
-    const file1 = fs.readFileSync(`${__dirname}${file1URL}`);
-    const file2 = fs.readFileSync(`${__dirname}${file2URL}`);
-    expect(file1.equals(file2)).toBe(true);
+  function expectIdenticalFiles(file1URL, done) {
+    //const file1 = fs.readFileSync(`${__dirname}${file1URL}`);
+    Jimp.read(`${__dirname}${file1URL}`).then((image) => {
+      image.getBuffer(Jimp.MIME_PNG, (err, result) => {
+        if (err) {
+          throw err;
+        }
+        expect(result).toMatchImageSnapshot();
+        done();
+      });
+    })
+    .catch(done.fail);
   }
 
-  function expectPDFResults([originalPDF, output, expected, options, done]) {
+  function expectPDFResults([originalPDF, output, options, done]) {
     pdfPageToImage(`${__dirname}/../fixtures/${originalPDF}`, `${__dirname}/../fixtures/${output}`, options)
     .then((res) => {
       expect(res).toContain('Finished converting page to');
-      expectIdenticalFiles(`/../fixtures/${output}`, `/../fixtures/${expected}`);
-      done();
+      expectIdenticalFiles(`/../fixtures/${output}`, done);
     })
     .catch(done.fail);
   }
@@ -46,19 +57,19 @@ describe('pdfPageToImage PDF utility', () => {
 
   describe('Basic Usage', () => {
     it('should save page 1 to specified output with default parameters (PNG, full size)', (done) => {
-      expectPDFResults(['batman.pdf', 'batmanFullPage1.png', 'expectedBatmanFullPage1.png', undefined, done]);
+      expectPDFResults(['batman.pdf', 'batmanFullPage1.png', { scale: 0.1 }, done]);
     });
   });
 
   describe('Advanced Options', () => {
     it('should save allow saving a different page, scale and format', (done) => {
-      const options = { format: 'jpg', scale: 0.2, page: 2 };
-      expectPDFResults(['joker.pdf', 'jokerThumbPage2.jpg', 'expectedJokerThumbPage2.jpg', options, done]);
+      const options = { format: 'jpg', scale: 0.1, page: 2 };
+      expectPDFResults(['joker.pdf', 'jokerThumbPage2.jpg', options, done]);
     });
 
     it('should save allow overriding certain params only', (done) => {
-      const options = { format: 'jpg', page: 4 };
-      expectPDFResults(['joker.pdf', 'jokerFullPage4.jpg', 'expectedJokerFullPage4.jpg', options, done]);
+      const options = { format: 'jpg', scale: 0.1, page: 4 };
+      expectPDFResults(['joker.pdf', 'jokerFullPage4.jpg', options, done]);
     });
   });
 
