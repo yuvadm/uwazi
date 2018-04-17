@@ -1,14 +1,18 @@
 /* eslint-disable import/no-mutable-exports, global-require, prefer-destructuring */
 import { isClient } from 'app/utils';
+/*import * as PDFJSMain from 'pdfjs-dist/build/pdf';*/
 
 let PDFJS;
 if (isClient) {
   require('../../../node_modules/pdfjs-dist/web/pdf_viewer.css');
-  PDFJS = require('../../../node_modules/pdfjs-dist/web/pdf_viewer.js').PDFJS;
+  PDFJS = require('../../../node_modules/pdfjs-dist/build/pdf.js');
+  const viewer = require('../../../node_modules/pdfjs-dist/web/pdf_viewer.js');
+
+  PDFJS = Object.assign(PDFJS, viewer);
   if (process.env.HOT) {
-    PDFJS.workerSrc = 'http://localhost:8080/pdf.worker.js';
+    PDFJS.GlobalWorkerOptions.workerSrc = 'http://localhost:8080/pdf.worker.js';
   } else {
-    PDFJS.workerSrc = '/pdf.worker.js';
+    PDFJS.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
   }
 }
 
