@@ -8,6 +8,12 @@ import needsAuthorization from '../auth/authMiddleware';
 import { uploadDocumentsPath } from '../config/paths';
 import fs from 'fs';
 
+
+import PDF from './PDF';
+import needsAuthorization from '../auth/authMiddleware';
+import { uploadDocumentsPath } from '../config/paths';
+
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, uploadDocumentsPath);
