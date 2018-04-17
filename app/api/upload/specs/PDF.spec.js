@@ -48,7 +48,7 @@ describe('PDF', () => {
           done.fail('should have thrown a conversion_error');
         })
         .catch((error) => {
-          expect(error).toEqual({ error: 'conversion_error' });
+          expect(error).toEqual(new Error('conversion_error'));
           done();
         });
       });

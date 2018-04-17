@@ -27,15 +27,14 @@ export default class PDF extends EventEmitter {
           return reject(err);
         }
         const fileData = new Uint8Array(data);
-        PDFJS.getDocument(fileData).then((pdf) => {
+        return PDFJS.getDocument(fileData).then((pdf) => {
           const maxPages = pdf.pdfInfo.numPages;
           const pages = [];
           for (let pageNumber = 1; pageNumber <= maxPages; pageNumber += 1) {
             pages.push(
               pdf.getPage(pageNumber)
-              .then(page => page.getTextContent()
-                .then(text => `${text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, `$1[[${Number(page.pageIndex) + 1}]]$2`)}\f`)
-              )
+              .then(page => Promise.all([page, page.getTextContent()]))
+              .then(([page, text]) => `${text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, `$1[[${Number(page.pageIndex) + 1}]]$2`)}\f`)
             );
           }
           Promise.all(pages).then((texts) => {
@@ -54,7 +53,7 @@ export default class PDF extends EventEmitter {
 
   convert() {
     return this.extractText()
-    .catch(() => Promise.reject({ error: 'conversion_error' }))
+    .catch(() => Promise.reject(new Error('conversion_error')))
     .then(fullText => ({ fullText }));
   }
 }
