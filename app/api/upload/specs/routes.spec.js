@@ -43,85 +43,83 @@ describe('upload routes', () => {
   });
 
   describe('POST/upload', () => {
-    // Temporary test for PDF conversion. This should probably go elsewhere?
-    it('should process the document after upload', (done) => {
-      iosocket.emit.and.callFake((eventName) => {
-        if (eventName === 'documentProcessed') {
-          return Promise.all([
-            documents.get({ sharedId: 'id', language: 'es' }, '+fullText'),
-            documents.get({ sharedId: 'id', language: 'en' }, '+fullText')
-          ])
-          .then(([docES, docEN]) => {
-            expect(iosocket.emit).toHaveBeenCalledWith('conversionStart', 'id');
-            expect(iosocket.emit).toHaveBeenCalledWith('documentProcessed', 'id');
-            expect(docEN[0].processed).toBe(true);
-            expect(docEN[0].fullText).toMatch(/Test\[\[1\]\] file/);
-            expect(docEN[0].language).toBe('en');
+    describe('Success process', () => {
+      function getDocuments() {
+        return Promise.all([
+          documents.get({ sharedId: 'id', language: 'es' }, '+fullText'),
+          documents.get({ sharedId: 'id', language: 'en' }, '+fullText')
+        ]);
+      }
 
-            expect(docES[0].processed).toBe(true);
-            expect(docES[0].fullText).toMatch(/Test\[\[1\]\] file/);
-            expect(docES[0].language).toBe('es');
-            done();
-          })
+      function checkLanguage(lang, done) {
+        iosocket.emit.and.callFake((eventName) => {
+          if (eventName === 'documentProcessed') {
+            return getDocuments()
+            .then(([docES, docEN]) => {
+              expect(docEN[0].file.language).toBe(lang);
+              expect(docES[0].file.language).toBe(lang);
+              done();
+            })
+            .catch(catchErrors(done));
+          }
+
+          return null;
+        });
+      }
+
+      // Temporary test for PDF conversion. This should probably go elsewhere?
+      it('should process the document after upload', (done) => {
+        iosocket.emit.and.callFake((eventName) => {
+          if (eventName === 'documentProcessed') {
+            return getDocuments()
+            .then(([docES, docEN]) => {
+              expect(iosocket.emit).toHaveBeenCalledWith('conversionStart', 'id');
+              expect(iosocket.emit).toHaveBeenCalledWith('documentProcessed', 'id');
+              expect(docEN[0].processed).toBe(true);
+              expect(docEN[0].fullText).toMatch(/Test\[\[1\]\] file/);
+              expect(docEN[0].language).toBe('en');
+
+              expect(docES[0].processed).toBe(true);
+              expect(docES[0].fullText).toMatch(/Test\[\[1\]\] file/);
+              expect(docES[0].language).toBe('es');
+              done();
+            })
+            .catch(catchErrors(done));
+          }
+          return null;
+        });
+
+        routes.post('/api/upload', req)
+        .catch(catchErrors(done));
+      });
+
+      describe('Language detection', () => {
+        it('should detect English documents and store the result', (done) => {
+          file.filename = 'eng.pdf';
+          file.path = `${__dirname}/uploads/eng.pdf`;
+
+          checkLanguage('eng', done);
+
+          routes.post('/api/upload', req)
           .catch(catchErrors(done));
-        }
-      });
-      routes.post('/api/upload', req)
-      .catch(catchErrors(done));
-    });
-
-    describe('Language detection', () => {
-      it('should detect English documents and store the result', (done) => {
-        file.filename = 'eng.pdf';
-        file.path = `${__dirname}/uploads/eng.pdf`;
-
-        iosocket.emit.and.callFake((eventName) => {
-          if (eventName === 'documentProcessed') {
-            return Promise.all([
-              documents.get({ sharedId: 'id', language: 'es' }, '+fullText'),
-              documents.get({ sharedId: 'id', language: 'en' }, '+fullText')
-            ])
-            .then(([docES, docEN]) => {
-              expect(docEN[0].file.language).toBe('eng');
-              expect(docES[0].file.language).toBe('eng');
-              done();
-            })
-            .catch(catchErrors(done));
-          }
         });
 
-        routes.post('/api/upload', req)
-        .catch(catchErrors(done));
-      });
+        it('should detect Spanish documents and store the result', (done) => {
+          file.filename = 'spn.pdf';
+          file.path = `${__dirname}/uploads/spn.pdf`;
 
-      it('should detect Spanish documents and store the result', (done) => {
-        file.filename = 'spn.pdf';
-        file.path = `${__dirname}/uploads/spn.pdf`;
-        iosocket.emit.and.callFake((eventName) => {
-          if (eventName === 'documentProcessed') {
-            return Promise.all([
-              documents.get({ sharedId: 'id', language: 'es' }, '+fullText'),
-              documents.get({ sharedId: 'id', language: 'en' }, '+fullText')
-            ])
-            .then(([docES, docEN]) => {
-              expect(docEN[0].file.language).toBe('spa');
-              expect(docES[0].file.language).toBe('spa');
-              done();
-            })
-            .catch(catchErrors(done));
-          }
+          checkLanguage('spa', done);
+
+          routes.post('/api/upload', req)
+          .catch(catchErrors(done));
         });
-
-        routes.post('/api/upload', req)
-        .catch(catchErrors(done));
       });
     });
 
     // -----------------------------------------------------------------------
 
     describe('when conversion fails', () => {
-      it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
-        //spyOn(elastic, 'bulk').and.returnValue(Promise.resolve({items: []}));
+      function checkError(done) {
         iosocket.emit.and.callFake((eventName) => {
           if (eventName === 'conversionFailed') {
             setTimeout(() => {
@@ -133,11 +131,31 @@ describe('upload routes', () => {
               });
             }, 500);
           }
-        });
 
-        req.files = ['invalid_file'];
-        routes.post('/api/upload', req)
-        .catch(done.fail);
+          if (eventName === 'documentProcessed') {
+            done.fail('should not have processed');
+          }
+        });
+      }
+
+      describe('by conversion_error', () => {
+        it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
+          checkError(done);
+          req.files = ['invalid_file'];
+          routes.post('/api/upload', req)
+          .catch(done.fail);
+        });
+      });
+
+      fdescribe('by thumbnail_error', () => {
+        it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
+          pdfUtils.pdfPageToImage.and.callFake(() => Promise.reject(new Error('thumbnail_error')));
+
+          checkError(done);
+
+          routes.post('/api/upload', req)
+          .catch(catchErrors(done));
+        });
       });
     });
 
