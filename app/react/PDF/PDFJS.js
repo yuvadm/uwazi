@@ -1,6 +1,5 @@
 /* eslint-disable import/no-mutable-exports, global-require, prefer-destructuring */
 import { isClient } from 'app/utils';
-/*import * as PDFJSMain from 'pdfjs-dist/build/pdf';*/
 
 let PDFJS;
 if (isClient) {
