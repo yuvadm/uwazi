@@ -55,13 +55,13 @@ describe('PDF', () => {
 
     describe('Errors', () => {
       function expectError(object, method, errorMsg, done) {
-        spyOn(object, method).and.returnValue(Promise.reject());
+        spyOn(object, method).and.returnValue(Promise.reject(new Error('generic_error')));
         pdf.convert()
         .then(() => {
           done.fail(`should have thrown a ${errorMsg}`);
         })
         .catch((error) => {
-          expect(error).toEqual(new Error(errorMsg));
+          expect(error.message).toContain(errorMsg);
           done();
         });
       }

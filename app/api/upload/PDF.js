@@ -57,12 +57,13 @@ export default class PDF extends EventEmitter {
 
   generateThumbnail() {
     const thumbPath = `${attachmentsPath}${basename(this.optimizedPath)}.jpg`;
-    return pdfUtils.pdfPageToImage(this.optimizedPath, thumbPath, { format: 'jpg', scale: 0.2 });
+    return pdfUtils.pdfPageToImage(this.optimizedPath, thumbPath, { format: 'jpg', scale: 0.2 })
+    .catch(err => Promise.reject(Object.assign(err, { message: `thumbnail_error: ${err.message}` })));
   }
 
   convert() {
     return this.extractText().catch(() => Promise.reject(new Error('conversion_error')))
-    .then(fullText => Promise.all([fullText, this.generateThumbnail().catch(() => Promise.reject(new Error('thumbnail_error')))]))
+    .then(fullText => Promise.all([fullText, this.generateThumbnail()]))
     .then(([fullText]) => ({ fullText }))
     .catch(err => Promise.reject(err));
   }
