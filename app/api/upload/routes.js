@@ -1,13 +1,10 @@
+import fs from 'fs';
 import multer from 'multer';
+
 import ID from 'shared/uniqueID';
 import languages from 'shared/languages';
 import entities from 'api/entities';
 import relationships from 'api/relationships';
-import PDF from './PDF';
-import needsAuthorization from '../auth/authMiddleware';
-import { uploadDocumentsPath } from '../config/paths';
-import fs from 'fs';
-
 
 import PDF from './PDF';
 import needsAuthorization from '../auth/authMiddleware';
