@@ -54,9 +54,7 @@ function renderPage(pdfDocument, page, scale) {
       canvasFactory
     };
 
-    return pageData.render(renderContext).then(() => canvasAndContext)
-    // REMOVE THIS CATCH!!!
-    .catch(err => console.log('ERR:', err));
+    return pageData.render(renderContext).then(() => canvasAndContext);
   });
 }
 
@@ -82,7 +80,6 @@ function outputPng(outputURL, canvasAndContext, promise) {
 }
 
 function formatResult(canvasAndContext, outputURL, format) {
-  console.log('Entering format after catch of line 59, this wont happen once that catch is removed');
   return new Promise((resolve, reject) => {
     switch (format) {
     case 'jpg':
