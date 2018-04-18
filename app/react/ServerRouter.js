@@ -31,9 +31,11 @@ function renderComponentWithRoot(Component, componentProps, initialData, user, i
   if (isRedux) {
     initialStore = store(initialData);
   }
-  // to prevent warnings on some client libs that use window global var
+  // To prevent warnings on some client libs that use window global var
+  // IMPORTANT!!! There are some implementations that use global.window
+  //              to detect if client or node, so this needs to be unset.
   global.window = {};
-  //
+  // ------------------------------------------------------------------
   t.resetCachedTranslation();
   try {
     componentHtml = renderToString(
@@ -46,6 +48,8 @@ function renderComponentWithRoot(Component, componentProps, initialData, user, i
   } catch (e) {
     console.trace(e); // eslint-disable-line
   }
+
+  delete global.window;
 
   const head = Helmet.rewind();
 
