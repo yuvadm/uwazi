@@ -8,6 +8,7 @@ const evidenceSchema = new mongoose.Schema({
   language: String,
   probability: Number,
   isEvidence: Boolean,
+  options: mongoose.Schema.Types.Mixed,
   evidence: {
     text: String
   }
