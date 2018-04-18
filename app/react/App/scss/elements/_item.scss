@@ -58,6 +58,13 @@
       background: transparent;
     }
   }
+
+  .thumbnail {
+    margin: 0px auto;
+    border: 0px;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 }
 
 .item-group-charts .item {
@@ -336,7 +343,7 @@ $item-padding: 15px;
   .markdown-viewer li {
     font-size: $f-size-sm;
   }
-  
+
   .markdown-viewer {
     position: relative;
     display: block;
@@ -387,7 +394,7 @@ $item-padding: 15px;
   height: $item-padding*2 + $item-padding;
   color: $c-grey-dark;
   padding: 0 $item-padding;
- 
+
   div {
     white-space: nowrap;
   }

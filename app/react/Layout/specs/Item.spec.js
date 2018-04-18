@@ -102,6 +102,22 @@ describe('Item', () => {
   });
 
   describe('Metadata', () => {
+    function expectThumbnail(filename, value) {
+      props.doc = props.doc.set('type', 'document').set('file', Immutable.fromJS({ filename }));
+      render();
+      expect(component.find(FormatMetadata).props().additionalMetadata).toEqual([
+        { label: 'Preview', type: 'thumbnail', translateContext: 'System', value }
+      ]);
+    }
+
+    it('should append the PDF thumbnail to additional metadata if entity is document', () => {
+      expectThumbnail('somedoc.pdf', 'somedoc.jpg');
+    });
+
+    it('should append a generic thumbnail when filename still undefined (recently uploaded documents)', () => {
+      expectThumbnail(null, 'no_peview.jpg');
+    });
+
     it('should render FormatMetadata passing entity sort property and additionalMetadata', () => {
       props.searchParams = { sort: 'sortedProperty' };
       props.additionalMetadata = [{ label: 'additional' }, { label: 'metadata' }];
@@ -109,14 +125,6 @@ describe('Item', () => {
       expect(component.find(FormatMetadata).props().entity).toEqual(props.doc.toJS());
       expect(component.find(FormatMetadata).props().sortedProperty).toBe(props.searchParams.sort);
       expect(component.find(FormatMetadata).props().additionalMetadata).toBe(props.additionalMetadata);
-    });
-
-    it('should append the PDF thumbnail to additional metadata if entity is document', () => {
-      props.doc = props.doc.set('type', 'document').set('file', Immutable.fromJS({ filename: 'somedoc.pdf' }));
-      render();
-      expect(component.find(FormatMetadata).props().additionalMetadata).toEqual([
-        { label: 'Preview', type: 'thumbnail', value: 'somedoc.jpg', translateContext: 'System' }
-      ]);
     });
   });
 
