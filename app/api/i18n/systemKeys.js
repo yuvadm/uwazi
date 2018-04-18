@@ -123,6 +123,7 @@ export default [
 { key: 'Pages', label: 'Pages' },
 { key: 'Password updated', label: 'Password updated' },
 { key: 'Password', label: 'Password' },
+{ key: 'Preview', label: 'Preview' },
 { key: 'Publish', label: 'Publish' },
 { key: 'Recently', label: 'Recently' },
 { key: 'References', label: 'References' },

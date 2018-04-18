@@ -16,6 +16,10 @@ const showByType = (prop, compact) => {
     result = <MarkdownViewer markdown={prop.value} />;
   }
 
+  if (prop.type === 'thumbnail') {
+    result = <img className="thumbnail" src={`/api/attachment/${prop.value}`} alt="Preview" />;
+  }
+
   if (prop.url) {
     result = <I18NLink to={prop.url}>{prop.value}</I18NLink>;
   }

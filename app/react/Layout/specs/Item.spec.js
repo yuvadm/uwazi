@@ -1,11 +1,11 @@
-import { fromJS as Immutable } from 'immutable';
 import React from 'react';
+import Immutable from 'immutable';
 
 import { get as prioritySortingCriteria } from 'app/utils/prioritySortingCriteria';
 import { shallow } from 'enzyme';
 
 import { FormatMetadata } from '../../Metadata';
-import { Item, mapStateToProps } from '../Item';
+import Item, { mapStateToProps } from '../Item';
 import { RowList, ItemFooter } from '../Lists';
 import DocumentLanguage from '../DocumentLanguage';
 import * as Icon from '../Icon';
@@ -18,7 +18,7 @@ describe('Item', () => {
   beforeEach(() => {
     Icon.default = Icon.Icon;
     props = {
-      doc: Immutable({
+      doc: Immutable.fromJS({
         type: 'entity',
         icon: { _id: 'icon', type: 'Icons' },
         title: 'doc title',
@@ -33,14 +33,13 @@ describe('Item', () => {
       onMouseEnter: jasmine.createSpy('onMouseEnter'),
       onMouseLeave: jasmine.createSpy('onMouseLeave'),
       additionalIcon: <div>additionalIcon</div>,
-      buttons: <div>Buttons</div>,
-      templates: Immutable([]),
-      thesauris: Immutable([])
+      buttons: <div>Buttons</div>
     };
   });
 
   const render = () => {
-    component = shallow(<Item {...props} />);
+    const state = { templates: Immutable.fromJS([]), thesauris: Immutable.fromJS([]) };
+    component = shallow(<Item.WrappedComponent {...Object.assign({}, props, mapStateToProps(state, props))} />);
   };
 
   it('should have default props values assigned', () => {
@@ -68,7 +67,7 @@ describe('Item', () => {
   });
 
   it('should call onSnippetClick when clicking on the snippet', () => {
-    props.doc = Immutable({ _id: 'id', snippets: [{ text: 'snippet', page: 1 }] });
+    props.doc = Immutable.fromJS({ _id: 'id', snippets: [{ text: 'snippet', page: 1 }] });
     render();
     component.find('.item-snippet').simulate('click');
     expect(props.onSnippetClick).toHaveBeenCalled();
@@ -104,18 +103,26 @@ describe('Item', () => {
 
   describe('Metadata', () => {
     it('should render FormatMetadata passing entity sort property and additionalMetadata', () => {
-      props.search = { sort: 'sortedProperty' };
-      props.additionalMetadata = ['additioal', 'metadata'];
+      props.searchParams = { sort: 'sortedProperty' };
+      props.additionalMetadata = [{ label: 'additional' }, { label: 'metadata' }];
       render();
       expect(component.find(FormatMetadata).props().entity).toEqual(props.doc.toJS());
-      expect(component.find(FormatMetadata).props().sortedProperty).toBe(props.search.sort);
+      expect(component.find(FormatMetadata).props().sortedProperty).toBe(props.searchParams.sort);
       expect(component.find(FormatMetadata).props().additionalMetadata).toBe(props.additionalMetadata);
+    });
+
+    it('should append the PDF thumbnail to additional metadata if entity is document', () => {
+      props.doc = props.doc.set('type', 'document').set('file', Immutable.fromJS({ filename: 'somedoc.pdf' }));
+      render();
+      expect(component.find(FormatMetadata).props().additionalMetadata).toEqual([
+        { label: 'Preview', type: 'thumbnail', value: 'somedoc.jpg', translateContext: 'System' }
+      ]);
     });
   });
 
   describe('when doc have no snippets', () => {
     it('should not render snippet secction when undefined', () => {
-      props.doc = Immutable({
+      props.doc = Immutable.fromJS({
         type: 'entity',
         icon: { _id: 'icon', type: 'Icons' },
         title: 'doc title',
@@ -127,7 +134,7 @@ describe('Item', () => {
       expect(component.find('.item-snippet').length).toBe(0);
     });
     it('should not render snippet secction when empty', () => {
-      props.doc = Immutable({
+      props.doc = Immutable.fromJS({
         type: 'entity',
         icon: { _id: 'icon', type: 'Icons' },
         title: 'doc title',
@@ -143,7 +150,7 @@ describe('Item', () => {
 
   describe('when doc have snippets', () => {
     it('should render the first snippet of the document if exists', () => {
-      props.doc = Immutable({
+      props.doc = Immutable.fromJS({
         type: 'entity',
         icon: { _id: 'icon', type: 'Icons' },
         title: 'doc title',
@@ -161,6 +168,7 @@ describe('Item', () => {
     let templates;
     let thesauris;
     let search;
+    const doc = Immutable.fromJS({ type: 'entity' });
 
     beforeEach(() => {
       templates = 'templates';
@@ -168,12 +176,13 @@ describe('Item', () => {
     });
 
     it('should include templates, thesauris and default sort', () => {
-      expect(mapStateToProps({ templates, thesauris }, {})).toEqual({ templates, thesauris, search });
+      expect(mapStateToProps({ templates, thesauris }, { doc })).toEqual({ additionalMetadata: [], templates, thesauris, search });
     });
 
     it('should allow overriding the default sort', () => {
-      const ownProps = { searchParams: { sort: 'newSort' } };
-      expect(mapStateToProps({ templates, thesauris }, ownProps)).toEqual({ templates, thesauris, search: { sort: 'newSort' } });
+      const ownProps = { doc, searchParams: { sort: 'newSort' } };
+      expect(mapStateToProps({ templates, thesauris }, ownProps))
+      .toEqual({ additionalMetadata: [], templates, thesauris, search: { sort: 'newSort' } });
     });
   });
 });

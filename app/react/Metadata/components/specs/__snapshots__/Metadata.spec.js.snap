@@ -126,6 +126,27 @@ exports[`Metadata should render links when the property has url 1`] = `
 </React.Fragment>
 `;
 
+exports[`Metadata should render preview img when propery has type thumbnail 1`] = `
+<React.Fragment>
+  <dl
+    key="Preview"
+  >
+    <dt>
+      Preview
+    </dt>
+    <dd
+      className=""
+    >
+      <img
+        alt="Preview"
+        className="thumbnail"
+        src="/api/attachment/filename.jpg"
+      />
+    </dd>
+  </dl>
+</React.Fragment>
+`;
+
 exports[`Metadata should render property not have this item when type is null 1`] = `
 <React.Fragment>
   <dl

@@ -11,7 +11,7 @@ import Icon from './Icon';
 import TemplateLabel from './TemplateLabel';
 import t from '../I18N/t';
 
-export class Item extends Component {
+class Item extends Component {
   getSearchSnipett(doc) {
     if (!doc.snippets || !doc.snippets.length) {
       return false;
@@ -39,7 +39,7 @@ export class Item extends Component {
 
   render() {
     const { onClick, onMouseEnter, onMouseLeave, active, additionalIcon,
-           additionalText, buttons, evalPublished } = this.props;
+           additionalText, buttons, evalPublished, additionalMetadata, search } = this.props;
 
     const doc = this.props.doc.toJS();
     const Snippet = additionalText ? <div className="item-snippet-wrapper"><div className="item-snippet">{additionalText}</div></div> : null;
@@ -63,8 +63,8 @@ export class Item extends Component {
         <div className="item-metadata">
           <FormatMetadata
             entity={doc}
-            sortedProperty={this.props.search.sort}
-            additionalMetadata={this.props.additionalMetadata}
+            sortedProperty={search.sort}
+            additionalMetadata={additionalMetadata}
           />
         </div>
         <ItemFooter>
@@ -80,7 +80,10 @@ export class Item extends Component {
 Item.defaultProps = {
   onClick: () => {},
   onMouseEnter: () => {},
-  onMouseLeave: () => {}
+  onMouseLeave: () => {},
+  additionalMetadata: [],
+  search: prioritySortingCriteria(),
+  titleProperty: 'title'
 };
 
 Item.propTypes = {
@@ -94,7 +97,7 @@ Item.propTypes = {
   active: PropTypes.bool,
   additionalIcon: PropTypes.object,
   additionalText: PropTypes.string,
-  additionalMetadata: PropTypes.array,
+  additionalMetadata: PropTypes.arrayOf(PropTypes.object),
   doc: PropTypes.object,
   itemHeader: PropTypes.object,
   buttons: PropTypes.object,
@@ -104,15 +107,18 @@ Item.propTypes = {
   evalPublished: PropTypes.bool
 };
 
-Item.defaultProps = {
-  search: prioritySortingCriteria(),
-  titleProperty: 'title'
-};
-
 export const mapStateToProps = ({ templates, thesauris }, ownProps) => {
+  const additionalMetadata = ownProps.additionalMetadata || [];
+
+  if (ownProps.doc.get('type') === 'document') {
+    const filename = ownProps.doc.getIn(['file', 'filename']);
+    const thumbnail = `${filename.lastIndexOf('.') !== -1 ? filename.substring(0, filename.lastIndexOf('.')) : filename}.jpg`;
+    additionalMetadata.push({ label: 'Preview', type: 'thumbnail', value: thumbnail, translateContext: 'System' });
+  }
+
   const search = ownProps.searchParams;
   const _templates = ownProps.templates || templates;
-  return { templates: _templates, thesauris, search };
+  return { templates: _templates, thesauris, search, additionalMetadata };
 };
 
 export default connect(mapStateToProps)(Item);
