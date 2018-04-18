@@ -63,9 +63,9 @@ export default (app) => {
   app.get('/api/attachment/:file', (req, res) => {
     const filePath = `${path.resolve(attachmentsPath)}/${path.basename(req.params.file)}`;
     fs.stat(filePath, (err) => {
-      const error = new Error('File not found');
-      error.code = '404';
-      if (err) { return res.error(error); }
+      if (err) {
+        return res.sendFile(path.resolve(`${__dirname}/../../../public/no_preview.jpg`));
+      }
       return res.sendFile(filePath);
     });
   });
