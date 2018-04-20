@@ -54,25 +54,29 @@ describe('PDF', () => {
     });
 
     describe('Errors', () => {
-      function expectError(object, method, errorMsg, done) {
-        spyOn(object, method).and.returnValue(Promise.reject(new Error('generic_error')));
+      it('should throw a conversion_error', (done) => {
+        spyOn(pdf, 'extractText').and.returnValue(Promise.reject(new Error('generic_error')));
         pdf.convert()
         .then(() => {
-          done.fail(`should have thrown a ${errorMsg}`);
+          done.fail('Should have thrown a conversion_error');
         })
         .catch((error) => {
-          expect(error.message).toContain(errorMsg);
+          expect(error.message).toBe('conversion_error');
           done();
         });
-      }
-
-      it('should throw a conversion_error', (done) => {
-        expectError(pdf, 'extractText', 'conversion_error', done);
       });
 
-      it('should throw a thumbnail_error', (done) => {
+      it('should bypass a thumbnail_error (PDF.js is prone to errors, better to not block a cosmetic failure like thumbnail)', (done) => {
         spyOn(pdf, 'extractText').and.returnValue(Promise.resolve('fullText'));
-        expectError(pdfUtils, 'pdfPageToImage', 'thumbnail_error', done);
+        spyOn(pdfUtils, 'pdfPageToImage').and.returnValue(Promise.reject(new Error('thumbnail_error')));
+        pdf.convert()
+        .then((fullText) => {
+          expect(fullText).toEqual({ fullText: 'fullText' });
+          done();
+        })
+        .catch((error) => {
+          done.fail(`Should not have failed with ${error}`);
+        });
       });
     });
   });
