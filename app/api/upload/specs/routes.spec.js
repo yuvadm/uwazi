@@ -138,24 +138,11 @@ describe('upload routes', () => {
         });
       }
 
-      describe('by conversion_error', () => {
-        it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
-          checkError(done);
-          req.files = ['invalid_file'];
-          routes.post('/api/upload', req)
-          .catch(done.fail);
-        });
-      });
-
-      fdescribe('by thumbnail_error', () => {
-        it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
-          pdfUtils.pdfPageToImage.and.callFake(() => Promise.reject(new Error('thumbnail_error')));
-
-          checkError(done);
-
-          routes.post('/api/upload', req)
-          .catch(catchErrors(done));
-        });
+      it('should set document processed to false and emit a socket conversionFailed event with the id of the document', (done) => {
+        checkError(done);
+        req.files = ['invalid_file'];
+        routes.post('/api/upload', req)
+        .catch(done.fail);
       });
     });
 
