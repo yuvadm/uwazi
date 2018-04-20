@@ -36,11 +36,7 @@ export default (app) => {
     console.log('Upload Process for', _docs.map(d => d._id).toString());
     console.log('Original name', fs.existsSync(req.files[0].originalname));
     console.log('File exists', fs.existsSync(req.files[0].path));
-    const docs = _docs.map((doc) => {
-      doc.file = req.files[0];
-      doc.uploaded = true;
-      return doc;
-    });
+    const docs = _docs.map(doc => Object.assign({}, doc, { file: req.files[0], uploaded: true }));
     return entities.saveMultiple(docs);
   })
   .then(() => {
@@ -60,11 +56,8 @@ export default (app) => {
   .then(([conversion, _docs]) => {
     console.log('Conversion succeeed for:', req.files[0].originalname);
     const docs = _docs.map((doc) => {
-      doc.processed = true;
-      doc.fullText = conversion.fullText;
-      doc.file.language = languages.detect(conversion.fullText, 'franc');
-      doc.toc = [];
-      return doc;
+      const file = Object.assign({}, doc.file, { language: languages.detect(conversion.fullText, 'franc') });
+      return Object.assign({}, doc, { processed: true, fullText: conversion.fullText, toc: [], file });
     });
     console.log('Saving documents');
     return entities.saveMultiple(docs).then(() => {
@@ -75,10 +68,7 @@ export default (app) => {
   .catch((err) => {
     getDocuments(req.body.document, allLanguages)
     .then((_docs) => {
-      const docs = _docs.map((doc) => {
-        doc.processed = false;
-        return doc;
-      });
+      const docs = _docs.map(doc => Object.assign({}, doc, { processed: false }));
       entities.saveMultiple(docs);
     });
 
