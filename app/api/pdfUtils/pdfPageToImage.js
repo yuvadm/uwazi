@@ -62,10 +62,8 @@ function outputJpg(outputURL, canvasAndContext, promise) {
   const out = fs.createWriteStream(outputURL);
   const stream = canvasAndContext.canvas.jpegStream({ bufsize: 4096, quality: 75, progressive: false });
 
-  stream.on('data', (chunk) => { out.write(chunk); });
-  stream.on('end', () => { out.end(); });
+  stream.pipe(out);
   out.on('error', (err) => { promise.reject(err); });
-
   out.on('finish', () => {
     promise.resolve('Finished converting page to JPG.');
   });
