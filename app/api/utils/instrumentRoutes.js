@@ -1,3 +1,7 @@
+const createSpy = (key, resolve) => jasmine.createSpy(key).and.callFake((response) => {
+  resolve(response);
+});
+
 const executeRoute = (method, routePath, req = {}, res, app) => {
   const args = app[method].calls.allArgs().find(a => a[0] === routePath);
   if (!args) {
@@ -10,9 +14,9 @@ const executeRoute = (method, routePath, req = {}, res, app) => {
       statusCode = code;
     };
 
-    res.download = jasmine.createSpy('download').and.callFake((response) => {
-      resolve(response);
-    });
+    res.download = createSpy('download', resolve);
+    res.redirect = createSpy('redirect', resolve);
+    res.sendFile = createSpy('sendFile', resolve);
 
     res.json = jasmine.createSpy('json').and.callFake((response) => {
       if (statusCode) {
@@ -26,10 +30,10 @@ const executeRoute = (method, routePath, req = {}, res, app) => {
     };
 
     if (!args[1]) {
-      return reject(new Error('route function has not been defined !'));
+      reject(new Error('route function has not been defined !'));
+    } else {
+      args[args.length - 1](req, res);
     }
-
-    args[args.length - 1](req, res);
   });
 
   if (args) {
@@ -45,9 +49,7 @@ export default (route, io) => {
 
   const instrumentedRoute = {
     get: (routePath, req, res = {}) => executeRoute('get', routePath, req, res, app),
-
     delete: (routePath, req, res = {}) => executeRoute('delete', routePath, req, res, app),
-
     post: (routePath, req, res = {}) => executeRoute('post', routePath, req, res, app)
   };
 

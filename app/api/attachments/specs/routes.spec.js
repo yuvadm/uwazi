@@ -6,11 +6,20 @@ import attachmentsRoutes from '../routes';
 import entities from '../../entities';
 import fixtures, { entityId, entityIdEn, entityIdPt, toDeleteId, attachmentToEdit } from './fixtures';
 import instrumentRoutes from '../../utils/instrumentRoutes';
-import paths, { attachmentsPath } from '../../config/paths';
+import paths from '../../config/paths';
 
 describe('Attachments Routes', () => {
   let routes;
   let originalAttachmentsPath;
+
+  function testRouteResponse(URL, req, expected, done) {
+    routes.get(URL, req)
+    .then((response) => {
+      expect(response).toBe(expected);
+      done();
+    })
+    .catch(catchErrors(done));
+  }
 
   beforeEach((done) => {
     spyOn(entities, 'indexEntities').and.returnValue(Promise.resolve());
@@ -29,6 +38,17 @@ describe('Attachments Routes', () => {
     db.disconnect().then(done);
   });
 
+  describe('/attachment/file', () => {
+    it('should send the requested existing file', (done) => {
+      const expected = `${paths.attachmentsPath}mockfile.doc`;
+      testRouteResponse('/api/attachment/:file', { params: { file: 'mockfile.doc' } }, expected, done);
+    });
+
+    it('should redirect to no_preview if file doesnt exist', (done) => {
+      testRouteResponse('/api/attachment/:file', { params: { file: 'missing.jpg' } }, '/public/no_preview.jpg', done);
+    });
+  });
+
   describe('/download', () => {
     it('should download the document with the titile as file name (replacing extension with file ext)', (done) => {
       const req = { query: { _id: entityId, file: 'match.doc' } };
@@ -36,7 +56,7 @@ describe('Attachments Routes', () => {
 
       routes.get('/api/attachments/download', req, res)
       .then(() => {
-        expect(res.download).toHaveBeenCalledWith(attachmentsPath + req.query.file, 'common name 2.doc');
+        expect(res.download).toHaveBeenCalledWith(paths.attachmentsPath + req.query.file, 'common name 2.doc');
         done();
       })
       .catch(catchErrors(done));

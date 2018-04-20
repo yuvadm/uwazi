@@ -8,11 +8,11 @@ import ID from 'shared/uniqueID';
 import entities from 'api/entities';
 import needsAuthorization from '../auth/authMiddleware';
 
-import { attachmentsPath } from '../config/paths';
+import paths from '../config/paths';
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, attachmentsPath);
+    cb(null, paths.attachmentsPath);
   },
   filename(req, file, cb) {
     cb(null, Date.now() + ID() + path.extname(file.originalname));
@@ -49,19 +49,8 @@ const processAllLanguages = (entity, req) => processSingleLanguage(entity, req)
 export default (app) => {
   const upload = multer({ storage });
 
-  app.get('/api/attachments/download', (req, res) => {
-    entities.getById(req.query._id)
-    .then((response) => {
-      const file = response.attachments.find(a => a.filename === req.query.file);
-      const newName = path.basename(file.originalname, path.extname(file.originalname)) + path.extname(file.filename);
-      res.download(attachmentsPath + file.filename, sanitize(newName));
-    })
-    .catch(error => res.json({ error }, 500));
-  });
-
-  // TEST!!!
   app.get('/api/attachment/:file', (req, res) => {
-    const filePath = `${path.resolve(attachmentsPath)}/${path.basename(req.params.file)}`;
+    const filePath = `${path.resolve(paths.attachmentsPath)}/${path.basename(req.params.file)}`;
     fs.stat(filePath, (err) => {
       if (err) {
         return res.redirect('/public/no_preview.jpg');
@@ -69,7 +58,16 @@ export default (app) => {
       return res.sendFile(filePath);
     });
   });
-  // -------
+
+  app.get('/api/attachments/download', (req, res) => {
+    entities.getById(req.query._id)
+    .then((response) => {
+      const file = response.attachments.find(a => a.filename === req.query.file);
+      const newName = path.basename(file.originalname, path.extname(file.originalname)) + path.extname(file.filename);
+      res.download(paths.attachmentsPath + file.filename, sanitize(newName));
+    })
+    .catch(error => res.json({ error }, 500));
+  });
 
   app.post('/api/attachments/upload', needsAuthorization(['admin', 'editor']), upload.any(), (req, res) => entities.getById(req.body.entityId)
   .then(entity => req.body.allLanguages === 'true' ? processAllLanguages(entity, req) :
@@ -120,7 +118,7 @@ export default (app) => {
     }, true);
 
     return !shouldUnlink ? res.json(response[0]) : new Promise((resolve, reject) => {
-      fs.unlink(attachmentsPath + req.query.filename, (err) => {
+      fs.unlink(paths.attachmentsPath + req.query.filename, (err) => {
         if (err) {
           reject(err);
           return;
