@@ -40,12 +40,12 @@ describe('Attachments Routes', () => {
 
   describe('/attachment/file', () => {
     it('should send the requested existing file', (done) => {
-      const expected = `${paths.attachmentsPath}mockfile.doc`;
+      const expected = `sendFile:${paths.attachmentsPath}mockfile.doc`;
       testRouteResponse('/api/attachment/:file', { params: { file: 'mockfile.doc' } }, expected, done);
     });
 
     it('should redirect to no_preview if file doesnt exist', (done) => {
-      testRouteResponse('/api/attachment/:file', { params: { file: 'missing.jpg' } }, '/public/no_preview.jpg', done);
+      testRouteResponse('/api/attachment/:file', { params: { file: 'missing.jpg' } }, 'redirect:/public/no_preview.jpg', done);
     });
   });
 

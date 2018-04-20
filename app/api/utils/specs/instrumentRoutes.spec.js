@@ -53,15 +53,15 @@ describe('routesMock', () => {
 
   describe('res alternate methods', () => {
     it('should allow testing res.redirect as a pormise', (done) => {
-      testMethod('get', done, '/overriden/redirect', 'newUrl');
+      testMethod('get', done, '/overriden/redirect', 'redirect:newUrl');
     });
 
     it('should allow testing res.download as a pormise', (done) => {
-      testMethod('get', done, '/overriden/donwload', 'file');
+      testMethod('get', done, '/overriden/donwload', 'download:file');
     });
 
     it('should allow testing res.sendFile as a pormise', (done) => {
-      testMethod('get', done, '/overriden/sendFile', 'file');
+      testMethod('get', done, '/overriden/sendFile', 'sendFile:file');
     });
   });
 
