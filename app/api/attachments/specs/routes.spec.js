@@ -52,14 +52,8 @@ describe('Attachments Routes', () => {
   describe('/download', () => {
     it('should download the document with the titile as file name (replacing extension with file ext)', (done) => {
       const req = { query: { _id: entityId, file: 'match.doc' } };
-      const res = {};
-
-      routes.get('/api/attachments/download', req, res)
-      .then(() => {
-        expect(res.download).toHaveBeenCalledWith(paths.attachmentsPath + req.query.file, 'common name 2.doc');
-        done();
-      })
-      .catch(catchErrors(done));
+      const expected = `download:${paths.attachmentsPath + req.query.file},common name 2.doc`;
+      testRouteResponse('/api/attachments/download', req, expected, done);
     });
   });
 
