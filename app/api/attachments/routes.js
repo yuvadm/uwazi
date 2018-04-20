@@ -64,7 +64,7 @@ export default (app) => {
     const filePath = `${path.resolve(attachmentsPath)}/${path.basename(req.params.file)}`;
     fs.stat(filePath, (err) => {
       if (err) {
-        return res.sendFile(path.resolve(`${__dirname}/../../../public/no_preview.jpg`));
+        return res.redirect('/public/no_preview.jpg');
       }
       return res.sendFile(filePath);
     });
