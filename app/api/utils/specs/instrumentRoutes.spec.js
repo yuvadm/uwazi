@@ -31,7 +31,7 @@ describe('routesMock', () => {
     app.delete('/test/route', (req, res) => { res.json({ response: 'delete' }); });
     app.post('/test/route', (req, res) => { res.json({ response: 'post' }); });
     app.get('/overriden/redirect', (req, res) => { res.redirect('newUrl'); });
-    app.get('/overriden/donwload', (req, res) => { res.download('file'); });
+    app.get('/overriden/donwload', (req, res) => { res.download('file', 'secondParam'); });
     app.get('/overriden/sendFile', (req, res) => { res.sendFile('file'); });
   };
 
@@ -57,7 +57,7 @@ describe('routesMock', () => {
     });
 
     it('should allow testing res.download as a pormise', (done) => {
-      testMethod('get', done, '/overriden/donwload', 'download:file');
+      testMethod('get', done, '/overriden/donwload', 'download:file,secondParam');
     });
 
     it('should allow testing res.sendFile as a pormise', (done) => {

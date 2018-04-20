@@ -1,5 +1,5 @@
-const createSpy = (key, resolve) => jasmine.createSpy(key).and.callFake((response) => {
-  resolve(`${key}:${response}`);
+const createSpy = (key, resolve) => jasmine.createSpy(key).and.callFake((...args) => {
+  resolve(`${key}:${args.join(',')}`);
 });
 
 const executeRoute = (method, routePath, req = {}, res, app) => {
