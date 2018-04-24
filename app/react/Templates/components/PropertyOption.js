@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { removeProperty } from 'app/Templates/actions/templateActions';
 import Icons from './Icons';
 
-export class PropertyOption extends Component {
+class PropertyOption extends Component {
   render() {
     const { connectDragSource } = this.props;
     const { label } = this.props;
@@ -25,6 +25,10 @@ export class PropertyOption extends Component {
     );
   }
 }
+
+PropertyOption.defaultProps = {
+  disabled: false
+};
 
 PropertyOption.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
