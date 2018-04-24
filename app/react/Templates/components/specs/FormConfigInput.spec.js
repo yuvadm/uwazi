@@ -25,8 +25,22 @@ describe('FormConfigInput', () => {
     };
   });
 
-  it('should render Fields with the correct datas', () => {
+  const render = () => {
     component = shallow(<FormConfigInput {...props}/>);
+  };
+
+  const expectPrioritySortingToShow = (bool) => {
+    render();
+    expect(component.find(Field).at(5).parent().props().if).toBe(bool);
+  };
+
+  const expectErrorLengthToBe = (length) => {
+    render();
+    expect(component.find('.has-error').length).toBe(length);
+  };
+
+  it('should render Fields with the correct datas', () => {
+    render();
     const formFields = component.find(Field);
     expect(formFields.getElements()[0].props.model).toBe('template.data.properties[0].label');
     expect(formFields.getElements()[1].props.model).toBe('template.data.properties[0].required');
@@ -38,20 +52,16 @@ describe('FormConfigInput', () => {
 
   it('should not allow prioritySorting on types others than text or date', () => {
     props.type = 'text';
-    component = shallow(<FormConfigInput {...props}/>);
-    expect(component.find(Field).at(5).parent().props().if).toBe(true);
+    expectPrioritySortingToShow(true);
     props.type = 'date';
-    component = shallow(<FormConfigInput {...props}/>);
-    expect(component.find(Field).at(5).parent().props().if).toBe(true);
+    expectPrioritySortingToShow(true);
     props.type = 'markdown';
-    component = shallow(<FormConfigInput {...props}/>);
-    expect(component.find(Field).at(5).parent().props().if).toBe(false);
+    expectPrioritySortingToShow(false);
   });
 
   describe('validation', () => {
     it('should render the label without errors', () => {
-      component = shallow(<FormConfigInput {...props}/>);
-      expect(component.find('.has-error').length).toBe(0);
+      expectErrorLengthToBe(0);
     });
   });
 
@@ -59,15 +69,13 @@ describe('FormConfigInput', () => {
     it('should render the label with errors', () => {
       props.formState.$form.errors['properties.0.label.required'] = true;
       props.formState['properties.0.label'].dirty = true;
-      component = shallow(<FormConfigInput {...props}/>);
-      expect(component.find('.has-error').length).toBe(1);
+      expectErrorLengthToBe(1);
     });
 
     it('should render the label with errors', () => {
       props.formState.$form.errors['properties.0.label.required'] = true;
       props.formState.submitFailed = true;
-      component = shallow(<FormConfigInput {...props}/>);
-      expect(component.find('.has-error').length).toBe(1);
+      expectErrorLengthToBe(1);
     });
   });
 });
