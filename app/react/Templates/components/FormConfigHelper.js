@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import FilterSuggestions from 'app/Templates/components/FilterSuggestions';
 import { Field } from 'react-redux-form';
 import { connect } from 'react-redux';
 
 class FormConfigHelper extends Component {
   render() {
-    const { index, property, formState, canShowInCard, helpText } = this.props;
+    const { index, formState, canShowInCard, helpText } = this.props;
     let labelClass = 'form-group';
     const labelKey = `properties.${index}.label`;
     const requiredLabel = formState.$form.errors[`${labelKey}.required`];
@@ -25,9 +24,9 @@ class FormConfigHelper extends Component {
         </div>
 
         {helpText &&
-          <div className="help-text">
-            <i className="fa fa-lightbulb" />
-            {helpText}
+          <div className="protip">
+            <i className="fa fa-lightbulb-o"/>
+            <span>This is an automatically generated field.  For Documents, it renders a thumbnail of the PDFs first page.</span>
           </div>
         }
 
@@ -43,9 +42,6 @@ class FormConfigHelper extends Component {
             </label>
           </Field>
         }
-        <div>
-          <FilterSuggestions {...property} />
-        </div>
       </div>
     );
   }
@@ -59,14 +55,12 @@ FormConfigHelper.defaultProps = {
 FormConfigHelper.propTypes = {
   canShowInCard: PropTypes.bool,
   helpText: PropTypes.string,
-  property: PropTypes.instanceOf(Object).isRequired,
   index: PropTypes.number.isRequired,
   formState: PropTypes.instanceOf(Object).isRequired
 };
 
-export function mapStateToProps({ template }, props) {
+export function mapStateToProps({ template }) {
   return {
-    property: template.data.properties[props.index],
     formState: template.formState
   };
 }

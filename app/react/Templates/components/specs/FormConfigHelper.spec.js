@@ -42,10 +42,10 @@ describe('FormConfigHelper', () => {
   });
 
   it('should allow setting a help text', () => {
-    expect(component.find('.help-text').length).toBe(0);
+    expect(component.find('.protip').length).toBe(0);
     props.helpText = 'Some help text';
     render();
-    expect(component.find('.help-text').length).toBe(1);
+    expect(component.find('.protip').length).toBe(1);
   });
 
   it('should allow excluding "show in card"', () => {
