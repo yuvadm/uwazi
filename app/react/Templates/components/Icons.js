@@ -11,5 +11,6 @@ export default {
   multidate: 'fa fa-calendar fa-fw',
   multidaterange: 'fa fa-calendar fa-fw',
   daterange: 'fa fa-calendar fa-fw',
-  geolocation: 'fa fa-map-marker fa-fw'
+  geolocation: 'fa fa-map-marker fa-fw',
+  preview: 'fa fa-image fa-fw'
 };

@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Icons should hold the option icons map 1`] = `
+Object {
+  "checkbox": "fa fa-check-square-o fa-fw",
+  "date": "fa fa-calendar fa-fw",
+  "daterange": "fa fa-calendar fa-fw",
+  "geolocation": "fa fa-map-marker fa-fw",
+  "markdown": "fa fa-file-text-o fa-fw",
+  "multidate": "fa fa-calendar fa-fw",
+  "multidaterange": "fa fa-calendar fa-fw",
+  "multiselect": "fa fa-list fa-fw",
+  "nested": "fa fa-cubes fa-fw",
+  "numeric": "fa fa-calculator fa-fw",
+  "preview": "fa fa-image fa-fw",
+  "relationship": "fa fa-link fa-fw",
+  "select": "fa fa-sort fa-fw",
+  "text": "fa fa-font fa-fw",
+}
+`;
