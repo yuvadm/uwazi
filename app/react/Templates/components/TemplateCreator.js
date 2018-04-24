@@ -7,11 +7,11 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { resetTemplate, saveTemplate, saveEntity } from 'app/Templates/actions/templateActions';
-import { saveRelationType } from 'app/RelationTypes/actions/relationTypeActions';
-import MetadataTemplate from 'app/Templates/components/MetadataTemplate';
-import PropertyOption from 'app/Templates/components/PropertyOption';
 import ShowIf from 'app/App/ShowIf';
+import { saveRelationType } from 'app/RelationTypes/actions/relationTypeActions';
+import { resetTemplate, saveTemplate, saveEntity } from '../actions/templateActions';
+import MetadataTemplate from './MetadataTemplate';
+import PropertyOption from './PropertyOption';
 
 export class TemplateCreator extends Component {
   componentWillUnmount() {
@@ -19,16 +19,20 @@ export class TemplateCreator extends Component {
   }
 
   render() {
+    let environment = 'document';
     let save = this.props.saveTemplate;
     let backUrl = '/settings/documents';
+
     if (this.props.entity) {
       save = this.props.saveEntity;
       backUrl = '/settings/entities';
+      environment = 'entity';
     }
 
     if (this.props.relationType) {
       save = this.props.saveRelationType;
       backUrl = '/settings/connections';
+      environment = 'relationship';
     }
 
     return (
@@ -42,7 +46,7 @@ export class TemplateCreator extends Component {
               <main className="col-xs-12 col-sm-9">
                 <MetadataTemplate saveTemplate={save} backUrl={backUrl} relationType={this.props.relationType}/>
               </main>
-              <ShowIf if={!this.props.relationType}>
+              { environment !== 'relationship' &&
                 <aside className="col-xs-12 col-sm-3">
                   <div className="metadataTemplate-constructor">
                     <div><i>Properties</i></div>
@@ -51,16 +55,17 @@ export class TemplateCreator extends Component {
                       <PropertyOption label="Numeric" type="numeric"/>
                       <PropertyOption label="Select" type="select" disabled={this.props.noDictionaries} />
                       <PropertyOption label="Multi Select" type="multiselect" disabled={this.props.noDictionaries} />
-                      <ShowIf if={!this.props.relationType}>
+                      { environment !== 'relationship' &&
                         <PropertyOption label="Relationship" type="relationship" disabled={this.props.noRelationtypes} />
-                      </ShowIf>
+                      }
                       <PropertyOption label="Date" type="date"/>
                       <PropertyOption label="Date Range" type="daterange"/>
                       <PropertyOption label="Multi Date" type="multidate"/>
                       <PropertyOption label="Multi Date Range" type="multidaterange"/>
+                      { environment === 'document' && <PropertyOption label="Preview" type="preview"/> }
                       <PropertyOption label="Rich Text" type="markdown"/>
                       <PropertyOption label="Geolocation" type="geolocation"/>
-                      <ShowIf if={this.props.settings.collection.toJS().project === 'cejil'}>
+                      <ShowIf if={this.props.project === 'cejil'}>
                         <PropertyOption label="Violated articles" type="nested"/>
                       </ShowIf>
                     </ul>
@@ -71,7 +76,7 @@ export class TemplateCreator extends Component {
                     </ShowIf>
                   </div>
                 </aside>
-              </ShowIf>
+              }
             </div>
           </div>
         </div>
@@ -80,16 +85,24 @@ export class TemplateCreator extends Component {
   }
 }
 
+TemplateCreator.defaultProps = {
+  entity: false,
+  relationType: false,
+  noRelationtypes: true,
+  noDictionaries: true,
+  project: ''
+};
+
 TemplateCreator.propTypes = {
-  resetTemplate: PropTypes.func,
-  saveTemplate: PropTypes.func,
-  saveEntity: PropTypes.func,
-  saveRelationType: PropTypes.func,
+  resetTemplate: PropTypes.func.isRequired,
+  saveTemplate: PropTypes.func.isRequired,
+  saveEntity: PropTypes.func.isRequired,
+  saveRelationType: PropTypes.func.isRequired,
   entity: PropTypes.bool,
   relationType: PropTypes.bool,
   noRelationtypes: PropTypes.bool,
   noDictionaries: PropTypes.bool,
-  settings: PropTypes.object
+  project: PropTypes.string
 };
 
 TemplateCreator.contextTypes = {
@@ -101,7 +114,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ settings, relationTypes, thesauris }) => ({
-    settings,
+    project: settings.collection.toJS().project,
     noRelationtypes: !relationTypes.size,
     noDictionaries: !thesauris.size
 });
