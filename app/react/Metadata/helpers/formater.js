@@ -92,6 +92,16 @@ export default {
     return { label: property.get('label'), name: property.get('name'), value, showInCard };
   },
 
+  preview(property, value, thesauris, showInCard, options, doc) {
+    let url = 'no_preview.jpg';
+    if (doc.type === 'document') {
+      const filename = doc.file && doc.file.filename ? doc.file.filename : 'no_peview';
+      const thumbnail = `${filename.lastIndexOf('.') !== -1 ? filename.substring(0, filename.lastIndexOf('.')) : filename}.jpg`;
+      url = thumbnail;
+    }
+    return { label: property.get('label'), name: property.get('name'), value: url, showInCard };
+  },
+
   geolocation(property, value, thesauris, showInCard, renderForCard) {
     const markers = [];
     let _value;
@@ -201,11 +211,10 @@ export default {
     .map((property) => {
       const value = doc.metadata[property.get('name')];
       const showInCard = property.get('showInCard');
-
       const type = property.get('type');
 
-      if (this[type] && value) {
-        const formatedMetadata = this[type](property, value, thesauris, showInCard, options.onlyForCards);
+      if (this[type] && (value || type === 'preview')) {
+        const formatedMetadata = this[type](property, value, thesauris, showInCard, options.onlyForCards, doc);
         return Object.assign(formatedMetadata, { type, translateContext: template.get('_id') });
       }
 

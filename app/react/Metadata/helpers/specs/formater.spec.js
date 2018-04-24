@@ -15,6 +15,7 @@ describe('metadata formater', () => {
       template: 'templateID',
       title: 'Corte Interamericana de Derechos Humanos',
       creationDate: 0,
+      type: 'document',
       metadata: {
         text: 'text content',
         date: 10,
@@ -27,7 +28,8 @@ describe('metadata formater', () => {
         relationship1: ['value1', 'value2'],
         relationship2: ['value1', 'value2', 'value4'],
         geolocation: { lat: 2, lon: 3 }
-      }
+      },
+      file: { filename: 'pdfFilename.pdf' }
     };
 
     templates = fromJS([
@@ -48,6 +50,7 @@ describe('metadata formater', () => {
           { name: 'select', content: 'thesauriId', type: 'select', label: 'Select' },
           { name: 'relationship1', type: 'relationship', label: 'Relationship', content: 'thesauriId', relationType: 'relationType1' },
           { name: 'relationship2', type: 'relationship', label: 'Relationship 2', content: null, relationType: 'relationType1' },
+          { name: 'preview', type: 'preview', label: 'Preview', showInCard: true },
           { name: 'geolocation', type: 'geolocation', label: 'Geolocation', showInCard: true }
         ]
       }
@@ -102,11 +105,13 @@ describe('metadata formater', () => {
     let select;
     let relationship1;
     let relationship2;
+    let preview;
     let geolocation;
 
     beforeEach(() => {
       data = formater.prepareMetadata(doc, templates, thesauris);
-      [text, date, multiselect, multidate, daterange, multidaterange, markdown, select, relationship1, relationship2, geolocation] = data.metadata;
+      [text, date, multiselect, multidate, daterange, multidaterange,
+       markdown, select, relationship1, relationship2, preview, geolocation] = data.metadata;
     });
 
     const formatValue = value => ({ icon: undefined, url: `/entity/${value.toLowerCase().replace(/ /g, '')}`, value });
@@ -169,17 +174,21 @@ describe('metadata formater', () => {
       assessMultiValues(relationship2, [formatValue('Value 1'), formatValue('Value 2'), formatValue('Value 4')]);
     });
 
-    it('should not fail when field do not exists on the document', () => {
-      doc.metadata.relationship1 = null;
-      doc.metadata.multiselect = null;
-      doc.metadata.select = null;
-      expect(formater.prepareMetadata.bind(formater, doc, templates, thesauris)).not.toThrow();
+    it('should render a preview of the passed doc', () => {
+      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', 'pdfFilename.jpg']);
     });
 
     it('should render a Map for geolocation fields', () => {
       expect(geolocation.value.type).toBe(Map);
       expect(geolocation.value.props.latitude).toBe(2);
       expect(geolocation.value.props.longitude).toBe(3);
+    });
+
+    it('should not fail when field do not exists on the document', () => {
+      doc.metadata.relationship1 = null;
+      doc.metadata.multiselect = null;
+      doc.metadata.select = null;
+      expect(formater.prepareMetadata.bind(formater, doc, templates, thesauris)).not.toThrow();
     });
   });
 
@@ -189,11 +198,12 @@ describe('metadata formater', () => {
     let text;
     let markdown;
     let creationDate;
+    let preview;
     let geolocation;
 
     beforeEach(() => {
       data = formater.prepareMetadataForCard(doc, templates, thesauris);
-      [text, markdown, geolocation] = data.metadata;
+      [text, markdown, preview, geolocation] = data.metadata;
     });
 
     it('should maintain doc original data untouched', () => {
@@ -209,6 +219,10 @@ describe('metadata formater', () => {
       assessBasicProperties(markdown, ['Mark Down', 'markdown', 'templateID', 'markdown content']);
     });
 
+    it('should process preview type', () => {
+      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', 'pdfFilename.jpg']);
+    });
+
     it('should render a Map for geolocation fields', () => {
       assessBasicProperties(geolocation, ['Geolocation', 'geolocation', 'templateID', 'Lat / Lon: 2 / 3']);
     });
@@ -219,7 +233,7 @@ describe('metadata formater', () => {
         data = formater.prepareMetadataForCard(doc, templates, thesauris, 'metadata.date');
         [text, date, markdown] = data.metadata;
         assessBasicProperties(date, ['Date', 'date', 'templateID']);
-        expect(data.metadata.length).toBe(4);
+        expect(data.metadata.length).toBe(5);
         expect(date.value).toContain('1970');
       });
 
@@ -244,7 +258,7 @@ describe('metadata formater', () => {
       describe('when sort property is creationDate', () => {
         it('should add it as a value to show', () => {
           data = formater.prepareMetadataForCard(doc, templates, thesauris, 'creationDate');
-          [text, markdown, geolocation, creationDate] = data.metadata;
+          [text, markdown, preview, geolocation, creationDate] = data.metadata;
           expect(text.sortedBy).toBe(false);
           expect(markdown.sortedBy).toBe(false);
           assessBasicProperties(creationDate, ['Date added', undefined, 'System', 'Jan 1, 1970']);
