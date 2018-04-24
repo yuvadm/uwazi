@@ -126,7 +126,7 @@ exports[`Metadata should render links when the property has url 1`] = `
 </React.Fragment>
 `;
 
-exports[`Metadata should render preview img when propery has type thumbnail 1`] = `
+exports[`Metadata should render preview img when propery has type preview 1`] = `
 <React.Fragment>
   <dl
     key="Preview"

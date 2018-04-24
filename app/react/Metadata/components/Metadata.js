@@ -16,7 +16,7 @@ const showByType = (prop, compact) => {
     result = <MarkdownViewer markdown={prop.value} />;
   }
 
-  if (prop.type === 'thumbnail') {
+  if (prop.type === 'preview') {
     result = <img className="thumbnail" src={`/api/attachment/${prop.value}`} alt="Preview" />;
   }
 

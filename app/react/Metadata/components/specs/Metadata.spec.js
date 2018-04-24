@@ -57,8 +57,8 @@ describe('Metadata', () => {
     testMetadata([{ label: 'withUrl', value: 'string value', url: 'url' }]);
   });
 
-  it('should render preview img when propery has type thumbnail', () => {
-    testMetadata([{ label: 'Preview', value: 'filename.jpg', type: 'thumbnail', translateContext: 'System' }]);
+  it('should render preview img when propery has type preview', () => {
+    testMetadata([{ label: 'Preview', value: 'filename.jpg', type: 'preview' }]);
   });
 
   it('should render links when multiple properties have url', () => {
