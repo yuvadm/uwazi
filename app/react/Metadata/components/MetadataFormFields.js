@@ -60,6 +60,8 @@ export class MetadataFormFields extends Component {
       return <MultiDateRange model={_model} format={this.props.dateFormat}/>;
     case 'geolocation':
       return <Geolocation model={_model} />;
+    case 'preview':
+      return <span><i className="fa fa-lightbulb-o"/> <em>Thumbnail of first page of PDF</em></span>;
     default:
       return <Field model={_model}><input className="form-control"/></Field>;
     }
