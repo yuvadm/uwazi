@@ -102,22 +102,6 @@ describe('Item', () => {
   });
 
   describe('Metadata', () => {
-    function expectThumbnail(filename, value) {
-      props.doc = props.doc.set('type', 'document').set('file', Immutable.fromJS({ filename }));
-      render();
-      expect(component.find(FormatMetadata).props().additionalMetadata).toEqual([
-        { label: 'Preview', type: 'thumbnail', translateContext: 'System', value }
-      ]);
-    }
-
-    it('should append the PDF thumbnail to additional metadata if entity is document', () => {
-      expectThumbnail('somedoc.pdf', 'somedoc.jpg');
-    });
-
-    it('should append a generic thumbnail when filename still undefined (recently uploaded documents)', () => {
-      expectThumbnail(null, 'no_peview.jpg');
-    });
-
     it('should render FormatMetadata passing entity sort property and additionalMetadata', () => {
       props.searchParams = { sort: 'sortedProperty' };
       props.additionalMetadata = [{ label: 'additional' }, { label: 'metadata' }];
@@ -184,13 +168,13 @@ describe('Item', () => {
     });
 
     it('should include templates, thesauris and default sort', () => {
-      expect(mapStateToProps({ templates, thesauris }, { doc })).toEqual({ additionalMetadata: [], templates, thesauris, search });
+      expect(mapStateToProps({ templates, thesauris }, { doc })).toEqual({ templates, thesauris, search });
     });
 
     it('should allow overriding the default sort', () => {
       const ownProps = { doc, searchParams: { sort: 'newSort' } };
       expect(mapStateToProps({ templates, thesauris }, ownProps))
-      .toEqual({ additionalMetadata: [], templates, thesauris, search: { sort: 'newSort' } });
+      .toEqual({ templates, thesauris, search: { sort: 'newSort' } });
     });
   });
 });

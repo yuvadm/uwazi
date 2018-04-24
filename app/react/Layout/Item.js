@@ -108,17 +108,9 @@ Item.propTypes = {
 };
 
 export const mapStateToProps = ({ templates, thesauris }, ownProps) => {
-  const additionalMetadata = ownProps.additionalMetadata || [];
-
-  if (ownProps.doc.get('type') === 'document') {
-    const filename = ownProps.doc.getIn(['file', 'filename']) || 'no_peview';
-    const thumbnail = `${filename.lastIndexOf('.') !== -1 ? filename.substring(0, filename.lastIndexOf('.')) : filename}.jpg`;
-    additionalMetadata.push({ label: 'Preview', type: 'thumbnail', value: thumbnail, translateContext: 'System' });
-  }
-
   const search = ownProps.searchParams;
   const _templates = ownProps.templates || templates;
-  return { templates: _templates, thesauris, search, additionalMetadata };
+  return { templates: _templates, thesauris, search };
 };
 
 export default connect(mapStateToProps)(Item);
