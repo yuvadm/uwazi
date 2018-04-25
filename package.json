@@ -53,6 +53,7 @@
     "batarange": "0.2.0",
     "bluebird": "^3.4.6",
     "bootstrap": "3.3.6",
+    "canvas": "^1.6.10",
     "compression": "^1.6.0",
     "connect-mongo": "2.0.1",
     "cookie": "0.3.1",

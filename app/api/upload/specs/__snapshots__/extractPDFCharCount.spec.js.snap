@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PDF extractText should extract number of characters per page 1`] = `
+exports[`extractPDFCharCount should extract number of characters per page 1`] = `
 Array [
   3000,
   5306,

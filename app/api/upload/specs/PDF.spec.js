@@ -10,7 +10,7 @@ describe('PDF', () => {
       pdf = new PDFObject(filepath);
     });
 
-    fit('should extract the text of the pdf by page, every word on every page should have appended the page number in between [[]]', (done) => {
+    it('should extract the text of the pdf by page, every word on every page should have appended the page number in between [[]]', (done) => {
       pdf.extractText()
       .then(([text]) => {
         const lines = text.split(/\f/);
@@ -27,7 +27,7 @@ describe('PDF', () => {
       pdf = new PDFObject(filepath);
       pdf.extractText()
       .then((data) => {
-        const pdfInfo = Object.keys(data[1]).map(key => data[1][key].chars).sort((a, b) => a - b);
+        const pdfInfo = Object.keys(data).map(key => data[key].chars).sort((a, b) => a - b);
         expect(pdfInfo).toMatchSnapshot();
         done();
       })
