@@ -64,6 +64,7 @@ export class TemplateCreator extends Component {
                       <PropertyOption label="Multi Date Range" type="multidaterange"/>
                       { environment === 'document' && <PropertyOption label="Preview" type="preview"/> }
                       <PropertyOption label="Rich Text" type="markdown"/>
+                      <PropertyOption label="Multimedia" type="multimedia"/>
                       <PropertyOption label="Geolocation" type="geolocation"/>
                       <ShowIf if={this.props.project === 'cejil'}>
                         <PropertyOption label="Violated articles" type="nested"/>

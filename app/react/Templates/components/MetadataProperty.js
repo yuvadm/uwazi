@@ -33,6 +33,9 @@ export class MetadataProperty extends Component {
       const helpText = 'This field is automatically populated according to type.  Documents render a thumbanil of the first page of the PDF.';
       return <FormConfigMultimedia type={this.props.type} index={this.props.index} helpText={helpText}/>;
     }
+    if (this.props.type === 'multimedia') {
+      return <FormConfigMultimedia type={this.props.type} index={this.props.index}/>;
+    }
     if (this.props.type === 'geolocation') {
       return <FormConfigInput type={this.props.type} index={this.props.index} canBeFilter={false}/>;
     }

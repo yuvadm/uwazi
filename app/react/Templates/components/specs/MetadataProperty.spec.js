@@ -164,6 +164,9 @@ describe('MetadataProperty', () => {
         component.setProps({ type: 'preview' });
         expect(component.find(FormConfigMultimedia).length).toBe(1);
 
+        component.setProps({ type: 'multimedia' });
+        expect(component.find(FormConfigMultimedia).length).toBe(1);
+
         component.setProps({ type: 'geolocation' });
         expect(component.find(FormConfigInput).length).toBe(1);
         expect(component.find(FormConfigInput).props().canBeFilter).toBe(false);

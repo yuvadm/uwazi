@@ -9,6 +9,7 @@ Object {
   "markdown": "fa fa-file-text-o fa-fw",
   "multidate": "fa fa-calendar fa-fw",
   "multidaterange": "fa fa-calendar fa-fw",
+  "multimedia": "fa fa-image fa-fw",
   "multiselect": "fa fa-list fa-fw",
   "nested": "fa fa-cubes fa-fw",
   "numeric": "fa fa-calculator fa-fw",
