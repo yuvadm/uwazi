@@ -9,6 +9,27 @@
       border-top: 1px solid $c-grey-lighten;
       margin: 0;
     }
+
+    dl.multimedia {
+      &.multimedia-show-label {
+        margin-top: 45px;
+
+        & > dt {
+          top: -30px;
+        }
+
+        &:after {
+          content: '';
+          position: absolute;
+          top: -46px;
+          left: 0px;
+          width: 100%;
+          border-top: 1px solid $c-grey-lighten;
+        }
+      }
+
+    }
+
     dl:first-child {
       border-top: 0;
     }
@@ -69,5 +90,17 @@ dl.multimedia {
 
   & > dt {
     display: none;
+  }
+
+  &.multimedia-show-label {
+    margin-top: 30px;
+    position: relative;
+
+    & > dt {
+      display: block;
+      position: absolute;
+      top: -23px;
+      text-align: left;
+    }
   }
 }

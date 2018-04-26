@@ -77,7 +77,29 @@ exports[`Metadata should render array values separated by ", " 1`] = `
 exports[`Metadata should render img when propery has type multimedia 1`] = `
 <React.Fragment>
   <dl
-    className="multimedia cover"
+    className="multimedia  cover"
+    key="Multimedia"
+  >
+    <dt>
+      Multimedia
+    </dt>
+    <dd
+      className=""
+    >
+      <img
+        alt="Multimedia"
+        className="multimedia-img cover"
+        src="image.jpg"
+      />
+    </dd>
+  </dl>
+</React.Fragment>
+`;
+
+exports[`Metadata should render img when propery has type multimedia 2`] = `
+<React.Fragment>
+  <dl
+    className="multimedia multimedia-show-label cover"
     key="Multimedia"
   >
     <dt>

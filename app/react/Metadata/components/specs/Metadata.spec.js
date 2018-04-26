@@ -59,6 +59,7 @@ describe('Metadata', () => {
 
   it('should render img when propery has type multimedia', () => {
     testMetadata([{ label: 'Multimedia', value: 'image.jpg', type: 'multimedia', style: 'cover' }]);
+    testMetadata([{ label: 'Multimedia', value: 'image.jpg', type: 'multimedia', style: 'cover', showLabel: true }]);
   });
 
   it('should render links when multiple properties have url', () => {

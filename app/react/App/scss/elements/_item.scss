@@ -299,8 +299,13 @@ $item-padding: 15px;
     &.multimedia {
       margin-left: -15px;
       margin-right: -15px;
-      margin-top: 5px;
+      margin-top: 6px;
       padding: 0px;
+
+      &.multimedia-show-label > dt {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
 
       &.contain img {
         max-height: 200px;

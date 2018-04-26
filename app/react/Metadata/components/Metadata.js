@@ -41,8 +41,10 @@ const removeEmptyValues = (p) => {
 const Metadata = ({ metadata, compact }) => (
   <React.Fragment>
     {metadata.filter(removeEmptyValues).map(prop => (
-      <dl key={prop.label} className={prop.type === 'multimedia' ? `multimedia ${prop.style}` : ''}>
-        <dt>{t(prop.translateContext, prop.label)}</dt>
+      <dl key={prop.label} className={prop.type === 'multimedia' ? `multimedia ${prop.showLabel ? 'multimedia-show-label' : ''} ${prop.style}` : ''}>
+        <dt>
+          {t(prop.translateContext, prop.label)}
+        </dt>
         <dd className={prop.sortedBy ? 'item-current-sort' : ''}>
           {showByType(prop, compact)}
         </dd>
