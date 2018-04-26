@@ -11,18 +11,13 @@
     }
 
     dl.multimedia {
-      &.cover {
-        padding: 0px;
-      }
+      padding: 0px;
 
       &.multimedia-show-label {
         margin-top: 45px;
 
         & > dt {
           top: -30px;
-        }
-
-        &.cover > dt {
           margin-left: 15px;
           margin-right: 15px;
         }
