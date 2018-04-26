@@ -57,7 +57,7 @@ export default class PDF extends EventEmitter {
 
   generateThumbnail() {
     const thumbPath = `${attachmentsPath}${basename(this.optimizedPath)}.jpg`;
-    return pdfUtils.pdfPageToImage(this.optimizedPath, thumbPath, { format: 'jpg', scale: 0.2 })
+    return pdfUtils.pdfPageToImage(this.optimizedPath, thumbPath, { format: 'jpg', scale: 0.3 })
     .catch(() => Promise.resolve());
   }
 

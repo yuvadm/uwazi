@@ -47,7 +47,7 @@ describe('PDF', () => {
       pdf.convert()
       .then(() => {
         const thumbnailPath = `${attachmentsPath}12345.test.jpg`;
-        expect(pdfUtils.pdfPageToImage).toHaveBeenCalledWith(filepath, thumbnailPath, { format: 'jpg', scale: 0.2 });
+        expect(pdfUtils.pdfPageToImage).toHaveBeenCalledWith(filepath, thumbnailPath, { format: 'jpg', scale: 0.3 });
         done();
       })
       .catch(done.fail);
