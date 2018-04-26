@@ -53,9 +53,13 @@ class FormConfigMultimedia extends Component {
         {helpText &&
           <div className="protip">
             <i className="fa fa-lightbulb-o"/>
-            <span>This is an automatically generated field.  For Documents, it renders a thumbnail of the PDFs first page.</span>
+            <span>{helpText}</span>
           </div>
         }
+
+        <PropertyConfigOption label="Show label" model={`template.data.properties[${index}].showLabel`}>
+          <Tip>If selected, the property will be rendered with the label. Otherwise, it will just show the multimedia content.</Tip>
+        </PropertyConfigOption>
 
         {canShowInCard &&
           <div>

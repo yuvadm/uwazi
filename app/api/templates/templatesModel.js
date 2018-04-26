@@ -11,6 +11,7 @@ const propertiesSchema = new mongoose.Schema({
   defaultfilter: Boolean,
   required: Boolean,
   sortable: Boolean,
+  showLabel: Boolean,
   showInCard: Boolean,
   prioritySorting: Boolean,
   style: String,

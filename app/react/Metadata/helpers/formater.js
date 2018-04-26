@@ -98,6 +98,7 @@ export default {
       label: property.get('label'),
       name: property.get('name'),
       style: property.get('style') || 'contain',
+      showLabel: Boolean(property.get('showLabel')),
       value,
       showInCard
     };

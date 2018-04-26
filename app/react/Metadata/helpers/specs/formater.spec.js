@@ -49,7 +49,7 @@ describe('metadata formater', () => {
           { name: 'multidaterange', type: 'multidaterange', label: 'Multi Date Range' },
           { name: 'markdown', type: 'markdown', label: 'Mark Down', showInCard: true },
           { name: 'select', content: 'thesauriId', type: 'select', label: 'Select' },
-          { name: 'multimedia', type: 'multimedia', label: 'Multimedia', showInCard: true, style: 'cover' },
+          { name: 'multimedia', type: 'multimedia', label: 'Multimedia', showInCard: true, showLabel: true, style: 'cover' },
           { name: 'relationship1', type: 'relationship', label: 'Relationship', content: 'thesauriId', relationType: 'relationType1' },
           { name: 'relationship2', type: 'relationship', label: 'Relationship 2', content: null, relationType: 'relationType1' },
           { name: 'preview', type: 'preview', label: 'Preview', showInCard: true },
@@ -93,6 +93,10 @@ describe('metadata formater', () => {
 
     if (options.length > 5) {
       expect(element.style).toBe(options[5]);
+    }
+
+    if (options.length > 6) {
+      expect(element.showLabel).toBe(options[6]);
     }
   }
 
@@ -174,7 +178,7 @@ describe('metadata formater', () => {
     });
 
     it('should process multimedia type', () => {
-      assessBasicProperties(multimedia, ['Multimedia', 'multimedia', 'templateID', 'multimediaURL', 'multimedia', 'cover']);
+      assessBasicProperties(multimedia, ['Multimedia', 'multimedia', 'templateID', 'multimediaURL', 'multimedia', 'cover', true]);
     });
 
     it('should process bound relationship types', () => {
@@ -190,7 +194,7 @@ describe('metadata formater', () => {
     });
 
     it('should process preview type as multimedia, adding URL', () => {
-      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', '/api/attachment/pdfFilename.jpg', 'multimedia', 'contain']);
+      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', '/api/attachment/pdfFilename.jpg', 'multimedia', 'contain', false]);
     });
 
     it('should render a Map for geolocation fields', () => {

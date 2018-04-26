@@ -38,7 +38,7 @@ describe('FormConfigMultimedia', () => {
     expect(component.find('.has-error').length).toBe(length);
   };
 
-  it('should hold show in card and other congifuration options by default', () => {
+  it('should hold show label, show in card and other congifuration options by default', () => {
     render();
     expect(component).toMatchSnapshot();
   });
@@ -49,17 +49,12 @@ describe('FormConfigMultimedia', () => {
     expect(component).toMatchSnapshot();
   });
 
-  it('should render Fields with the correct datas', () => {
-    render();
-    expect(component.find(Field).props().model).toBe('template.data.properties[0].label');
-    expect(component.find(PropertyConfigOption).props().model).toBe('template.data.properties[0].showInCard');
-  });
-
   it('should allow setting a help text', () => {
+    render();
     expect(component.find('.protip').length).toBe(0);
     props.helpText = 'Some help text';
     render();
-    expect(component.find('.protip').length).toBe(1);
+    expect(component).toMatchSnapshot();
   });
 
   it('should allow excluding "show in card"', () => {
