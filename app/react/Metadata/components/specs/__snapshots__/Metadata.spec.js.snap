@@ -5,6 +5,7 @@ exports[`Metadata should not render an empty list 1`] = `<React.Fragment />`;
 exports[`Metadata should not render metadata without value 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="Label"
   >
     <dt>
@@ -22,6 +23,7 @@ exports[`Metadata should not render metadata without value 1`] = `
 exports[`Metadata should render a Markdown when the metadata is type mardown 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="label array"
   >
     <dt>
@@ -42,6 +44,7 @@ exports[`Metadata should render a Markdown when the metadata is type mardown 1`]
 exports[`Metadata should render array values separated by ", " 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="label array"
   >
     <dt>
@@ -71,9 +74,32 @@ exports[`Metadata should render array values separated by ", " 1`] = `
 </React.Fragment>
 `;
 
+exports[`Metadata should render img when propery has type multimedia 1`] = `
+<React.Fragment>
+  <dl
+    className="multimedia cover"
+    key="Multimedia"
+  >
+    <dt>
+      Multimedia
+    </dt>
+    <dd
+      className=""
+    >
+      <img
+        alt="Multimedia"
+        className="multimedia-img cover"
+        src="image.jpg"
+      />
+    </dd>
+  </dl>
+</React.Fragment>
+`;
+
 exports[`Metadata should render links when multiple properties have url 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="label array"
   >
     <dt>
@@ -108,6 +134,7 @@ exports[`Metadata should render links when multiple properties have url 1`] = `
 exports[`Metadata should render links when the property has url 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="withUrl"
   >
     <dt>
@@ -126,30 +153,10 @@ exports[`Metadata should render links when the property has url 1`] = `
 </React.Fragment>
 `;
 
-exports[`Metadata should render preview img when propery has type preview 1`] = `
-<React.Fragment>
-  <dl
-    key="Preview"
-  >
-    <dt>
-      Preview
-    </dt>
-    <dd
-      className=""
-    >
-      <img
-        alt="Preview"
-        className="thumbnail"
-        src="/api/attachment/filename.jpg"
-      />
-    </dd>
-  </dl>
-</React.Fragment>
-`;
-
 exports[`Metadata should render property not have this item when type is null 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="metadata without property"
   >
     <dt>
@@ -167,6 +174,7 @@ exports[`Metadata should render property not have this item when type is null 1`
 exports[`Metadata should render sorted property with sorted styles 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="sortedBy"
   >
     <dt>
@@ -184,6 +192,7 @@ exports[`Metadata should render sorted property with sorted styles 1`] = `
 exports[`Metadata should render string values 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="Label"
   >
     <dt>
@@ -201,6 +210,7 @@ exports[`Metadata should render string values 1`] = `
 exports[`Metadata when passing compact prop should pass it to ValueList 1`] = `
 <React.Fragment>
   <dl
+    className=""
     key="label array"
   >
     <dt>

@@ -16,8 +16,8 @@ const showByType = (prop, compact) => {
     result = <MarkdownViewer markdown={prop.value} />;
   }
 
-  if (prop.type === 'preview') {
-    result = <img className="thumbnail" src={`/api/attachment/${prop.value}`} alt="Preview" />;
+  if (prop.type === 'multimedia') {
+    result = <img className={`multimedia-img ${prop.style}`} src={prop.value} alt={prop.label} />;
   }
 
   if (prop.url) {
@@ -41,7 +41,7 @@ const removeEmptyValues = (p) => {
 const Metadata = ({ metadata, compact }) => (
   <React.Fragment>
     {metadata.filter(removeEmptyValues).map(prop => (
-      <dl key={prop.label}>
+      <dl key={prop.label} className={prop.type === 'multimedia' ? `multimedia ${prop.style}` : ''}>
         <dt>{t(prop.translateContext, prop.label)}</dt>
         <dd className={prop.sortedBy ? 'item-current-sort' : ''}>
           {showByType(prop, compact)}
@@ -59,6 +59,7 @@ Metadata.propTypes = {
   metadata: PropTypes.arrayOf(PropTypes.shape({
     type: PropTypes.string,
     label: PropTypes.string,
+    style: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
