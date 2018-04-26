@@ -150,6 +150,7 @@ export default [
 { key: 'Size', label: 'Size' },
 { key: 'Size', label: 'Size' },
 { key: 'Sort by', label: 'Sort by' },
+{ key: 'Style', label: 'Style' },
 { key: 'Table of Content', label: 'Table of Content' },
 { key: 'Text', label: 'Text' },
 { key: 'Thesauri', label: 'Thesauri' },
