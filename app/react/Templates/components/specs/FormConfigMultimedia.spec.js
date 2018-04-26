@@ -3,7 +3,6 @@ import { shallow } from 'enzyme';
 import { Field } from 'react-redux-form';
 
 import FormConfigMultimedia, { mapStateToProps } from '../FormConfigMultimedia';
-import PropertyConfigOption from '../PropertyConfigOption';
 
 describe('FormConfigMultimedia', () => {
   let component;
@@ -38,20 +37,12 @@ describe('FormConfigMultimedia', () => {
     expect(component.find('.has-error').length).toBe(length);
   };
 
-  it('should hold show label, show in card and other congifuration options by default', () => {
-    render();
-    expect(component).toMatchSnapshot();
-  });
-
-  it('should add option to select card display type', () => {
-    state.template.data.properties[0].showInCard = true;
+  it('should hold show label, show in card and card display type options by default', () => {
     render();
     expect(component).toMatchSnapshot();
   });
 
   it('should allow setting a help text', () => {
-    render();
-    expect(component.find('.protip').length).toBe(0);
     props.helpText = 'Some help text';
     render();
     expect(component).toMatchSnapshot();
