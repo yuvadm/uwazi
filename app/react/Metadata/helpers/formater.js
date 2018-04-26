@@ -92,14 +92,25 @@ export default {
     return { label: property.get('label'), name: property.get('name'), value, showInCard };
   },
 
+  multimedia(property, value, thesauris, showInCard) {
+    return {
+      type: 'multimedia',
+      label: property.get('label'),
+      name: property.get('name'),
+      style: property.get('style') || 'contain',
+      value,
+      showInCard
+    };
+  },
+
   preview(property, value, thesauris, showInCard, options, doc) {
     let url = 'no_preview.jpg';
     if (doc.type === 'document') {
       const filename = doc.file && doc.file.filename ? doc.file.filename : 'no_peview';
       const thumbnail = `${filename.lastIndexOf('.') !== -1 ? filename.substring(0, filename.lastIndexOf('.')) : filename}.jpg`;
-      url = thumbnail;
+      url = `/api/attachment/${thumbnail}`;
     }
-    return { label: property.get('label'), name: property.get('name'), value: url, showInCard };
+    return this.multimedia(property, url, thesauris, showInCard);
   },
 
   geolocation(property, value, thesauris, showInCard, renderForCard) {
@@ -215,7 +226,7 @@ export default {
 
       if (this[type] && (value || type === 'preview')) {
         const formatedMetadata = this[type](property, value, thesauris, showInCard, options.onlyForCards, doc);
-        return Object.assign(formatedMetadata, { type, translateContext: template.get('_id') });
+        return Object.assign({ type, translateContext: template.get('_id') }, formatedMetadata);
       }
 
       return { label: property.get('label'), name: property.get('name'), value, showInCard, translateContext: template.get('_id') };

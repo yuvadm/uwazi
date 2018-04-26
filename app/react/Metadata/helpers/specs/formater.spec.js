@@ -25,6 +25,7 @@ describe('metadata formater', () => {
         multidaterange: [{ from: 10, to: 1000000 }, { from: 2000000, to: 3000000 }],
         markdown: 'markdown content',
         select: 'value3',
+        multimedia: 'multimediaURL',
         relationship1: ['value1', 'value2'],
         relationship2: ['value1', 'value2', 'value4'],
         geolocation: { lat: 2, lon: 3 }
@@ -48,6 +49,7 @@ describe('metadata formater', () => {
           { name: 'multidaterange', type: 'multidaterange', label: 'Multi Date Range' },
           { name: 'markdown', type: 'markdown', label: 'Mark Down', showInCard: true },
           { name: 'select', content: 'thesauriId', type: 'select', label: 'Select' },
+          { name: 'multimedia', type: 'multimedia', label: 'Multimedia', showInCard: true, style: 'cover' },
           { name: 'relationship1', type: 'relationship', label: 'Relationship', content: 'thesauriId', relationType: 'relationType1' },
           { name: 'relationship2', type: 'relationship', label: 'Relationship 2', content: null, relationType: 'relationType1' },
           { name: 'preview', type: 'preview', label: 'Preview', showInCard: true },
@@ -84,6 +86,14 @@ describe('metadata formater', () => {
     if (options.length > 3) {
       expect(element.value).toBe(options[3]);
     }
+
+    if (options.length > 4) {
+      expect(element.type).toBe(options[4]);
+    }
+
+    if (options.length > 5) {
+      expect(element.style).toBe(options[5]);
+    }
   }
 
   function assessMultiValues(element, values, secondaryDepth) {
@@ -103,6 +113,7 @@ describe('metadata formater', () => {
     let multidaterange;
     let markdown;
     let select;
+    let multimedia;
     let relationship1;
     let relationship2;
     let preview;
@@ -110,8 +121,8 @@ describe('metadata formater', () => {
 
     beforeEach(() => {
       data = formater.prepareMetadata(doc, templates, thesauris);
-      [text, date, multiselect, multidate, daterange, multidaterange,
-       markdown, select, relationship1, relationship2, preview, geolocation] = data.metadata;
+      [text, date, multiselect, multidate, daterange, multidaterange, markdown,
+       select, multimedia, relationship1, relationship2, preview, geolocation] = data.metadata;
     });
 
     const formatValue = value => ({ icon: undefined, url: `/entity/${value.toLowerCase().replace(/ /g, '')}`, value });
@@ -162,6 +173,10 @@ describe('metadata formater', () => {
       assessBasicProperties(select, ['Select', 'select', 'templateID', 'Value 3']);
     });
 
+    it('should process multimedia type', () => {
+      assessBasicProperties(multimedia, ['Multimedia', 'multimedia', 'templateID', 'multimediaURL', 'multimedia', 'cover']);
+    });
+
     it('should process bound relationship types', () => {
       assessBasicProperties(relationship1, ['Relationship', 'relationship1', 'templateID']);
       expect(relationship1.value.length).toBe(2);
@@ -174,8 +189,8 @@ describe('metadata formater', () => {
       assessMultiValues(relationship2, [formatValue('Value 1'), formatValue('Value 2'), formatValue('Value 4')]);
     });
 
-    it('should render a preview of the passed doc', () => {
-      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', 'pdfFilename.jpg']);
+    it('should process preview type as multimedia, adding URL', () => {
+      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', '/api/attachment/pdfFilename.jpg', 'multimedia', 'contain']);
     });
 
     it('should render a Map for geolocation fields', () => {
@@ -198,12 +213,13 @@ describe('metadata formater', () => {
     let text;
     let markdown;
     let creationDate;
+    let multimedia;
     let preview;
     let geolocation;
 
     beforeEach(() => {
       data = formater.prepareMetadataForCard(doc, templates, thesauris);
-      [text, markdown, preview, geolocation] = data.metadata;
+      [text, markdown, multimedia, preview, geolocation] = data.metadata;
     });
 
     it('should maintain doc original data untouched', () => {
@@ -219,8 +235,12 @@ describe('metadata formater', () => {
       assessBasicProperties(markdown, ['Mark Down', 'markdown', 'templateID', 'markdown content']);
     });
 
+    it('should process multimedia type', () => {
+      assessBasicProperties(multimedia, ['Multimedia', 'multimedia', 'templateID', 'multimediaURL']);
+    });
+
     it('should process preview type', () => {
-      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', 'pdfFilename.jpg']);
+      assessBasicProperties(preview, ['Preview', 'preview', 'templateID', '/api/attachment/pdfFilename.jpg']);
     });
 
     it('should render a Map for geolocation fields', () => {
@@ -233,7 +253,7 @@ describe('metadata formater', () => {
         data = formater.prepareMetadataForCard(doc, templates, thesauris, 'metadata.date');
         [text, date, markdown] = data.metadata;
         assessBasicProperties(date, ['Date', 'date', 'templateID']);
-        expect(data.metadata.length).toBe(5);
+        expect(data.metadata.length).toBe(6);
         expect(date.value).toContain('1970');
       });
 
@@ -258,7 +278,7 @@ describe('metadata formater', () => {
       describe('when sort property is creationDate', () => {
         it('should add it as a value to show', () => {
           data = formater.prepareMetadataForCard(doc, templates, thesauris, 'creationDate');
-          [text, markdown, preview, geolocation, creationDate] = data.metadata;
+          [text, markdown, multimedia, preview, geolocation, creationDate] = data.metadata;
           expect(text.sortedBy).toBe(false);
           expect(markdown.sortedBy).toBe(false);
           assessBasicProperties(creationDate, ['Date added', undefined, 'System', 'Jan 1, 1970']);
