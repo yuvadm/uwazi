@@ -7,7 +7,7 @@ import { editProperty } from 'app/Templates/actions/uiActions';
 import { showModal } from 'app/Modals/actions/modalActions';
 import { reorderProperty, addProperty } from 'app/Templates/actions/templateActions';
 import ShowIf from 'app/App/ShowIf';
-import FormConfigHelper from './FormConfigHelper';
+import FormConfigMultimedia from './FormConfigMultimedia';
 import FormConfigInput from './FormConfigInput';
 import FormConfigSelect from './FormConfigSelect';
 import FormConfigRelationship from './FormConfigRelationship';
@@ -31,7 +31,7 @@ export class MetadataProperty extends Component {
     }
     if (this.props.type === 'preview') {
       const helpText = 'This field is automatically populated according to type.  Documents render a thumbanil of the first page of the PDF.';
-      return <FormConfigHelper type={this.props.type} index={this.props.index} helpText={helpText}/>;
+      return <FormConfigMultimedia type={this.props.type} index={this.props.index} helpText={helpText}/>;
     }
     if (this.props.type === 'geolocation') {
       return <FormConfigInput type={this.props.type} index={this.props.index} canBeFilter={false}/>;

@@ -9,7 +9,7 @@ import Immutable from 'immutable';
 import { shallow } from 'enzyme';
 
 import { MetadataProperty, dragSource, dropTarget } from '../MetadataProperty';
-import FormConfigHelper from '../FormConfigHelper';
+import FormConfigMultimedia from '../FormConfigMultimedia';
 import FormConfigInput from '../FormConfigInput';
 import FormConfigSelect from '../FormConfigSelect';
 import FormConfigNested from '../FormConfigNested';
@@ -162,7 +162,7 @@ describe('MetadataProperty', () => {
         expect(component.find(FormConfigRelationship).length).toBe(1);
 
         component.setProps({ type: 'preview' });
-        expect(component.find(FormConfigHelper).length).toBe(1);
+        expect(component.find(FormConfigMultimedia).length).toBe(1);
 
         component.setProps({ type: 'geolocation' });
         expect(component.find(FormConfigInput).length).toBe(1);
