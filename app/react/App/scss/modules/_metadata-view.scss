@@ -52,6 +52,7 @@
       }
     }
   }
+
   .btn-block {
     padding: 10px 15px;
     margin: 15px 0;
@@ -59,5 +60,14 @@
     letter-spacing: 0.1em;
     font-size: $f-size-sm;
     font-weight: bold;
+  }
+}
+
+dl.multimedia {
+  background-color: #c7c7c7;
+  text-align: center;
+
+  & > dt {
+    display: none;
   }
 }
