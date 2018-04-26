@@ -37,11 +37,11 @@ exports[`FormConfigMultimedia should add option to select card display type 1`] 
           options={
             Array [
               Object {
-                "id": "contain",
+                "_id": "contain",
                 "name": "Contain",
               },
               Object {
-                "id": "cover",
+                "_id": "cover",
                 "name": "Cover",
               },
             ]
