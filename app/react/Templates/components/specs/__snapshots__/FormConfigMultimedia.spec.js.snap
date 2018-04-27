@@ -1,83 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormConfigMultimedia should add option to select card display type 1`] = `
-<div>
-  <div
-    className="form-group"
-  >
-    <label>
-      Name
-    </label>
-    <Modeled(Connect(Field))
-      model="template.data.properties[0].label"
-    >
-      <input
-        className="form-control"
-      />
-    </Modeled(Connect(Field))>
-  </div>
-  <PropertyConfigOption
-    label="Show label"
-    model="template.data.properties[0].showLabel"
-  >
-    <Tip>
-      If selected, the property will be rendered with the label. Otherwise, it will just show the multimedia content.
-    </Tip>
-  </PropertyConfigOption>
-  <div>
-    <PropertyConfigOption
-      label="Show in cards"
-      model="template.data.properties[0].showInCard"
-    >
-      <Tip>
-        This property will appear in the library cards as part of the basic info.
-      </Tip>
-    </PropertyConfigOption>
-    <div>
-      <div
-        className="form-group"
-      >
-        <label>
-          Style
-        </label>
-        <Select
-          model="template.data.properties[0].style"
-          options={
-            Array [
-              Object {
-                "_id": "contain",
-                "name": "Contain",
-              },
-              Object {
-                "_id": "cover",
-                "name": "Cover",
-              },
-            ]
-          }
-          optionsLabel="name"
-          optionsValue="_id"
-        />
-      </div>
-      <div
-        className="protip"
-      >
-        <p>
-          <b>
-            Contain
-          </b>
-           will show the entire media inside the container.  Grey bars may appear to the sides of the image.
-          <br />
-          <b>
-            Cover
-          </b>
-           will attempt to fill the container, using it's entire width.  Cropping is likely to occur.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`FormConfigMultimedia should allow setting a help text 1`] = `
 <div>
   <div
@@ -112,20 +34,59 @@ exports[`FormConfigMultimedia should allow setting a help text 1`] = `
       If selected, the property will be rendered with the label. Otherwise, it will just show the multimedia content.
     </Tip>
   </PropertyConfigOption>
+  <PropertyConfigOption
+    label="Show in cards"
+    model="template.data.properties[0].showInCard"
+  >
+    <Tip>
+      This property will appear in the library cards as part of the basic info.
+    </Tip>
+  </PropertyConfigOption>
   <div>
-    <PropertyConfigOption
-      label="Show in cards"
-      model="template.data.properties[0].showInCard"
+    <div
+      className="form-group"
     >
-      <Tip>
-        This property will appear in the library cards as part of the basic info.
-      </Tip>
-    </PropertyConfigOption>
+      <label>
+        Style
+      </label>
+      <Select
+        model="template.data.properties[0].style"
+        options={
+          Array [
+            Object {
+              "_id": "contain",
+              "name": "Contain",
+            },
+            Object {
+              "_id": "cover",
+              "name": "Cover",
+            },
+          ]
+        }
+        optionsLabel="name"
+        optionsValue="_id"
+      />
+    </div>
+    <div
+      className="protip"
+    >
+      <p>
+        <b>
+          Contain
+        </b>
+         will show the entire media inside the container.  Grey bars will appear to the sides of the image.
+        <br />
+        <b>
+          Cover
+        </b>
+         will attempt to fill the container, using it's entire width.  In cards, cropping is likely to occur.
+      </p>
+    </div>
   </div>
 </div>
 `;
 
-exports[`FormConfigMultimedia should hold show label and show in card type options by default 1`] = `
+exports[`FormConfigMultimedia should hold show label, show in card and select card style type options by default 1`] = `
 <div>
   <div
     className="form-group"
@@ -149,15 +110,54 @@ exports[`FormConfigMultimedia should hold show label and show in card type optio
       If selected, the property will be rendered with the label. Otherwise, it will just show the multimedia content.
     </Tip>
   </PropertyConfigOption>
+  <PropertyConfigOption
+    label="Show in cards"
+    model="template.data.properties[0].showInCard"
+  >
+    <Tip>
+      This property will appear in the library cards as part of the basic info.
+    </Tip>
+  </PropertyConfigOption>
   <div>
-    <PropertyConfigOption
-      label="Show in cards"
-      model="template.data.properties[0].showInCard"
+    <div
+      className="form-group"
     >
-      <Tip>
-        This property will appear in the library cards as part of the basic info.
-      </Tip>
-    </PropertyConfigOption>
+      <label>
+        Style
+      </label>
+      <Select
+        model="template.data.properties[0].style"
+        options={
+          Array [
+            Object {
+              "_id": "contain",
+              "name": "Contain",
+            },
+            Object {
+              "_id": "cover",
+              "name": "Cover",
+            },
+          ]
+        }
+        optionsLabel="name"
+        optionsValue="_id"
+      />
+    </div>
+    <div
+      className="protip"
+    >
+      <p>
+        <b>
+          Contain
+        </b>
+         will show the entire media inside the container.  Grey bars will appear to the sides of the image.
+        <br />
+        <b>
+          Cover
+        </b>
+         will attempt to fill the container, using it's entire width.  In cards, cropping is likely to occur.
+      </p>
+    </div>
   </div>
 </div>
 `;

@@ -74,7 +74,7 @@
 
 dl.multimedia {
   dd {
-    background-color: #c7c7c7;
+    background-color: #eaeaea;
     text-align: center;
     overflow: hidden;
   }
@@ -90,6 +90,11 @@ dl.multimedia {
   }
 
   img {
-    box-shadow: 3px 0px 6px 0px rgba(0, 0, 0, 0.2), -3px 0px 6px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 1px 6px 0px rgba(0, 0, 0, 0.1), -3px 1px 6px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  &.contain img {
+    max-width: calc(100% - 10px);
+    margin: 5px;
   }
 }

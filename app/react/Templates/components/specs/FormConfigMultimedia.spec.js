@@ -37,13 +37,7 @@ describe('FormConfigMultimedia', () => {
     expect(component.find('.has-error').length).toBe(length);
   };
 
-  it('should hold show label and show in card type options by default', () => {
-    render();
-    expect(component).toMatchSnapshot();
-  });
-
-  it('should add option to select card display type', () => {
-    state.template.data.properties[0].showInCard = true;
+  it('should hold show label, show in card and select card style type options by default', () => {
     render();
     expect(component).toMatchSnapshot();
   });

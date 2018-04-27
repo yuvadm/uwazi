@@ -24,8 +24,8 @@ const style = index => (
     </div>
     <div className="protip">
       <p>
-        <b>Contain</b> will show the entire media inside the container.  Grey bars may appear to the sides of the image.
-        <br /><b>Cover</b> will attempt to fill the container, using it&#39;s entire width.  Cropping is likely to occur.
+        <b>Contain</b> will show the entire media inside the container.  Grey bars will appear to the sides of the image.
+        <br /><b>Cover</b> will attempt to fill the container, using it&#39;s entire width.  In cards, cropping is likely to occur.
       </p>
     </div>
   </div>
@@ -33,7 +33,7 @@ const style = index => (
 
 class FormConfigMultimedia extends Component {
   render() {
-    const { property, index, formState, canShowInCard, helpText } = this.props;
+    const { index, formState, canShowInCard, helpText } = this.props;
 
     let labelClass = 'form-group';
     const labelKey = `properties.${index}.label`;
@@ -64,13 +64,12 @@ class FormConfigMultimedia extends Component {
         </PropertyConfigOption>
 
         {canShowInCard &&
-          <div>
-            <PropertyConfigOption label="Show in cards" model={`template.data.properties[${index}].showInCard`}>
-              <Tip>This property will appear in the library cards as part of the basic info.</Tip>
-            </PropertyConfigOption>
-            {property.showInCard && style(index)}
-          </div>
+          <PropertyConfigOption label="Show in cards" model={`template.data.properties[${index}].showInCard`}>
+            <Tip>This property will appear in the library cards as part of the basic info.</Tip>
+          </PropertyConfigOption>
         }
+
+        {style(index)}
       </div>
     );
   }
@@ -82,16 +81,14 @@ FormConfigMultimedia.defaultProps = {
 };
 
 FormConfigMultimedia.propTypes = {
-  property: PropTypes.instanceOf(Object).isRequired,
   canShowInCard: PropTypes.bool,
   helpText: PropTypes.string,
   index: PropTypes.number.isRequired,
   formState: PropTypes.instanceOf(Object).isRequired
 };
 
-export function mapStateToProps({ template }, ownProps) {
+export function mapStateToProps({ template }) {
   return {
-    property: template.data.properties[ownProps.index],
     formState: template.formState
   };
 }
