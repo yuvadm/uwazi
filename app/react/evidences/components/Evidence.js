@@ -35,7 +35,7 @@ class Evidence extends Component {
             }
           </div>
           <div className="item-snippet-wrapper">
-            <p>{evidence.get('evidence').get('text')}</p>
+            <p dangerouslySetInnerHTML={{__html: evidence.get('evidence').get('text')}} />
           </div>
           {evidence.get('isEvidence') === true && <Badge>Positive</Badge>}
           {evidence.get('isEvidence') === false && <Badge red>Negative</Badge>}
