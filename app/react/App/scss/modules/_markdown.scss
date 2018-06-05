@@ -112,12 +112,10 @@
     margin-bottom: 5px;
   }
   p, ul, ol {
-    margin-top: 24px;
     margin-bottom: 24px;
   }
 
   ul ul, ul ol, ol ul {
-    margin-top: 0;
     margin-bottom: 0;
   }
 
@@ -226,4 +224,22 @@
 
 .page-viewer .video-container{
   padding-bottom: 36%;
+}
+
+.side-panel .markdown-viewer {
+  p, li {
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    text-transform: none;
+    letter-spacing: 0;
+    padding-left: 0;
+  }
+  h3 {
+    font-size: 18px;
+  }
 }
