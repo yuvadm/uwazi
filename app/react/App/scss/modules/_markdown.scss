@@ -103,7 +103,7 @@
   img {
     max-width: 100%;
   }
-  p, li {
+  p, li, table {
     font-family: $f-regular;
     font-size: 18px;
     line-height: 1.75em;
@@ -227,7 +227,7 @@
 }
 
 .side-panel .markdown-viewer {
-  p, li {
+  p, li, table {
     font-size: 14px;
   }
   h1 {
