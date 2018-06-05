@@ -71,7 +71,12 @@
       color: #555;
     }
     & > blockquote {
+      margin-top: -16px;
       margin-left: 32px;
+
+      p {
+        font-size: 18px;
+      }
     }
   }
   code, pre {
@@ -135,6 +140,9 @@
   }
   tr:not(:last-of-type) {
     border-bottom: 1px solid $c-grey-light;
+  }
+  hr {
+    border: 2px solid #ddd;
   }
 }
 
