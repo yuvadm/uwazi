@@ -29,8 +29,6 @@ module.exports = function(production) {
 
   return {
     mode: 'development',
-    // context: rootPath,
-    // devtool: '#eval-source-map',
     entry: {
       main: path.join(rootPath, 'app/react/index.js'),
       nprogress: path.join(rootPath, 'node_modules/nprogress/nprogress.js'),
@@ -87,13 +85,8 @@ module.exports = function(production) {
       ]
     },
     plugins: [
-      new CopyWebpackPlugin([
-        {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
-      ]),
       new CleanPlugin(__dirname + '/../dist/'),
       new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // both options are optional
         filename: devMode ? '[name].css' : '[name].[hash].css',
         chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
       }),

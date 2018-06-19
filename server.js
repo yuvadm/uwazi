@@ -48,7 +48,11 @@ app.use(bodyParser.json());
 require('./app/api/auth/routes.js')(app);
 app.use(privateInstanceMiddleware);
 app.use('/uploaded_documents', express.static(path.resolve(__dirname, 'uploaded_documents')));
-app.use('/flag-images', express.static(path.resolve(__dirname, 'dist/flags')));
+
+app.use('/flag-images', express.static(path.resolve(__dirname, 'node_modules/react-flags/vendor/flags')));
+if (app.get('env') === 'production') {
+  app.use('/flag-images', express.static(path.resolve(__dirname, 'dist/flags')));
+}
 
 require('./app/api/api.js')(app, http);
 require('./app/react/server.js')(app);
