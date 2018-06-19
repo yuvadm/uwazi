@@ -1,31 +1,21 @@
-/* eslint-disable */
-'use strict';
+/* eslint-disable import/no-extraneous-dependencies */
+import AssetsPlugin from 'assets-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CleanPlugin = require('./CleanPlugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+import CleanPlugin from './CleanPlugin.js';
 
-var rootPath = __dirname + '/../';
-
-var AssetsPlugin = require('assets-webpack-plugin')
-var assetsPluginInstance = new AssetsPlugin({path: path.join(rootPath + '/dist/')})
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const rootPath = `${__dirname}/../`;
+const assetsPluginInstance = new AssetsPlugin({ path: path.join(`${rootPath}/dist/`) });
 
 const devMode = true;
 
-module.exports = function(production) {
-  var stylesName = 'styles.css';
-  var jsChunkHashName = '';
+module.exports = (production) => {
+  let jsChunkHashName = '';
 
   if (production) {
-    stylesName = 'styles.[contenthash].css';
     jsChunkHashName = '.[chunkhash]';
   }
-
-  const CoreCss = new ExtractTextPlugin(stylesName);
-  const VendorCSS = new ExtractTextPlugin('vendor.' + stylesName);
 
   return {
     mode: 'development',
@@ -37,10 +27,10 @@ module.exports = function(production) {
     output: {
       path: path.join(rootPath, '/dist/'),
       publicPath: '/',
-      filename: '[name]'+jsChunkHashName+'.js'
+      filename: `[name]${jsChunkHashName}.js`
     },
     resolveLoader: {
-      modules: ['node_modules', __dirname + '/webpackLoaders'],
+      modules: ['node_modules', `${__dirname}/webpackLoaders`],
       extensions: ['.js', '.json'],
       mainFields: ['loader', 'main']
     },
@@ -85,7 +75,7 @@ module.exports = function(production) {
       ]
     },
     plugins: [
-      new CleanPlugin(__dirname + '/../dist/'),
+      new CleanPlugin(`${__dirname}/../dist/`),
       new MiniCssExtractPlugin({
         filename: devMode ? '[name].css' : '[name].[hash].css',
         chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
@@ -93,4 +83,4 @@ module.exports = function(production) {
       assetsPluginInstance
     ]
   };
-}
+};

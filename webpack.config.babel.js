@@ -6,6 +6,4 @@ const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 
 const smp = new SpeedMeasurePlugin();
 
-config.context = __dirname;
-
 module.exports = smp.wrap(config);
