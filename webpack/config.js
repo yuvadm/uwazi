@@ -87,9 +87,9 @@ module.exports = function(production) {
       ]
     },
     plugins: [
-      // new CopyWebpackPlugin([
-      //   {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
-      // ]),
+      new CopyWebpackPlugin([
+        {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
+      ]),
       new CleanPlugin(__dirname + '/../dist/'),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
