@@ -26,13 +26,12 @@ class Root extends Component {
     let pdfWorkerPathScript = 'window.pdfWorkerPath = \'/static/pdf.worker.js\';';
     let JS = [
       'http://localhost:8080/nprogress.js',
-      'http://localhost:8080/vendor.js',
       'http://localhost:8080/main.js'
     ];
 
     let CSS = [
-      'http://localhost:8080/vendor.styles.css',
-      'http://localhost:8080/styles.css'
+      // 'http://localhost:8080/vendor.styles.css',
+      // 'http://localhost:8080/styles.css'
     ];
 
 

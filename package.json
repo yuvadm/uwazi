@@ -196,8 +196,8 @@
     "webpack": "v4.12.0",
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-middleware": "2.0.4",
-    "webpack-hot-middleware": "^2.21.0",
+    "webpack-dev-middleware": "3.1.3",
+    "webpack-hot-middleware": "2.22.0",
     "whatwg-fetch": "^0.10.1"
   }
 }
