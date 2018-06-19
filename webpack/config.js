@@ -26,8 +26,8 @@ module.exports = function(production) {
 
   return {
     mode: 'development',
-    context: rootPath,
-    devtool: '#eval-source-map',
+    // context: rootPath,
+    // devtool: '#eval-source-map',
     entry: {
       main: path.join(rootPath, 'app/react/index.js'),
       nprogress: path.join(rootPath, 'node_modules/nprogress/nprogress.js'),
@@ -103,13 +103,6 @@ module.exports = function(production) {
             path.join(rootPath, 'node_modules/pdfjs-dist/web/images/'),
             path.join(rootPath, 'node_modules/bootstrap/dist/fonts/')
           ]
-        },
-        {
-          test:/\.json$/i,
-          loaders: ['json-loader'],
-          include: [
-            path.join(rootPath, 'app')
-          ]
         }
       ]
     },
@@ -133,9 +126,9 @@ module.exports = function(production) {
       }
     },
     plugins: [
-      new CopyWebpackPlugin([
-        {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
-      ]),
+      // new CopyWebpackPlugin([
+      //   {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
+      // ]),
       new CleanPlugin(__dirname + '/../dist/'),
       VendorCSS,
       CoreCss,
