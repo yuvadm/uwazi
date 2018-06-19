@@ -11,6 +11,9 @@ var rootPath = __dirname + '/../';
 
 var AssetsPlugin = require('assets-webpack-plugin')
 var assetsPluginInstance = new AssetsPlugin({path: path.join(rootPath + '/dist/')})
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const devMode = true;
 
 module.exports = function(production) {
   var stylesName = 'styles.css';
@@ -56,38 +59,15 @@ module.exports = function(production) {
           exclude: /node_modules/
         },
         {
-          test: /\.scss$/,
-          use: ['css-hot-loader'].concat(CoreCss.extract({
-            fallback: 'style-loader',
-            use: 'css-loader?sourceMap!sass-loader?outputStyle=expanded&sourceMap=true&sourceMapContents=true'
-          })),
+          test: /\.(sa|sc|c)ss$/,
+          use: [
+            devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+            'css-loader',
+            'sass-loader',
+          ],
           include: [
             path.join(rootPath, 'app'),
-            path.join(rootPath, 'node_modules/react-widgets/lib/scss/')
-          ]
-        },
-        {
-          test: /\.css$/,
-          loader: CoreCss.extract({
-            fallback: 'style-loader',
-            use: 'css-loader?sourceMap'
-          }),
-          include: [
-            path.join(rootPath, 'app')
-          ]
-        },
-        {
-          test: /\.css$/,
-          loader: VendorCSS.extract({
-            fallback: 'style-loader',
-            use: 'css-loader?sourceMap'
-          }),
-          include: [
-            path.join(rootPath, 'node_modules/react-datepicker/dist/'),
-            path.join(rootPath, 'node_modules/bootstrap/dist/'),
-            path.join(rootPath, 'node_modules/nprogress/'),
-            path.join(rootPath, 'node_modules/font-awesome/css/'),
-            path.join(rootPath, 'node_modules/pdfjs-dist/web')
+            path.join(rootPath, 'node_modules/')
           ]
         },
         {
@@ -106,32 +86,17 @@ module.exports = function(production) {
         }
       ]
     },
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          commons: {
-            chunks: "initial",
-            minChunks: 2,
-            maxInitialRequests: 5, // The default limit is too small to showcase the effect
-            minSize: 0 // This is example is too small to create commons chunks
-          },
-          vendor: {
-            test: /node_modules/,
-            chunks: "initial",
-            name: "vendor",
-            priority: 10,
-            enforce: true
-          }
-        }
-      }
-    },
     plugins: [
       // new CopyWebpackPlugin([
       //   {from: 'node_modules/react-flags/vendor/flags', to: 'flags'},
       // ]),
       new CleanPlugin(__dirname + '/../dist/'),
-      VendorCSS,
-      CoreCss,
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: devMode ? '[name].css' : '[name].[hash].css',
+        chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      }),
       assetsPluginInstance
     ]
   };

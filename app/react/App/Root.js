@@ -25,7 +25,6 @@ class Root extends Component {
     const head = this.props.head;
     let pdfWorkerPathScript = 'window.pdfWorkerPath = \'/static/pdf.worker.js\';';
     let JS = [
-      'http://localhost:8080/manifest.js',
       'http://localhost:8080/nprogress.js',
       'http://localhost:8080/vendor.js',
       'http://localhost:8080/main.js'
@@ -40,14 +39,12 @@ class Root extends Component {
     if (!isHotReload) {
       pdfWorkerPathScript = `window.pdfWorkerPath = '${this.props.assets['pdf.worker'].js}';`;
       JS = [
-        this.props.assets.manifest.js,
         this.props.assets.nprogress.js,
-        this.props.assets.vendor.js,
         this.props.assets.main.js
       ];
       CSS = [
-        this.props.assets.main.css[0],
-        this.props.assets.main.css[1]
+        // this.props.assets.main.css,
+        // this.props.assets.vendor.css[1]
       ];
     }
 
