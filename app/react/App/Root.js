@@ -22,28 +22,27 @@ class Root extends Component {
 
   render() {
     const isHotReload = process.env.HOT;
-    const head = this.props.head;
-    let pdfWorkerPathScript = 'window.pdfWorkerPath = \'/static/pdf.worker.js\';';
-    let JS = [
-      'http://localhost:8080/nprogress.js',
-      'http://localhost:8080/main.js'
-    ];
+    const production = process.env.NODE_ENV === 'production';
+    const { head } = this.props;
 
-    let CSS = [
-      // 'http://localhost:8080/vendor.styles.css',
-      // 'http://localhost:8080/styles.css'
-    ];
+    let JS = [this.props.assets.main.js];
+    let CSS = [];
+    let pdfWorkerPath;
 
+    if (isHotReload) {
+      JS = ['http://localhost:8080/main.js'];
+    }
 
-    if (!isHotReload) {
-      pdfWorkerPathScript = `window.pdfWorkerPath = '${this.props.assets['pdf.worker'].js}';`;
+    if (production) {
+      pdfWorkerPath = `window.pdfWorkerPath='${this.props.assets['pdf.worker'].js}'`;
       JS = [
-        this.props.assets.nprogress.js,
-        this.props.assets.main.js
+        this.props.assets.main.js,
+        this.props.assets.vendor.js
       ];
+
       CSS = [
-        // this.props.assets.main.css,
-        // this.props.assets.vendor.css[1]
+        this.props.assets.vendor.css,
+        this.props.assets.main.css,
       ];
     }
 
@@ -56,6 +55,7 @@ class Root extends Component {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           {CSS.map((style, key) => <link key={key} href={style} rel="stylesheet" type="text/css" />)}
           <style type="text/css" dangerouslySetInnerHTML={{ __html: this.props.reduxData.settings.collection.customCSS }} />
+          <script dangerouslySetInnerHTML={{ __html: pdfWorkerPath }} />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500,700|Roboto+Slab:100,300,400,700|Roboto:100,300,400,500,700,900"
@@ -66,7 +66,6 @@ class Root extends Component {
           <div id="root" dangerouslySetInnerHTML={{ __html: this.props.content }} />
           {this.renderInitialData()}
           {head.script.toComponent()}
-          <script dangerouslySetInnerHTML={{ __html: pdfWorkerPathScript }} />
           {JS.map((file, index) => <script key={index} src={file} />)}
         </body>
       </html>

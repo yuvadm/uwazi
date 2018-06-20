@@ -8,9 +8,10 @@ import CleanPlugin from './CleanPlugin.js';
 const rootPath = `${__dirname}/../`;
 const assetsPluginInstance = new AssetsPlugin({ path: path.join(`${rootPath}/dist/`) });
 
-const devMode = true;
 
 module.exports = (production) => {
+  const devMode = !production;
+
   let jsChunkHashName = '';
 
   if (production) {
@@ -21,7 +22,6 @@ module.exports = (production) => {
     mode: 'development',
     entry: {
       main: path.join(rootPath, 'app/react/index.js'),
-      nprogress: path.join(rootPath, 'node_modules/nprogress/nprogress.js'),
       'pdf.worker': path.join(rootPath, 'node_modules/pdfjs-dist/build/pdf.worker.entry'),
     },
     output: {
@@ -42,7 +42,7 @@ module.exports = (production) => {
         },
         {
           test: /\.js$/,
-          loader: 'babel-loader?cacheDirectory',
+          loader: `babel-loader${devMode ? '?cacheDirectory' : ''}`,
           include: path.join(rootPath, 'app'),
           exclude: /node_modules/
         },
