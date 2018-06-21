@@ -85,6 +85,7 @@ module.exports = function(production) {
             path.join(rootPath, 'node_modules/react-datepicker/dist/'),
             path.join(rootPath, 'node_modules/bootstrap/dist/'),
             path.join(rootPath, 'node_modules/nprogress/'),
+            path.join(rootPath, 'node_modules/codemirror/'),
             path.join(rootPath, 'node_modules/font-awesome/css/'),
             path.join(rootPath, 'node_modules/pdfjs-dist/web')
           ]

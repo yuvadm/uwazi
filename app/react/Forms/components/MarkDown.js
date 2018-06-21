@@ -1,3 +1,12 @@
+import 'codemirror/addon/hint/html-hint';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/edit/closetag.js';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/xml/xml';
+
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { Tabs, TabLink, TabContent } from 'react-tabs-redux';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -22,6 +31,20 @@ export default class MarkDown extends Component {
           </a>
         </div>
         <TabContent for="edit">
+          <CodeMirror
+            value={this.props.value}
+            options={{
+              extraKeys: {
+                'Ctrl-Space': 'autocomplete',
+              },
+              autoCloseTags: true,
+              lineWrapping: true,
+              mode: 'markdown',
+            }}
+            editorDidMount={editor => {
+              window.codemirror = editor;
+            }}
+          />
           <textarea className="form-control" rows={rows} onChange={this.props.onChange} value={this.props.value}/>
         </TabContent>
         <TabContent for="preview" className="markdownViewer">
