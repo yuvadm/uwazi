@@ -38,12 +38,24 @@ exports[`MarkdownViewer render should render Link 1`] = `
   className="markdown-viewer"
 >
   <MarkdownLink
-    className=""
-    icon=""
+    classname=""
     key="0"
     label="this is a label"
     url="this_is_the_url"
   />
+  
+
+  <p
+    key="2"
+  >
+    <MarkdownLink
+      classname=""
+      key="0"
+      url="the_url"
+    >
+      label
+    </MarkdownLink>
+  </p>
   
 
 </div>
@@ -54,7 +66,7 @@ exports[`MarkdownViewer render should render a searchbox 1`] = `
   className="markdown-viewer"
 >
   <SearchBox
-    className=""
+    classname=""
     key="0"
     placeholder="this is a placeholder"
   />
