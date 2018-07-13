@@ -17,7 +17,7 @@ import {isClient} from 'app/utils';
 import {loadCSS} from 'fg-loadcss';
 
 if (isClient) {
-  loadCSS('https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css');
+  loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 }
 
 class App extends Component {
