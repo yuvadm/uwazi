@@ -11,7 +11,7 @@ export default function () {
         filter: []
       }
     },
-    sort: [],
+    sort: [{probability: {order: 'desc'}}],
     aggregations: {}
   };
 
