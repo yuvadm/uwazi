@@ -32,7 +32,7 @@ export default class PDF extends EventEmitter {
           for (let pageNumber = 1; pageNumber <= maxPages; pageNumber += 1) {
             pages.push(pdf.getPage(pageNumber).then(page => {
               return page.getTextContent().then(text => {
-                return text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, '$1[[' + (Number(page.pageIndex) + 1) + ']]$2') + '\f';
+                return text.items.map(s => s.str.trim()).join(' ').replace(/(\S+)(\s?)/g, '$1[[' + (Number(page.pageIndex) + 1) + ']]$2') + '\f';
               });
             }));
           }

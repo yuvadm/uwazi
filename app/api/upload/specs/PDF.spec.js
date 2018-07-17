@@ -20,6 +20,19 @@ describe('PDF', function () {
       })
       .catch(done.fail);
     });
+
+    it('should add spaces between lines', (done) => {
+      filepath = __dirname + '/add_spaces_between_lines.pdf';
+      pdf = new PDFObject(filepath);
+
+      pdf.extractText()
+      .then((text) => {
+        expect(text.match(/the\[\[2\]\] national\[\[2\]\]/g)).not.toBe(null);
+        expect(text.match(/that\[\[2\]\] Section\[\[2\]\]/g)).not.toBe(null);
+        done();
+      })
+      .catch(done.fail);
+    });
   });
 
   describe('convert', () => {
