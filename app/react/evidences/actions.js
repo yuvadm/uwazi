@@ -2,12 +2,12 @@ import {browserHistory} from 'react-router';
 import {actions as formActions} from 'react-redux-form';
 import Immutable from 'immutable';
 import rison from 'rison';
+
 import {actions} from 'app/BasicReducer';
 
+import {evidencesActions, docEvidencesActions, evidencesUIActions} from './reducer';
 import {getEvidencesFilters} from './selectors';
 import evidencesAPI from './evidencesAPI';
-
-import {evidencesActions, docEvidencesActions, evidencesUIActions} from './reducer';
 
 docEvidencesActions.getSuggestions = (docId) => {
   return (dispatch) => {
@@ -70,11 +70,30 @@ evidencesActions.saveEvidence = (evidence) => {
 };
 
 evidencesActions.getSuggestions = (property, value) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     return evidencesAPI.getSuggestions({property, value})
     .then((suggestions) => {
-      dispatch(evidencesActions.concat(suggestions));
+      const currentFilters = getEvidencesFilters(getState());
+      return evidencesAPI.search(currentFilters);
+    })
+    .then((evidences) => {
+      dispatch(evidencesActions.set(evidences.rows));
+      dispatch(evidencesActions.setTotalRows(evidences.totalRows));
     });
+  };
+};
+
+evidencesActions.oneByOneSuggestions = (property, value) => {
+  return async (dispatch, getState) => {
+    let thereIsMore = true;
+
+    while (thereIsMore) {
+      await evidencesAPI.getSuggestions({property, value, limit: 1});
+      const currentFilters = getEvidencesFilters(getState());
+      const evidences = await evidencesAPI.search(currentFilters);
+      dispatch(evidencesActions.set(evidences.rows));
+      dispatch(evidencesActions.setTotalRows(evidences.totalRows));
+    }
   };
 };
 

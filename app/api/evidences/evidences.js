@@ -61,10 +61,10 @@ export default {
     });
   },
 
-  getSuggestionsForOneValue(property, value, language, limit = 50) {
+  getSuggestionsForOneValue(property, value, language, limit = 10) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
-      return entities.get({template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit})
+      return entities.get({type: 'document', template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit: Number(limit)})
       .then((docs) => {
         if (!docs.length) {
           return entitiesModel.db.updateMany({}, {$set: {evidencesAnalyzed: false}})

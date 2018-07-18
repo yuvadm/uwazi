@@ -23,7 +23,7 @@ export default (app) => {
 
   app.get('/api/evidences/suggestions', needsAuthorization(['admin', 'editor']), (req, res) => {
     if (req.query.property) {
-      return evidences.getSuggestionsForOneValue(req.query.property, req.query.value, req.language)
+      return evidences.getSuggestionsForOneValue(req.query.property, req.query.value, req.language, req.query.limit)
       .then(response => res.json(response))
       .catch(res.error);
     }

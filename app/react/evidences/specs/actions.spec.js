@@ -22,11 +22,12 @@ describe('evidences actions', () => {
 
   describe('docEvidencesActions', () => {
     describe('getSuggestions', () => {
-      it('should request suggestions and add them to the evidences', (done) => {
+      it('should request suggestions and reload the sugestions list', (done) => {
         spyOn(evidencesAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestionsResponse'));
         const expectedActions = [docEvidencesActions.concat('suggestionsResponse')];
 
-        docEvidencesActions.getSuggestions('docId')(store.dispatch)
+        const getState = () => ({ });
+        docEvidencesActions.getSuggestions('docId')(store.dispatch, getState)
         .then(() => {
           expect(evidencesAPI.getSuggestions).toHaveBeenCalledWith({_id: 'docId'});
           expect(store.getActions()).toEqual(expectedActions);
@@ -132,22 +133,6 @@ describe('evidences actions', () => {
         evidencesActions.saveInvalidSuggestion(evidence)(store.dispatch)
         .then(() => {
           expect(evidencesAPI.save).toHaveBeenCalledWith({test: 'test', isEvidence: false});
-          expect(store.getActions()).toEqual(expectedActions);
-          done();
-        });
-      });
-    });
-
-    describe('getSuggestions', () => {
-      it('should request suggestions and add them to the evidences', (done) => {
-        spyOn(evidencesAPI, 'getSuggestions').and.returnValue(Promise.resolve('suggestionsResponse'));
-        const expectedActions = [evidencesActions.concat('suggestionsResponse')];
-
-        const property = 'property';
-        const value = 'value';
-        evidencesActions.getSuggestions(property, value)(store.dispatch)
-        .then(() => {
-          expect(evidencesAPI.getSuggestions).toHaveBeenCalledWith({property, value});
           expect(store.getActions()).toEqual(expectedActions);
           done();
         });

@@ -65,6 +65,7 @@ const EvidencesFiltersForm = (props) => {
                   renderActions={(option) =>
                       <div>
                         <button onClick={() => props.getSuggestions(filter.get('_id'), option.value)}>Predict</button>
+                        <button onClick={() => props.oneByOne(filter.get('_id'), option.value)}>OneByOne</button>
                         <button onClick={() => props.retrainModel(filter.get('_id'), option.value)}>Retrain</button>
                       </div>
                   }
@@ -96,6 +97,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     onChange: searchEvidences,
     retrainModel,
+    oneByOne: evidencesActions.oneByOneSuggestions,
     getSuggestions: evidencesActions.getSuggestions,
     deleteSuggestions: evidencesActions.deleteSuggestions
   }, dispatch);

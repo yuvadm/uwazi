@@ -66,8 +66,9 @@ export default {
             }
           });
         }
-        return indexedEvidences;
-      });
+        return elastic.indices.refresh({index: elasticIndex});
+      })
+      .then(() => indexedEvidences);
     });
   },
 
