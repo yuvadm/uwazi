@@ -69,9 +69,9 @@ evidencesActions.saveEvidence = (evidence) => {
   };
 };
 
-evidencesActions.getSuggestions = (property, value) => {
+evidencesActions.getSuggestions = (property, value, limit) => {
   return (dispatch, getState) => {
-    return evidencesAPI.getSuggestions({property, value})
+    return evidencesAPI.getSuggestions({property, value, limit})
     .then((suggestions) => {
       const currentFilters = getEvidencesFilters(getState());
       return evidencesAPI.search(currentFilters);
@@ -79,6 +79,7 @@ evidencesActions.getSuggestions = (property, value) => {
     .then((evidences) => {
       dispatch(evidencesActions.set(evidences.rows));
       dispatch(evidencesActions.setTotalRows(evidences.totalRows));
+      return evidences;
     });
   };
 };

@@ -61,7 +61,7 @@ export default {
     });
   },
 
-  getSuggestionsForOneValue(property, value, language, limit = 10) {
+  getSuggestionsForOneValue(property, value, language, limit = 3) {
     return templates.get({'properties._id': property})
     .then(([template]) => {
       return entities.get({type: 'document', template: template._id, $or: [{evidencesAnalyzed: {$exists: false}}, {evidencesAnalyzed: false}]}, '+fullText', {limit: Number(limit)})
