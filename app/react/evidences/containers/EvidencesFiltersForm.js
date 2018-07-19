@@ -16,17 +16,27 @@ class EvidencesFiltersForm extends React.Component {
   constructor(props) {
     super(props);
     this.continuePrediciton = false;
-    this.thereIsMore = true;
+    this.state = {
+      predictionStopped: true
+    }
   }
 
   async oneByOne(property, value) {
-    while (this.thereIsMore && this.continuePrediciton) {
-      await this.props.getSuggestions(property, value, 1);
+    while (true) {
+      try {
+        await this.props.getSuggestions(property, value, 1);
+      }
+      catch(e) {}
+      if (!this.continuePrediciton) {
+        this.setState({ predictionStopped: true });
+        break;
+      }
     }
   }
 
   async start(property, value) {
     this.continuePrediciton = true;
+    this.setState({ predictionStopped: false });
     this.oneByOne(property, value)
   }
 
@@ -87,9 +97,12 @@ class EvidencesFiltersForm extends React.Component {
                     renderActions={(option) =>
                         <div>
                           <button onClick={() => this.props.getSuggestions(filter.get('_id'), option.value)}>Predict</button>
-                          <button onClick={() => this.start(filter.get('_id'), option.value)}>OneByOne</button>
-                          <button onClick={() => this.stop()}>stop</button>
                           <button onClick={() => this.props.retrainModel(filter.get('_id'), option.value)}>Retrain</button>
+                          {
+                            this.state.predictionStopped ?
+                              <button className="btn btn-success" onClick={() => this.start(filter.get('_id'), option.value)}>Toggle predict</button>
+                            : <button className="btn btn-danger" onClick={() => this.stop()}>Stop predict</button>
+                          }
                         </div>
                     }
                   />
