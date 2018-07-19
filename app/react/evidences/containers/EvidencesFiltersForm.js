@@ -24,7 +24,7 @@ class EvidencesFiltersForm extends React.Component {
   async oneByOne(property, value) {
     while (true) {
       try {
-        await this.props.getSuggestions(property, value, 1);
+        await this.props.getSuggestions(property, value, 3);
       }
       catch(e) {}
       if (!this.continuePrediciton) {
