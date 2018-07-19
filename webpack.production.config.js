@@ -5,6 +5,7 @@ var path = require('path');
 var webpack = require('webpack');
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var production = true;
 var config = require('./webpack/config')(production);
@@ -14,13 +15,7 @@ config.context = __dirname;
 config.plugins = config.plugins.concat([
   new webpack.optimize.OccurrenceOrderPlugin(),
   new OptimizeCssAssetsPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      warnings: false,
-      screw_ie8: true,
-      comparisons: false
-    }
-  }),
+  new UglifyJsPlugin(),
   new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } })
 ])
