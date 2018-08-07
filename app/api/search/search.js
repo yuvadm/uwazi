@@ -221,17 +221,18 @@ const search = {
     const body = entity;
     let fullTextIndex = Promise.resolve();
     if (entity.fullText) {
-      const fullText = {};
+      const fullText = Object.values(entity.fullText).join('\f');
+      const fullTextQueryIndex = {};
       let language;
       if (!entity.file || entity.file && !entity.file.language) {
-        language = detectLanguage(entity.fullText);
+        language = detectLanguage(fullText);
       }
       if (entity.file && entity.file.language) {
         language = languages(entity.file.language);
       }
 
-      fullText[`fullText_${language}`] = entity.fullText;
-      fullTextIndex = elastic.index({ index: elasticIndex, type: 'fullText', parent: id, body: fullText, id: `${id}_fullText` });
+      fullTextQueryIndex[`fullText_${language}`] = fullText;
+      fullTextIndex = elastic.index({ index: elasticIndex, type: 'fullText', parent: id, body: fullTextQueryIndex, id: `${id}_fullText` });
       delete entity.fullText;
     }
     return Promise.all([
@@ -264,16 +265,15 @@ const search = {
         action[_action] = { _index: elasticIndex, _type: 'fullText', parent: id, _id: `${id}_fullText` };
         body.push(action);
 
-        const fullText = {};
+        const fullText = Object.values(doc.fullText).join('\f');
         let language;
         if (!doc.file || doc.file && !doc.file.language) {
-          language = detectLanguage(doc.fullText);
+          language = detectLanguage(fullText);
         }
         if (doc.file && doc.file.language) {
           language = languages(doc.file.language);
         }
-        fullText[`fullText_${language}`] = doc.fullText;
-        body.push(fullText);
+        body.push({ [`fullText_${language}`]: fullText });
         delete doc.fullText;
       }
     });

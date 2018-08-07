@@ -1,7 +1,7 @@
 /* eslint-disable max-nested-callbacks */
+import { catchErrors } from 'api/utils/jasmineHelpers';
 import { index as elasticIndex } from 'api/config/elasticIndexes';
 import { search, elastic } from 'api/search';
-import { catchErrors } from 'api/utils/jasmineHelpers';
 import db from 'api/utils/testing_db';
 import instanceElasticTesting from 'api/utils/elastic_testing';
 import languages from 'shared/languages';
@@ -47,7 +47,7 @@ describe('search', () => {
           _id: 'asd1',
           type: 'document',
           title: 'Batman indexes',
-          fullText: 'text'
+          fullText: { 1: 'page1', 2: 'page2' }
         };
 
         search.index(entity)
@@ -55,7 +55,15 @@ describe('search', () => {
           expect(elastic.index)
           .toHaveBeenCalledWith({ index: elasticIndex, type: 'entity', id: 'asd1', body: { type: 'document', title: 'Batman indexes' } });
           expect(elastic.index)
-          .toHaveBeenCalledWith({ index: elasticIndex, type: 'fullText', parent: 'asd1', body: { fullText_english: 'text' }, id: 'asd1_fullText' });
+          .toHaveBeenCalledWith({
+            index: elasticIndex,
+            type: 'fullText',
+            parent: 'asd1',
+            body: {
+              fullText_english: 'page1\fpage2'
+            },
+            id: 'asd1_fullText'
+          });
           done();
         })
         .catch(done.fail);
@@ -68,7 +76,7 @@ describe('search', () => {
             sharedId: 'sharedIdOtherLanguage',
             type: 'document',
             title: 'Batman indexes',
-            fullText: '조 선말',
+            fullText: { 1: '조 선말' },
             language: 'en'
           };
 
@@ -115,10 +123,10 @@ describe('search', () => {
     describe('when docs have fullText', () => {
       it('should be indexed separatedly as a child of the doc', (done) => {
         spyOn(elastic, 'bulk').and.returnValue(Promise.resolve({ items: [] }));
-        spyOn(languages, 'detect').and.returnValue('english');
+        // spyOn(languages, 'detect').and.returnValue('english');
         const toIndexDocs = [
-          { _id: 'id1', title: 'test1', fullText: 'text1' },
-          { _id: 'id2', title: 'test2', fullText: 'text2' }
+          { _id: 'id1', title: 'test1', fullText: { 1: 'page1', 2: 'page2' } },
+          { _id: 'id2', title: 'test2', fullText: { 1: 'this is an english text, the language detector should detect this no problem' } }
         ];
 
         search.bulkIndex(toIndexDocs, 'index')
@@ -127,11 +135,11 @@ describe('search', () => {
             { index: { _index: elasticIndex, _type: 'entity', _id: 'id1' } },
             { title: 'test1' },
             { index: { _index: elasticIndex, _type: 'fullText', parent: 'id1', _id: 'id1_fullText' } },
-            { fullText_english: 'text1' },
+            { fullText_other: 'page1\fpage2' },
             { index: { _index: elasticIndex, _type: 'entity', _id: 'id2' } },
             { title: 'test2' },
             { index: { _index: elasticIndex, _type: 'fullText', parent: 'id2', _id: 'id2_fullText' } },
-            { fullText_english: 'text2' }
+            { fullText_english: 'this is an english text, the language detector should detect this no problem' }
           ] });
           done();
         })

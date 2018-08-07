@@ -68,7 +68,7 @@ export default (app) => {
     const docs = _docs.map((doc) => {
       doc.processed = true;
       doc.fullText = conversion.fullText;
-      doc.file.language = languages.detect(conversion.fullText, 'franc');
+      doc.file.language = languages.detect(conversion.fullText ? Object.values(conversion.fullText).join('\f') : '', 'franc');
       doc.toc = [];
       return doc;
     });
