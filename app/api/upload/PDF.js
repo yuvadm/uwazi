@@ -53,14 +53,15 @@ export default class PDF extends EventEmitter {
                 return page.getTextContent()
                 .then((text) => {
                   debugLog.debug('processing page text');
-                  const something = `${text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, `$1[[${Number(page.pageIndex) + 1}]]$2`)}\f`;
-                  return something;
+                  return `${text.items.map(s => s.str).join('').replace(/(\S+)(\s?)/g, `$1[[${Number(page.pageIndex) + 1}]]$2`)}`;
                 });
               }));
           }
           Promise.all(pages).then((texts) => {
             debugLog.debug('All pages processed');
-            resolve(texts.join(''));
+            resolve(texts.reduce((splitedPages, pageText, pageIndex) => {
+              return Object.assign(splitedPages, { [pageIndex + 1]: pageText });
+            }, {}));
           })
           .catch((error) => {
             debugLog.error(error);

@@ -12,10 +12,9 @@ describe('PDF', () => {
     it('should extract the text of the pdf by page, every word on every page should have appended the page number in between [[]]', (done) => {
       pdf.extractText()
       .then((text) => {
-        const lines = text.split(/\f/);
-        expect(lines[0]).toBe('Page[[1]] 1[[1]]');
-        expect(lines[1]).toBe('Page[[2]] 2[[2]]');
-        expect(lines[2]).toBe('Page[[3]] 3[[3]]');
+        expect(text[1]).toBe('Page[[1]] 1[[1]]');
+        expect(text[2]).toBe('Page[[2]] 2[[2]]');
+        expect(text[3]).toBe('Page[[3]] 3[[3]]');
         done();
       })
       .catch(done.fail);
@@ -31,10 +30,7 @@ describe('PDF', () => {
     it('should optimize and extract html and text', (done) => {
       pdf.convert()
       .then((conversion) => {
-        const lines = conversion.fullText.split(/\f/);
-
-        expect(lines[0]).toBe('Page[[1]] 1[[1]]');
-        //expect(conversion.fullText).toMatch('Page\[\[1\]\] 1');
+        expect(conversion.fullText[1]).toBe('Page[[1]] 1[[1]]');
         done();
       })
       .catch(done.fail);
