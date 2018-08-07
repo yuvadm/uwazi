@@ -10,7 +10,7 @@ import * as relationships from 'app/Relationships/utils/routeUtils';
 
 import { requestViewerState, setViewerState } from './actions/routeActions';
 
-export default class ViewDocument extends RouteHandler {
+class ViewDocument extends RouteHandler {
   constructor(props, context) {
     //Force client state even if is rendered from server to force the pdf character count process
     RouteHandler.renderedFromServer = props.renderedFromServer || false;
@@ -57,6 +57,12 @@ export default class ViewDocument extends RouteHandler {
   }
 
   render() {
-    return <Viewer page={Number(this.props.location.query.page)} searchTerm={this.props.location.query.searchTerm}/>;
+    return <Viewer raw={this.props.params.raw || !isClient} page={Number(this.props.location.query.page)} searchTerm={this.props.location.query.searchTerm}/>;
   }
 }
+
+ViewDocument.defaultProps = {
+  params: {}
+};
+
+export default ViewDocument;

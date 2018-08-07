@@ -12,6 +12,12 @@ describe('ViewDocument', () => {
   let component;
   let instance;
   let context;
+  let props;
+
+  const render = () => {
+    component = shallow(<ViewDocument {...props} renderedFromServer />, { context });
+    instance = component.instance();
+  };
 
   beforeEach(() => {
     const dispatch = jasmine.createSpy('dispatch');
@@ -21,11 +27,11 @@ describe('ViewDocument', () => {
       }
       return action;
     }) } };
-    const props = {
+    props = {
       location: { query: {} }
     };
-    component = shallow(<ViewDocument {...props} renderedFromServer />, { context });
-    instance = component.instance();
+
+    render();
 
     spyOn(routeActions, 'requestViewerState');
 
@@ -34,6 +40,21 @@ describe('ViewDocument', () => {
 
   it('should render the Viewer', () => {
     expect(component.find(Viewer).length).toBe(1);
+  });
+
+  it('should pass down raw prop', () => {
+    props.params = { raw: true };
+    render();
+    expect(component.find(Viewer).props().raw).toBe(true);
+  });
+
+  describe('when on server', () => {
+    it('should always pass raw true', () => {
+      props.params = { raw: false };
+      utils.isClient = false;
+      render();
+      expect(component.find(Viewer).props().raw).toBe(true);
+    });
   });
 
   describe('static requestState', () => {
