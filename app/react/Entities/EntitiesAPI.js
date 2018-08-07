@@ -11,6 +11,11 @@ export default {
     .then(response => response.json.rows);
   },
 
+  async getRawPage(sharedId, pageNumber = 1) {
+    const response = await api.get('entities/get_raw_page', { sharedId, pageNumber });
+    return response.json.data;
+  },
+
   countByTemplate(templateId) {
     const url = `entities/count_by_template?templateId=${templateId}`;
     return api.get(url)
