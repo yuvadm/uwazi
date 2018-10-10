@@ -18,6 +18,7 @@ import {
   ThesaurisList,
   TranslationsList,
   FiltersForm,
+  Languages,
   Customisation,
   CustomUploads
 } from 'app/Settings';
@@ -104,6 +105,7 @@ const routes = (
         <Route path="new" component={NewThesauri} />
         <Route path="edit/:thesauriId" component={EditThesauri} />
       </Route>
+      <Route path="languages" component={Languages}/>
       <Route path="translations">
         <IndexRoute component={TranslationsList} />
         <Route path="edit/:context" component={EditTranslations} />
