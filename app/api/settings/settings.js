@@ -2,11 +2,11 @@ import translations from 'api/i18n/translations';
 import model from './settingsModel';
 
 function saveLinksTranslations(newLinks = [], currentLinks = []) {
-  let updatedTitles = {};
-  let deletedLinks = [];
+  const updatedTitles = {};
+  const deletedLinks = [];
 
   currentLinks.forEach((link) => {
-    let matchLink = newLinks.find((l) => link._id.equals(l._id));
+    const matchLink = newLinks.find(l => link._id.equals(l._id));
     if (matchLink && matchLink.title !== link.title) {
       updatedTitles[link.title] = matchLink.title;
     }
@@ -15,7 +15,7 @@ function saveLinksTranslations(newLinks = [], currentLinks = []) {
     }
   });
 
-  let values = newLinks.reduce((result, link) => {
+  const values = newLinks.reduce((result, link) => {
     result[link.title] = link.title;
     return result;
   }, {});
@@ -24,14 +24,14 @@ function saveLinksTranslations(newLinks = [], currentLinks = []) {
 }
 
 function saveFiltersTranslations(_newFilters = [], _currentFilters = []) {
-  let newFilters = _newFilters.filter((item) => item.items);
-  let currentFilters = _currentFilters.filter((item) => item.items);
+  const newFilters = _newFilters.filter(item => item.items);
+  const currentFilters = _currentFilters.filter(item => item.items);
 
-  let updatedNames = {};
-  let deletedFilters = [];
+  const updatedNames = {};
+  const deletedFilters = [];
 
   currentFilters.forEach((filter) => {
-    let matchFilter = newFilters.find((l) => l.id === filter.id);
+    const matchFilter = newFilters.find(l => l.id === filter.id);
     if (matchFilter && matchFilter.name !== filter.name) {
       updatedNames[filter.name] = matchFilter.name;
     }
@@ -40,7 +40,7 @@ function saveFiltersTranslations(_newFilters = [], _currentFilters = []) {
     }
   });
 
-  let values = newFilters.reduce((result, filter) => {
+  const values = newFilters.reduce((result, filter) => {
     result[filter.name] = filter.name;
     return result;
   }, {});
@@ -49,7 +49,7 @@ function saveFiltersTranslations(_newFilters = [], _currentFilters = []) {
 }
 
 function removeTemplate(filters, templateId) {
-  let filterTemplate = (_filter) => _filter.id !== templateId;
+  const filterTemplate = _filter => _filter.id !== templateId;
   return filters
   .filter(filterTemplate)
   .map((_filter) => {
@@ -68,13 +68,40 @@ export default {
 
   save(settings) {
     return this.get()
+    .then(currentSettings => saveLinksTranslations(settings.links, currentSettings.links)
+    .then(() => saveFiltersTranslations(settings.filters, currentSettings.filters))
+    .then(() => {
+      settings._id = currentSettings._id;
+      return model.save(settings);
+    }));
+  },
+
+  setDefaultLanguage(key) {
+    return this.get()
     .then((currentSettings) => {
-      return saveLinksTranslations(settings.links, currentSettings.links)
-      .then(() => saveFiltersTranslations(settings.filters, currentSettings.filters))
-      .then(() => {
-        settings._id = currentSettings._id;
-        return model.save(settings);
+      const languages = currentSettings.languages.map((_language) => {
+        const language = Object.assign({}, _language);
+        language.default = language.key === key;
+        return language;
       });
+
+      return model.save(Object.assign(currentSettings, { languages }));
+    });
+  },
+
+  addLanguage(language) {
+    return this.get()
+    .then((currentSettings) => {
+      currentSettings.languages.push(language);
+      return model.save(currentSettings);
+    });
+  },
+
+  deleteLanguage(key) {
+    return this.get()
+    .then((currentSettings) => {
+      const languages = currentSettings.languages.filter(language => language.key !== key);
+      return model.save(Object.assign(currentSettings, { languages }));
     });
   },
 
